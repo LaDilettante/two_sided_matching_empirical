@@ -1,14 +1,18 @@
 rm(list = ls())
 source("0_functions.R")
-packs <- c("foreign", "plyr", "dplyr", "reshape2", "stringr", "tidyr",
-           "lubridate", "concordance")
-f_install_and_load(packs)
+
+library("checkpoint")
+checkpoint("2017-10-15")
+
+library("tidyverse")
+library("lubridate")
+library("concordance")
 
 # ---- read data ----
 
-d_raw <- read.spss("../raw_data/2003_entry_exit_matrix_all_data.sav",
-               to.data.frame = TRUE, use.value.labels = FALSE,
-               reencode = "UTF-8")
+d_raw <- foreign::read.spss("../data_raw/2003_entry_exit_matrix_all_data.sav",
+                            to.data.frame = TRUE, use.value.labels = FALSE,
+                            reencode = "UTF-8")
 d_labels <- data.frame(name = names(d_raw),
                        label = attr(d_raw, "variable.labels"))
 
@@ -49,10 +53,10 @@ d <- d %>% inner_join(d_nation_label, by = c("nation"="nation_numeric")) %>%
 
 # ---- Convert industry code ----
 
-d_sic_3_1 <- read.spss("../raw_data/2003_entry_exit_matrix_all_data.sav",
-                      to.data.frame = TRUE, use.value.labels = TRUE,
-                      reencode = "UTF-8") %>% select(sic_3_1)
-
+d_sic_3_1 <- foreign::read.spss("../data_raw/2003_entry_exit_matrix_all_data.sav",
+                                to.data.frame = TRUE, use.value.labels = TRUE,
+                                reencode = "UTF-8") %>% 
+  select(sic_3_1)
 d_industrycode <- data.frame(SIC3 = d_raw$sic_3_1,
                              SIC3_label = d_sic_3_1$sic_3_1) %>%
   distinct() %>% na.omit()
@@ -65,7 +69,6 @@ tmp2[, 1] <- NULL
 d_industrycode <- cbind(d_industrycode, tmp2)
 
 f_ISIC_to_intensity <- function(code) {
-  library(stringr)
 
   hi <- "^2423|^30|^32|^33"
   medhi <- "^(?!2423)24|^29|^31|^34|^352|^359"
@@ -74,13 +77,13 @@ f_ISIC_to_intensity <- function(code) {
 
   if (is.na(code)) {
     return(NA)
-  } else if (str_detect(code, hi)) {
+  } else if (stringr::str_detect(code, hi)) {
     return(4)
-  } else if (str_detect(code, medhi)) {
+  } else if (stringr::str_detect(code, medhi)) {
     return(3)
-  } else if (str_detect(code, medlow)) {
+  } else if (stringr::str_detect(code, medlow)) {
     return(2)
-  } else if (str_detect(code, low)) {
+  } else if (stringr::str_detect(code, low)) {
     return(1)
   }
 }
@@ -103,5 +106,5 @@ d <- left_join(d, d_industrycode2[, c("SIC3", "SIC3_label", "intensity_avg")],
 
 # ---- Save wide data ----
 
-saveRDS(d, file = "../clean_data/JapanFDI_wide.RData")
-saveRDS(d_labels, file = "../clean_data/JapanFDI_labels.RData")
+saveRDS(d, file = "../data_clean/JapanFDI_wide.RData")
+saveRDS(d_labels, file = "../data_clean/JapanFDI_labels.RData")
