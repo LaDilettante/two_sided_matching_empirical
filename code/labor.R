@@ -9,20 +9,22 @@ time_start <- Sys.time()
 
 # ---- Data ----
 dat <- read.table("../data_clean/gss18cat.raw", header=T)
-choice <- dat$occ17 + 1 # so 1=unemployment
-n_i <-  length(choice) # number_of_employees, Job acceptances (elements in 1:n_j)
 
-n_j <- length(unique(choice))    # number of employers, includes unemployment
+n_i <- nrow(dat) # number_of_employees, Job acceptances (elements in 1:n_j)
+n_j <- length(unique(dat$occ17))    # number of employers, includes unemployment
 p_i <- 4 # number of worker characteristics per worker; including the intercept
 # in this example it measures quality of employee
 p_j <- 2  # number of job characteristics per job; in this example, job quality
 
-# Populate the opportunity set
+# ---- Prepare choice ----
+choice <- dat$occ17 + 1
+
+# ---- Prepare opp, the opportunity set ----
 opp <- matrix(F, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
 opp[cbind(1:n_i, choice)] <- T  # people are offered jobs they have!
 opp[, 1] <- T                     # Unemployment always offered
 
-# Populate the W_j matrix
+# ---- Prepare ww ----
 ww <- matrix(NA, n_j, p_j)
 for (i in 1:n_j) {
   ww[i, 1] <- unique(dat$presmean[choice == i])
@@ -40,7 +42,7 @@ rownames(ww) <- c("Unemployment", "Professionals, Self employed",
                   "Service", "Laborers, Manufacturing",
                   "Laborers, Other", "Farmers", "Farm laborers")
 
-# Populate the X_i matrix
+# ---- Prepare xx ----
 # matrix nworkers x nx of worker characteristics
 # including column of ones for an intercept
 one <- rep(1, n_i)

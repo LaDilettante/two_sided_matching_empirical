@@ -6,7 +6,7 @@ f_install_and_load(packs)
 
 # ---- Load the clean wide data ----
 
-d <- readRDS("../clean_data/JapanFDI_wide.RData")
+d <- readRDS("../data_clean/JapanFDI_wide.RData")
 
 # ---- reshape the clean wide format into long format ----
 
@@ -52,4 +52,4 @@ d_cast <- tbl_df(d_cast) %>%
   select(id = order, everything())
 
 # ---- Save the data ----
-saveRDS(d_cast, file = "../clean_data/JapanFDI_long.RData")
+saveRDS(d_cast, file = "../data_clean/JapanFDI_long.RData")
