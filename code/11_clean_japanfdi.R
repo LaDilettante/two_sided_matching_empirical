@@ -1,8 +1,8 @@
 rm(list = ls())
 source("0_functions.R")
 
-library("checkpoint")
-checkpoint("2017-10-15")
+# library("checkpoint")
+# checkpoint("2017-10-15")
 
 library("tidyverse")
 library("lubridate")
