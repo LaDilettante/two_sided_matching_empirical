@@ -1,6 +1,4 @@
 rm(list = ls())
-library("checkpoint")
-checkpoint("2017-10-15", scanForPackages = FALSE)
 
 install.packages("~/projects/match2sided/", repos = NULL, type="source")
 try(detach("package:match2sided", unload = TRUE), silent = TRUE)
@@ -43,28 +41,28 @@ for (i in 1:n_j) {
 }
 # rescale (for better numerics )
 ww[, 1:2] <- log(ww[, 1:2])
+ww <- scale(ww)
 colnames(ww) <- c("lgdp", "lgdppc", "democracy")
 
 
 # ---- Prepare xx ----
 
-one <- rep(1, n_i)
-xx <- cbind( one, dat[,1:(p_i-1)] )
 # matrix n_i x p_i of firm characteristics
 # including column of ones for an intercept
-
-# rescale
-xx[,2] <- xx[,2] / 10
-xx[,3] <- log(xx[, 3])
-xx <- as.matrix(xx)
+one <- rep(1, n_i)
+xx <- dat %>% select(temp, uscptl) %>% mutate(uscptl = log(uscptl))
+xx <- scale(xx)
+xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
 res <- match2sided::match2sided(iter = 10000,
-                                eps_alpha = 0.05, eps_beta = 0.05, 
-                                frac_beta = 0.5, frac_opp = 0.5,
+                                eps_alpha = 0.01, eps_beta = 0.05, 
+                                frac_beta = 0.5, frac_opp = 0.75,
                                 ww = ww, xx = xx,
                                 choice = choice, opp = opp)
+time_end <- Sys.time()
+cat("Time elapsed", time_end - time_start)
 
 saveRDS(res, file = paste0("../result/japan-", 
                            format(Sys.time(), "%Y-%m-%d-%H%M"), ".RData"))
@@ -73,9 +71,15 @@ saveRDS(res, file = paste0("../result/japan-",
 
 WARMUP <- res$mcmc_settings$iter / 5
 
+print(res$acceptance_rate)
+
+par(mfrow=c(1, 1))
 plot(res$lp, type='l',
      xlab = 'iteration', ylab = 'log posterior density')
 
-alpha <- mcmc(res$alpha) %>% window(start = WARMUP)
+alpha <- mcmc(res$alpha) %>% window(start = 0)
 plot(alpha)
 summary(alpha)
+
+beta_uscptl <- mcmc(res$beta[, 'uscptl', ]) %>% window(start = WARMUP)
+plot(beta_uscptl)
