@@ -1,0 +1,48 @@
+---
+title: "EDA Japan FDI"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+rm(list = ls())
+source("0_functions.R")
+
+library("tidyverse")
+library("forcats")
+library("ggplot2")
+library("countrycode")
+
+# ---- Load Japan data ----
+
+d_raw <- readRDS("../data_clean/JapanFDI_long.RData")
+d_raw_labels <- readRDS("../data_clean/JapanFDI_labels.RData")
+glimpse(d_raw)
+```
+
+```{r}
+d <- d_raw %>%
+  mutate(nation = fct_recode(nation,
+                             "Czech Republic" = "Czech",
+                             "British Virgin Islands" = "Virgin Islands")) %>%
+  mutate(region = countrycode(nation, 
+                              origin = "country.name", destination = "region"))
+
+cat("We have ", length(unique(d_raw$nation)), "countries",
+    "and ", length(unique(d_raw$region)), "regions")
+```
+
+The top regions are East Asia, North America, SEA, West / North Europe
+
+```{r}
+d %>% group_by(region) %>%
+  summarise(count = n_distinct(id)) %>% arrange(desc(count))
+```
+
+The top countries are USA, China, Hong Hong, Thailand, Singapore, etc.
+```{r}
+d %>% group_by(nation) %>%
+  summarise(count = n_distinct(id)) %>% arrange(desc(count))
+```
+

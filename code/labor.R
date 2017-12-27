@@ -1,8 +1,6 @@
 rm(list = ls())
 
-install.packages("~/projects/match2sided/", repos = NULL, type="source")
-detach("package:match2sided", unload = TRUE)
-library("match2sided")
+source("match2sided.R")
 library("tidyverse")
 library("coda")
 time_start <- Sys.time()
@@ -51,12 +49,16 @@ xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
-res <- match2sided::match2sided(iter = 10000,
-                  eps_alpha = 0.05, eps_beta = 0.05, 
-                  frac_beta = 0.5, frac_opp = 0.5,
+res <- match2sided(iter = 10000,
+                  eps_alpha = 0.4, eps_beta = 0.05, 
+                  frac_beta = 1, frac_opp = 0.25,
                   ww = ww, xx = xx,
                   choice = choice, opp = opp)
-
+print(res$acceptance_rate)
+plot(res$lp[, 1], type='l',
+     xlab = 'iteration', ylab = 'log joint pdf')
+plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
+plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
 saveRDS(res, file = paste0("../result/labor-", 
                            format(Sys.time(), "%Y-%m-%d-%H%M"), ".RData"))
 
@@ -64,25 +66,27 @@ saveRDS(res, file = paste0("../result/labor-",
 
 WARMUP <- res$mcmc_settings$iter / 5
 
-plot(res$lp, type='l',
-     xlab = 'iteration', ylab = 'log posterior density')
-
 alpha <- mcmc(res$alpha) %>% window(start = WARMUP)
 plot(alpha)
 summary(alpha)
 
 beta_educ <- mcmc(res$beta[, 'educ', ]) %>% window(start = WARMUP)
 plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
-plot(beta_educ)
+# plot(beta_educ)
 
 beta_age <- mcmc(res$beta[, 'age', ]) %>% window(start = WARMUP)
 plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
-plot(beta_age)
+# plot(beta_age)
 
+plot(density(res$beta[WARMUP:dim(res$beta)[1], 1, 1]))
+for (i in 2:dim(res$beta)[2]) {
+  lines(density(res$beta[WARMUP:dim(res$beta)[1], i, 1]))
+}
 
-
-print(res$acceptance_rate)
-
+plot(density(res$beta[WARMUP:dim(res$beta)[1], 2, 1]))
+for (i in 3:dim(res$beta)[2]) {
+  lines(density(res$beta[WARMUP:dim(res$beta)[1], i, 1]))
+}
 
 boxplot(educ ~ occ17, data = dat %>% filter(occ17 %in% c(2, 3, 10, 17)),
         names = c("professional", "managers",
@@ -90,20 +94,41 @@ boxplot(educ ~ occ17, data = dat %>% filter(occ17 %in% c(2, 3, 10, 17)),
         ylab = "years of education",
         main = "sample statistics of education")
 
-
 par(mfrow = c(1, 2))
 boxplot(educ ~ occ17, data = dat %>% filter(occ17 %in% c(2, 17)),
         names = c("professional", "farm worker"),
         ylab = "years of education",
         main = "sample statistics of education")
 
-plot(density(bsave[500:mcmc$nsave, 4 * (2 - 1) + 1]),
+plot(density(beta_educ[ , c("Professionals, Salaried")]),
      xlim = c(-0.5, 0.5),
      main = "estimated firms' preference for education")
-lines(density(bsave[500:mcmc$nsave, 4 * (17 - 1) + 1]),
-      lty = 2)
-legend(-0.45, 5, c("profressional", "farm worker"), lty = c(1, 2))
+lines(density(beta_educ[ , c("Farm laborers")]), lty = 2)
+legend(-0.45, 6, c("profressional", "farm worker"), lty = c(1, 2))
 par(mfrow = c(1, 1))
+
+# ---- Regress beta ----
+
+X_beta <- dat %>% 
+  dplyr::select(occ17, presmean, autmean) %>%
+  distinct() %>% arrange(occ17)
+X_beta$occ <- c("Unemployment", "Professionals, Self employed",
+                "Professionals, Salaried",
+                "Managers", "Salesmen, Other", "Proprietors",
+                "Clerical", "Salesmen, Retail",
+                "Craftsmen, Manufacturing",
+                "Craftsmen, Other", "Craftsmen, Construction",
+                "Operatives, Manufacturing", "Operatives, Other",
+                "Service", "Laborers, Manufacturing",
+                "Laborers, Other", "Farmers", "Farm laborers")
+
+posterior_mean_beta <- data.frame(t(apply(res$beta, MARGIN = c(2, 3), mean))) %>%
+  mutate(occ = rownames(.))
+dat_beta <- inner_join(X_beta, posterior_mean_beta, by = "occ")
+
+summary(lm(educ ~ presmean + autmean, data = dat_beta))
+summary(lm(age ~ presmean + autmean, data = dat_beta))
+summary(lm(nonwhite ~ presmean + autmean, data = dat_beta))
 
 # ---- Data viz ---
 
