@@ -1,3 +1,6 @@
+library("mvtnorm")
+library("plyr")
+
 #' Two sided matching model
 #'
 #' @param opp A matrix of opportunity
@@ -118,14 +121,38 @@ cond_Tau_beta <- function(mu_beta, prior, beta) {
   return(list(nu = nu, Sinv = solve(S)))
 }
 
+# ---- Adaptive MCMC utilities ----
+
+#' Calculate the vcov matrix recursively
+#' @param X_sample matrix n_samples x length(X), the MCMC samples of X so far
+calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
+  d <- ncol(X_sample)
+  sd <- (2.4 ** 2) * d
+  
+  C_old <- C
+  Xbar_old <- Xbar
+      
+  Xbar <- 1 / (t - 1) * ((t - 2) * Xbar_old + X_sample[t - 1, ])
+  C <- (t - 3) / (t - 2) * C_old +
+    sd / (t - 2) * ((t - 2) * Xbar_old %*% t(Xbar_old) -
+                      (t - 1) * Xbar %*% t(Xbar) +
+                      X_sample[t - 1, ] %*% t(X_sample[t - 1, ]) +
+                        eps * diag(d))
+
+  return(list(C = C, Xbar = Xbar))
+}
+
 # ---- MCMC runs ----
 
-match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
+match2sided <- function(iter, t0 = iter / 10,
+                        C_alpha, C_beta, frac_opp,
                         ww, xx, choice, opp) {
   n_i <- nrow(xx)
   n_j <- nrow(ww)
   p_i <- ncol(xx)
   p_j <- ncol(ww)
+  sd <- (2.4 ** 2) / p_i # Scaling factor for beta proposal
+  eps <- 0.01 # Small constant for beta proposal
   
   prior <- list(alpha = list(mu = rnorm(p_j),
                              Tau = solve(diag(abs(rnorm(p_j))))),
@@ -156,8 +183,6 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
   # ---- Pre compute ----
   tmp <- as.matrix(ww[choice, ])
   wa <- apply(tmp, 2, sum) # sum of characteristics of accepted jobs; used in alpha update
-  
-  bmat <- eps_beta * matrix(1, p_i, n_j)
   
   # ---- Initialize storage ----
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
@@ -190,8 +215,7 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
     }
     
     # Update alpha
-    deviation <- eps_alpha * runif(p_j, min=-1, max=1) # Symmetric proposal
-    alphastar <- alpha + deviation
+    alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha))
     
     my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
     ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
@@ -201,12 +225,27 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
     }
     
     # Update beta
-    whichones <- sample(c(0, 1), size = p_i * n_j, replace = TRUE,
-                        prob = c(1 - frac_beta, frac_beta))
-    # Sample betastar from a [-eps_beta, eps_beta] box around beta
-    rmat <- matrix(runif(p_i * n_j, min=-1, max=1) * whichones,
-                   nrow = p_i, ncol = n_j)
-    deviation <- bmat * rmat
+    if (i <= t0) {
+      Cs <- rep(list(C_beta), n_j)
+    } else if (i > t0) {
+      if (i == t0 + 1) {
+        # Calculate Cs and Xbars for the first time
+        Cs <- alply(bsave[1:(i - 1), , ], 3, function(X) sd * cov(X) + sd * eps * diag(p_i))
+        Xbars <- alply(bsave[1:(i - 1), , ], 3, colMeans)
+      } else {
+        # Calculate Cs and Xbars recursively
+        # (notice we're passing in old values of Cs and Xbars)
+        res <- Map(function(X_sample, C, Xbar) calculate_C(X_sample = X_sample, 
+                                                          t = i, 
+                                                          C = C, Xbar = Xbar),
+                   alply(bsave[1:(i - 1), , ], 3, .dims = TRUE),
+                   Cs, Xbars)
+        Cs <- llply(res, `[[`, "C")
+        Xbars <- llply(res, `[[`, "Xbar")
+      }
+    }
+    
+    deviation <- t(laply(Cs, function(C) rmvnorm(1, sigma = C)))
     betastar <- beta + deviation
     my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
     ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
@@ -257,8 +296,5 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
               lp = logpost,
               acceptance_rate = acceptance_rate / iter,
               mcmc_settings = list(iter = iter,
-                                   eps_alpha = eps_alpha,
-                                   eps_beta = eps_beta,
-                                   frac_beta = frac_beta,
                                    frac_opp = frac_opp)))
 }

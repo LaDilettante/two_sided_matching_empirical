@@ -49,9 +49,10 @@ xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
-res <- match2sided(iter = 10000,
-                  eps_alpha = 0.4, eps_beta = 0.05, 
-                  frac_beta = 1, frac_opp = 0.25,
+res <- match2sided(iter = 5000,
+                  C_alpha = 0.4 * diag(ncol(ww)), 
+                  C_beta = 0.001 * diag(ncol(xx)), 
+                  frac_opp = 0.25,
                   ww = ww, xx = xx,
                   choice = choice, opp = opp)
 print(res$acceptance_rate)
