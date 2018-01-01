@@ -78,8 +78,10 @@ beta_age <- mcmc(res$beta[, 'age', ]) %>% window(start = WARMUP)
 plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
 # plot(beta_age)
 
-# Correlation between betas
-lattice::levelplot(cor(res$beta[, 2, ] %>% window(start = WARMUP)))
+# Correlation between betas of the same employer
+lattice::levelplot(cor(res$beta[, , 2]))
+# Correlation between the same beta of different employers
+lattice::levelplot(cor(res$beta[, 2, ]))
 
 plot(density(res$beta[WARMUP:dim(res$beta)[1], 1, 1]))
 for (i in 2:dim(res$beta)[2]) {
