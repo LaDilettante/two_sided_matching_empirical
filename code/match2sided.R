@@ -160,7 +160,7 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
   bmat <- eps_beta * matrix(1, p_i, n_j)
   
   # ---- Initialize storage ----
-  acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
+  acceptance_rate <- c("opp" = 0, "alpha" = 0, "beta" = 0) # Metropolis acceptance rates
   asave <- matrix(NA, iter, p_j)   # saved alphas
   bsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas
   mu_betasave <- matrix(NA, iter, p_i)
