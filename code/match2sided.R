@@ -105,7 +105,6 @@ logmh_beta <- function(beta, betastar, xx, opp, mu_beta, Tau_beta) {
 }
 
 cond_mu_beta <- function(Tau_beta, prior, beta) {
-  # browser()
   n_j <- ncol(beta)
   Vinv <- prior$mu_beta$Tau + n_j * Tau_beta
   V <- solve(Vinv)
@@ -195,7 +194,6 @@ match2sided <- function(iter, t0 = iter / 10,
   # ---- Loop ----
   for (i in 1:iter) {
     # Update opp
-    # browser()
     num_new_offers <- floor(frac_opp * n_j) # per i
     new <- replicate(n_i,
                      sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))

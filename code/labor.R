@@ -50,8 +50,8 @@ xx <- cbind(one, xx)
 # ---- Run MCMC ----
 
 res <- match2sided(iter = 5000,
-                  C_alpha = 0.4 * diag(ncol(ww)), 
-                  C_beta = 0.001 * diag(ncol(xx)), 
+                  C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
+                  C_beta = (0.025 ** 2) * diag(ncol(xx)), 
                   frac_opp = 0.25,
                   ww = ww, xx = xx,
                   choice = choice, opp = opp)
@@ -71,11 +71,11 @@ alpha <- mcmc(res$alpha) %>% window(start = WARMUP)
 plot(alpha)
 summary(alpha)
 
-beta_educ <- mcmc(res$beta[, 'educ', ]) %>% window(start = WARMUP)
+beta_educ <- mcmc(res$beta[, 'educ', ])
 plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
 # plot(beta_educ)
 
-beta_age <- mcmc(res$beta[, 'age', ]) %>% window(start = WARMUP)
+beta_age <- mcmc(res$beta[, 'age', ])
 plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
 # plot(beta_age)
 
