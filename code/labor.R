@@ -50,8 +50,8 @@ xx <- cbind(one, xx)
 # ---- Run MCMC ----
 
 res <- match2sided(iter = 10000,
-                  eps_alpha = 0.4, eps_beta = 0.05, 
-                  frac_beta = 1, frac_opp = 0.25,
+                  eps_alpha = 0.4, eps_beta = 0.025, 
+                  frac_opp = 0.25,
                   ww = ww, xx = xx,
                   choice = choice, opp = opp)
 print(res$acceptance_rate)
@@ -77,6 +77,9 @@ plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
 beta_age <- mcmc(res$beta[, 'age', ]) %>% window(start = WARMUP)
 plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
 # plot(beta_age)
+
+# Correlation between betas
+lattice::levelplot(cor(res$beta[, 2, ] %>% window(start = WARMUP)))
 
 plot(density(res$beta[WARMUP:dim(res$beta)[1], 1, 1]))
 for (i in 2:dim(res$beta)[2]) {

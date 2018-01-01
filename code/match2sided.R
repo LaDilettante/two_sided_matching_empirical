@@ -1,3 +1,5 @@
+library("mvtnorm")
+
 #' Two sided matching model
 #'
 #' @param opp A matrix of opportunity
@@ -14,7 +16,6 @@ NULL
 #' Calculate the log joint pdf, useful for testing
 #'
 #' @rdname match2sided
-#' @importFrom mvtnorm mvtnorm::dmvnorm
 f_logp_A <- function(opp, choice, alpha, ww) {
   w <- as.matrix(ww[choice, ])
   logp_A <- sum(w %*% alpha) - sum(log(opp %*% exp(ww %*% alpha)))
@@ -120,7 +121,7 @@ cond_Tau_beta <- function(mu_beta, prior, beta) {
 
 # ---- MCMC runs ----
 
-match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
+match2sided <- function(iter, eps_alpha, eps_beta, frac_opp,
                         ww, xx, choice, opp) {
   n_i <- nrow(xx)
   n_j <- nrow(ww)
@@ -157,10 +158,8 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
   tmp <- as.matrix(ww[choice, ])
   wa <- apply(tmp, 2, sum) # sum of characteristics of accepted jobs; used in alpha update
   
-  bmat <- eps_beta * matrix(1, p_i, n_j)
-  
   # ---- Initialize storage ----
-  acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
+  acceptance_rate <- c("opp" = 0, "alpha" = 0, "beta" = 0)                  # Metropolis acceptance rates
   asave <- matrix(NA, iter, p_j)   # saved alphas
   bsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas
   mu_betasave <- matrix(NA, iter, p_i)
@@ -190,7 +189,7 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
     }
     
     # Update alpha
-    deviation <- eps_alpha * runif(p_j, min=-1, max=1) # Symmetric proposal
+    deviation <- eps_alpha * c(rmvnorm(1, sigma = diag(p_j))) # Symmetric normal proposal
     alphastar <- alpha + deviation
     
     my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
@@ -200,14 +199,8 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
       acceptance_rate[2] <- acceptance_rate[2] + 1
     }
     
-    # Update beta
-    whichones <- sample(c(0, 1), size = p_i * n_j, replace = TRUE,
-                        prob = c(1 - frac_beta, frac_beta))
-    # Sample betastar from a [-eps_beta, eps_beta] box around beta
-    rmat <- matrix(runif(p_i * n_j, min=-1, max=1) * whichones,
-                   nrow = p_i, ncol = n_j)
-    deviation <- bmat * rmat
-    betastar <- beta + deviation
+    # Update beta (normal proposal distribution)
+    betastar <- beta + eps_beta * t(rmvnorm(n_j, sigma = diag(p_i)))
     my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
     ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
     if (ok_beta) {
@@ -259,6 +252,5 @@ match2sided <- function(iter, eps_alpha, eps_beta, frac_beta, frac_opp,
               mcmc_settings = list(iter = iter,
                                    eps_alpha = eps_alpha,
                                    eps_beta = eps_beta,
-                                   frac_beta = frac_beta,
                                    frac_opp = frac_opp)))
 }
