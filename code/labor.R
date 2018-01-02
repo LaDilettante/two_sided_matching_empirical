@@ -51,17 +51,29 @@ xx <- cbind(one, xx)
 
 all_res <- vector("list", 5)
 for (i in 1:5) {
-  starting_alpha <- runif(p_j, min = -10, max = 10)
-  starting_beta <- matrix(runif(p_i * n_j, min = -10, max = 10),
-                          nrow = p_i, ncol = n_j)
-  res <- match2sided(iter = 20000,
-                     C_alpha = (0.5 ** 2) * diag(ncol(ww)), 
-                     C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                     starting_alpha = starting_alpha, 
-                     starting_beta = starting_beta,
-                     frac_opp = 0.25,
-                     ww = ww, xx = xx,
-                     choice = choice, opp = opp)
+  if (i < 5) {
+    starting_alpha <- runif(p_j, min = -5, max = 5)
+    starting_beta <- matrix(runif(p_i * n_j, min = -5, max = 5),
+                            nrow = p_i, ncol = n_j)
+    
+    res <- match2sided(iter = 20000, t0 = 500,
+                       C_alpha = (1 ** 2) * diag(ncol(ww)), 
+                       C_beta = (0.025 ** 2) * diag(ncol(xx)),
+                       starting_alpha = starting_alpha, 
+                       starting_beta = starting_beta,
+                       frac_opp = 0.25,
+                       ww = ww, xx = xx,
+                       choice = choice, opp = opp)  
+  } else {
+    # Hand picked starting values
+    res <- match2sided(iter = 20000, t0 = 500,
+                       C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
+                       C_beta = (0.025 ** 2) * diag(ncol(xx)),
+                       frac_opp = 0.25,
+                       ww = ww, xx = xx,
+                       choice = choice, opp = opp)  
+  }
+  
   
   all_res[[i]] <- res
   plot(1, 1, main = i)
@@ -86,6 +98,8 @@ for (i in 1:5) {
   plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
 }
 
+tmp <- lapply(all_res, function(res) mcmc(res$beta[, 'educ', ]))
+gelman.diag(tmp)
 
 # saveRDS(res, file = paste0("../result/labor-", 
 #                            format(Sys.time(), "%Y-%m-%d-%H%M"), ".RData"))
