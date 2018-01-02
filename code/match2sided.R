@@ -145,6 +145,7 @@ calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
 
 match2sided <- function(iter, t0 = iter / 10,
                         C_alpha, C_beta,
+                        starting_alpha, starting_beta,
                         frac_opp,
                         ww, xx, choice, opp) {
   n_i <- nrow(xx)
@@ -161,18 +162,27 @@ match2sided <- function(iter, t0 = iter / 10,
                                 Sinv = solve(diag(abs(rnorm(p_i))))))
   
   # ---- Starting values ----
-  alpha <- rep(0, p_j)            # worker preferences
+  if (missing(starting_alpha)) {
+    alpha <- rep(0, p_j)            # worker preferences  
+  } else {
+    alpha <- starting_alpha
+  }
   exp_WA <- exp(ww %*% alpha) # linear predictors of
   pA_den <- opp %*% exp_WA # vector of denominators in p(A | O, alpha)
   
   # beta starting values (from 1-sided logit estimates)
-  beta  <- matrix(0, p_i, n_j)   # employer preferences
-  for(j in 1:n_j) {
-    y <- as.numeric(opp[, j])
-    mod <- glm(y ~ . - 1, family=binomial,
-               data=as.data.frame(xx) )
-    beta[, j] <- mod$coef
+  if (missing(starting_beta)) {
+    beta <- matrix(0, p_i, n_j)   # employer preferences
+    for(j in 1:n_j) {
+      y <- as.numeric(opp[, j])
+      mod <- glm(y ~ . - 1, family=binomial,
+                 data=as.data.frame(xx) )
+      beta[, j] <- mod$coef
+    }  
+  } else {
+    beta <- starting_beta
   }
+  
   XB <- xx %*% beta # worker side linear predictors (big matrix), n_i x n_j, same as opp
   
   # mu, Sigma starting values

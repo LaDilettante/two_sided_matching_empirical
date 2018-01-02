@@ -49,19 +49,46 @@ xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
-res <- match2sided(iter = 20000,
-                  C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
-                  C_beta = (0.025 ** 2) * diag(ncol(xx)), 
-                  frac_opp = 0.25,
-                  ww = ww, xx = xx,
-                  choice = choice, opp = opp)
-print(res$acceptance_rate)
-plot(res$lp[, 1], type='l',
-     xlab = 'iteration', ylab = 'log joint pdf')
-plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
-plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
-saveRDS(res, file = paste0("../result/labor-", 
-                           format(Sys.time(), "%Y-%m-%d-%H%M"), ".RData"))
+all_res <- vector("list", 5)
+for (i in 1:5) {
+  starting_alpha <- runif(p_j, min = -10, max = 10)
+  starting_beta <- matrix(runif(p_i * n_j, min = -10, max = 10),
+                          nrow = p_i, ncol = n_j)
+  res <- match2sided(iter = 20000,
+                     C_alpha = (0.5 ** 2) * diag(ncol(ww)), 
+                     C_beta = (0.025 ** 2) * diag(ncol(xx)),
+                     starting_alpha = starting_alpha, 
+                     starting_beta = starting_beta,
+                     frac_opp = 0.25,
+                     ww = ww, xx = xx,
+                     choice = choice, opp = opp)
+  
+  all_res[[i]] <- res
+  plot(1, 1, main = i)
+  plot(res$lp[, 1], type='l',
+       xlab = 'iteration', ylab = 'log joint pdf')
+  plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
+  plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
+  
+  WARMUP <- res$mcmc_settings$iter / 5
+  
+  alpha <- mcmc(res$alpha) %>% window(start = WARMUP)
+  plot(alpha)
+  
+  beta_educ <- mcmc(res$beta[, 'educ', ])
+  plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
+  # plot(beta_educ)
+  
+  betastar_educ <- mcmc(res$betastar[, 2, ])
+  plot(betastar_educ[, c(3, 18)])
+  
+  beta_age <- mcmc(res$beta[, 'age', ])
+  plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
+}
+
+
+# saveRDS(res, file = paste0("../result/labor-", 
+#                            format(Sys.time(), "%Y-%m-%d-%H%M"), ".RData"))
 
 # ---- Results and Diagnostics ----
 
