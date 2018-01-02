@@ -49,7 +49,7 @@ xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
-res <- match2sided(iter = 5000,
+res <- match2sided(iter = 20000,
                   C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
                   C_beta = (0.025 ** 2) * diag(ncol(xx)), 
                   frac_opp = 0.25,
@@ -74,6 +74,9 @@ summary(alpha)
 beta_educ <- mcmc(res$beta[, 'educ', ])
 plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
 # plot(beta_educ)
+
+betastar_educ <- mcmc(res$betastar[, 2, ])
+plot(betastar_educ[, c(3, 18)])
 
 beta_age <- mcmc(res$beta[, 'age', ])
 plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
@@ -107,6 +110,9 @@ plot(density(beta_educ[ , c("Professionals, Salaried")]),
 lines(density(beta_educ[ , c("Farm laborers")]), lty = 2)
 legend(-0.45, 6, c("profressional", "farm worker"), lty = c(1, 2))
 par(mfrow = c(1, 1))
+
+# mu_beta
+plot(mcmc(res$mu_beta))
 
 # ---- Regress beta ----
 

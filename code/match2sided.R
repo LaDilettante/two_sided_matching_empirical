@@ -144,13 +144,13 @@ calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
 # ---- MCMC runs ----
 
 match2sided <- function(iter, t0 = iter / 10,
-                        C_alpha, C_beta, frac_opp,
+                        C_alpha, C_beta,
+                        frac_opp,
                         ww, xx, choice, opp) {
   n_i <- nrow(xx)
   n_j <- nrow(ww)
   p_i <- ncol(xx)
   p_j <- ncol(ww)
-  sd <- (2.4 ** 2) / p_i # Scaling factor for beta proposal
   eps <- 0.01 # Small constant for beta proposal
   
   prior <- list(alpha = list(mu = rnorm(p_j),
@@ -187,9 +187,10 @@ match2sided <- function(iter, t0 = iter / 10,
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
   asave <- matrix(NA, iter, p_j)   # saved alphas
   bsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas
+  bstarsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas proposal
   mu_betasave <- matrix(NA, iter, p_i)
   Tau_betasave <- array(NA, dim = c(iter, p_i, p_i))
-  logpost <- matrix(NA, iter, 3) # posterior density, i.e. lp_A, lp_O, joint
+  logpost <- matrix(NA, iter, 3) # posterior density, i.e. joint, lp_A, lp_O
   
   # ---- Loop ----
   for (i in 1:iter) {
@@ -223,27 +224,32 @@ match2sided <- function(iter, t0 = iter / 10,
     }
     
     # Update beta
+    sd <- (2.4 ** 2) / (p_i * n_j) # Scaling factor for beta proposal
     if (i <= t0) {
-      Cs <- rep(list(C_beta), n_j)
+      C <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
     } else if (i > t0) {
+      beta_samples <- bsave[1:(i - 1), , ]
+      dim(beta_samples) <- c(i - 1, p_i * n_j)
       if (i == t0 + 1) {
         # Calculate Cs and Xbars for the first time
-        Cs <- alply(bsave[1:(i - 1), , ], 3, function(X) sd * cov(X) + sd * eps * diag(p_i))
-        Xbars <- alply(bsave[1:(i - 1), , ], 3, colMeans)
+        C <- sd * cov(beta_samples) + sd * eps * diag(p_i * n_j)
+        Xbar <- colMeans(beta_samples)
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        res <- Map(function(X_sample, C, Xbar) calculate_C(X_sample = X_sample, 
-                                                          t = i, 
-                                                          C = C, Xbar = Xbar),
-                   alply(bsave[1:(i - 1), , ], 3, .dims = TRUE),
-                   Cs, Xbars)
-        Cs <- llply(res, `[[`, "C")
-        Xbars <- llply(res, `[[`, "Xbar")
+        C_old <- C
+        Xbar_old <- Xbar
+        
+        Xbar <- 1 / (i - 1) * ((i - 2) * Xbar_old + beta_samples[i - 1, ])
+        C <- (i - 3) / (i - 2) * C_old +
+          sd / (i - 2) * ((i - 2) * Xbar_old %*% t(Xbar_old) -
+                            (i - 1) * Xbar %*% t(Xbar) +
+                            beta_samples[i - 1, ] %*% t(beta_samples[i - 1, ]) +
+                            eps * diag(p_i * n_j))
       }
     }
     
-    deviation <- t(laply(Cs, function(C) rmvnorm(1, sigma = C)))
+    deviation <- matrix(rmvnorm(1, sigma = C), nrow = p_i, ncol = n_j)
     betastar <- beta + deviation
     my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
     ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
@@ -270,7 +276,8 @@ match2sided <- function(iter, t0 = iter / 10,
     logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
     logpost[i, 3] <- f_logp_O(opp, beta, xx)
     asave[i, ] <- alpha
-    bsave[i, ,] <- beta # vectorize
+    bsave[i, , ] <- beta # vectorize
+    bstarsave[i, , ] <- betastar
     mu_betasave[i, ] <- mu_beta
     Tau_betasave[i, ,] <- Tau_beta
     
@@ -281,15 +288,18 @@ match2sided <- function(iter, t0 = iter / 10,
   if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
   if (!is.null(colnames(xx))) {
     dimnames(bsave)[[2]] <- colnames(xx)
+    dimnames(bstarsave)[[2]] <- colnames(xx)
     colnames(mu_betasave) <- colnames(xx)
     dimnames(Tau_betasave)[[2]] <- colnames(xx)
     dimnames(Tau_betasave)[[3]] <- rownames(xx)
   }
   if (!is.null(rownames(ww))) {
     dimnames(bsave)[[3]] <- rownames(ww)
+    dimnames(bstarsave)[[3]] <- rownames(ww)
   }
   
   return(list(alpha = asave, beta = bsave,
+              betastar = bstarsave,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,
               lp = logpost,
               acceptance_rate = acceptance_rate / iter,
