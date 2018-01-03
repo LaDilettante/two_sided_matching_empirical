@@ -62,8 +62,8 @@ pdf("../figure/posterior_density_adaptive.pdf", w = 7, h = 7)
 par(mfrow = c(2, 2))
 plot(res$lp[, 1], type='l',
      xlab = 'iteration', ylab = 'log joint pdf')
-plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
-plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
+plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'log p(A | O, alpha)')
+plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'log p(O | beta)')
 par(mfrow = c(1, 1))
 dev.off()
 
