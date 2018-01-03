@@ -126,7 +126,7 @@ cond_Tau_beta <- function(mu_beta, prior, beta) {
 #' @param X_sample matrix n_samples x length(X), the MCMC samples of X so far
 calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
   d <- ncol(X_sample)
-  sd <- (2.4 ** 2) * d
+  sd <- (2.4 ** 2) / d
   
   C_old <- C
   Xbar_old <- Xbar
@@ -182,6 +182,7 @@ match2sided <- function(iter, t0 = iter / 10,
   } else {
     beta <- starting_beta
   }
+  betastar <- beta
   
   XB <- xx %*% beta # worker side linear predictors (big matrix), n_i x n_j, same as opp
   
@@ -202,8 +203,20 @@ match2sided <- function(iter, t0 = iter / 10,
   Tau_betasave <- array(NA, dim = c(iter, p_i, p_i))
   logpost <- matrix(NA, iter, 3) # posterior density, i.e. joint, lp_A, lp_O
   
+  # Store results
+  logpost[1, 1] <- joint_lpdf(opp, choice,
+                              alpha, beta, mu_beta, Tau_beta, prior,
+                              ww, xx)
+  logpost[1, 2] <- f_logp_A(opp, choice, alpha, ww)
+  logpost[1, 3] <- f_logp_O(opp, beta, xx)
+  asave[1, ] <- alpha
+  bsave[1, , ] <- beta # vectorize
+  bstarsave[1, , ] <- betastar
+  mu_betasave[1, ] <- mu_beta
+  Tau_betasave[1, ,] <- Tau_beta
+  
   # ---- Loop ----
-  for (i in 1:iter) {
+  for (i in 2:iter) {
     # Update opp
     num_new_offers <- floor(frac_opp * n_j) # per i
     new <- replicate(n_i,
@@ -224,7 +237,25 @@ match2sided <- function(iter, t0 = iter / 10,
     }
     
     # Update alpha
-    alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha))
+    sd <- (2.4 ** 2) / p_j # Scaling factor for alpha proposal
+    if (i <= t0) {
+      C_alpha_est <- C_alpha
+    } else if (i > t0) {
+      alpha_samples <- asave[1:(i - 1), ]
+      if (i == t0 + 1) {
+        # Calculate Cs and Xbars for the first time
+        C_alpha_est <- sd * cov(alpha_samples) + sd * eps * diag(p_j)
+        Xbar_alpha_est <- colMeans(alpha_samples)
+      } else {
+        # Calculate Cs and Xbars recursively
+        # (notice we're passing in old values of Cs and Xbars)
+        res <- calculate_C(X_sample = alpha_samples, t = i, 
+                           C = C_alpha_est, Xbar = Xbar_alpha_est)
+        Xbar_alpha_est <- res$Xbar
+        C_alpha_est <- res$C
+      }
+    }
+    alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
     
     my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
     ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
@@ -236,30 +267,25 @@ match2sided <- function(iter, t0 = iter / 10,
     # Update beta
     sd <- (2.4 ** 2) / (p_i * n_j) # Scaling factor for beta proposal
     if (i <= t0) {
-      C <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
+      C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
     } else if (i > t0) {
       beta_samples <- bsave[1:(i - 1), , ]
       dim(beta_samples) <- c(i - 1, p_i * n_j)
       if (i == t0 + 1) {
         # Calculate Cs and Xbars for the first time
-        C <- sd * cov(beta_samples) + sd * eps * diag(p_i * n_j)
-        Xbar <- colMeans(beta_samples)
+        C_beta_est <- sd * cov(beta_samples) + sd * eps * diag(p_i * n_j)
+        Xbar_beta_est <- colMeans(beta_samples)
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        C_old <- C
-        Xbar_old <- Xbar
-        
-        Xbar <- 1 / (i - 1) * ((i - 2) * Xbar_old + beta_samples[i - 1, ])
-        C <- (i - 3) / (i - 2) * C_old +
-          sd / (i - 2) * ((i - 2) * Xbar_old %*% t(Xbar_old) -
-                            (i - 1) * Xbar %*% t(Xbar) +
-                            beta_samples[i - 1, ] %*% t(beta_samples[i - 1, ]) +
-                            eps * diag(p_i * n_j))
+        res <- calculate_C(X_sample = beta_samples, t = i, 
+                    C = C_beta_est, Xbar = Xbar_beta_est)
+        Xbar_beta_est <- res$Xbar
+        C_beta_est <- res$C
       }
     }
     
-    deviation <- matrix(rmvnorm(1, sigma = C), nrow = p_i, ncol = n_j)
+    deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
     betastar <- beta + deviation
     my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
     ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)

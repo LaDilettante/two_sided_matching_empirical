@@ -49,32 +49,70 @@ xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
-all_res <- vector("list", 5)
-for (i in 1:5) {
-  if (i < 5) {
-    starting_alpha <- runif(p_j, min = -5, max = 5)
-    starting_beta <- matrix(runif(p_i * n_j, min = -5, max = 5),
-                            nrow = p_i, ncol = n_j)
-    
-    res <- match2sided(iter = 20000, t0 = 500,
-                       C_alpha = (1 ** 2) * diag(ncol(ww)), 
-                       C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                       starting_alpha = starting_alpha, 
-                       starting_beta = starting_beta,
-                       frac_opp = 0.25,
-                       ww = ww, xx = xx,
-                       choice = choice, opp = opp)  
-  } else {
-    # Hand picked starting values
-    res <- match2sided(iter = 20000, t0 = 500,
-                       C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
-                       C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                       frac_opp = 0.25,
-                       ww = ww, xx = xx,
-                       choice = choice, opp = opp)  
-  }
+# Let starting alpha = 0, starting beta = logit estimates
+res <- match2sided(iter = 20000,
+                   C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
+                   C_beta = (0.025 ** 2) * diag(ncol(xx)),
+                   frac_opp = 0.25,
+                   ww = ww, xx = xx,
+                   choice = choice, opp = opp)
+print(res$acceptance_rate)
+
+pdf("../figure/posterior_density_adaptive.pdf", w = 7, h = 7)
+par(mfrow = c(2, 2))
+plot(res$lp[, 1], type='l',
+     xlab = 'iteration', ylab = 'log joint pdf')
+plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
+plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
+par(mfrow = c(1, 1))
+dev.off()
+
+alpha <- mcmc(res$alpha)
+pdf("../figure/trace_alpha_adaptive.pdf", w = 7, h = 7)
+plot(alpha)
+dev.off()
+
+beta_educ <- mcmc(res$beta[, 'educ', ])
+pdf("../figure/trace_beta_educ_adaptive.pdf", w = 7, h = 7)
+plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
+dev.off()
+
+betastar_educ <- mcmc(res$betastar[, 'educ', ])
+pdf("../figure/trace_betastar_educ_adaptive.pdf", w = 7, h = 7)
+plot(betastar_educ[, c('Professionals, Salaried', 'Farm laborers')])
+dev.off()
+
+beta_age <- mcmc(res$beta[, 'age', ])
+pdf("../figure/trace_beta_age_adaptive.pdf", w = 7, h = 7)
+plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
+dev.off()
+
+tmp <- res$beta
+dim(tmp) <- c(dim(tmp)[1], dim(tmp)[2] * dim(tmp)[3])
+pdf("../figure/correlation_across_beta_adaptive.pdf", w = 7, h = 7.4)
+lattice::levelplot(cor(tmp),
+                   main = "Correlation across 72 beta estimates\n18 employers, 4 beta each")
+dev.off()
+
+# ---- Run MCMC random starting points ----
+
+S <- 3
+all_res <- vector("list", S)
+for (i in 1:S) {
   
+  # starting_alpha <- runif(p_j, min = -5, max = 5)
+  # starting_beta <- matrix(runif(p_i * n_j, min = -5, max = 5),
+  #                         nrow = p_i, ncol = n_j)
   
+  res <- match2sided(iter = 20000, t0 = 500,
+                     C_alpha = (1 ** 2) * diag(ncol(ww)), 
+                     C_beta = (0.025 ** 2) * diag(ncol(xx)),
+                     # starting_alpha = starting_alpha,
+                     # starting_beta = starting_beta,
+                     frac_opp = 0.25,
+                     ww = ww, xx = xx,
+                     choice = choice, opp = opp)  
+
   all_res[[i]] <- res
   plot(1, 1, main = i)
   plot(res$lp[, 1], type='l',
@@ -82,12 +120,12 @@ for (i in 1:5) {
   plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
   plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
   
-  WARMUP <- res$mcmc_settings$iter / 5
+  WARMUP <- res$mcmc_settings$iter / 2
   
   alpha <- mcmc(res$alpha) %>% window(start = WARMUP)
   plot(alpha)
   
-  beta_educ <- mcmc(res$beta[, 'educ', ])
+  beta_educ <- mcmc(res$beta[, 'educ', ]) %>% window(start = WARMUP)
   plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
   # plot(beta_educ)
   
@@ -97,6 +135,14 @@ for (i in 1:5) {
   beta_age <- mcmc(res$beta[, 'age', ])
   plot(beta_age[, c('Professionals, Salaried', 'Farm laborers')])
 }
+
+tmp <- lapply(all_res, function(res) mcmc(res$alpha))
+gelman.diag(tmp)
+pdf("../figure/trace_alpha_adaptive_multiple_starting_points.pdf", w = 4, h = 12)
+plot(tmp[[1]])
+plot(tmp[[2]])
+plot(tmp[[3]])
+dev.off()
 
 tmp <- lapply(all_res, function(res) mcmc(res$beta[, 'educ', ]))
 gelman.diag(tmp)
