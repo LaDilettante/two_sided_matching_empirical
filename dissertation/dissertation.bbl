@@ -1,0 +1,8 @@
+\begin{thebibliography}{}
+\newcommand{\enquote}[1]{``#1''}
+
+\bibitem[Haario et~al.(2001)Haario, Saksman, and Tamminen]{Haario2001}
+Haario, H., Saksman, E., and Tamminen, J. (2001), \enquote{{An Adaptive
+  Metropolis Algorithm},} \emph{Bernoulli}, 7, 223.
+
+\end{thebibliography}
