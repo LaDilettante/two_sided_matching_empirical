@@ -1,0 +1,16 @@
+\begin{thebibliography}{}
+
+\bibitem[\protect\citeauthoryear{Haario, Saksman, and Tamminen}{Haario
+  et~al.}{1999}]{Haario1999}
+Haario, H., E.~Saksman, and J.~Tamminen (1999).
+\newblock {Adaptive proposal distribution for random walk Metropolis
+  algorithm}.
+\newblock {\em Computational Statistics\/}~{\em 14\/}(3), 375.
+
+\bibitem[\protect\citeauthoryear{Haario, Saksman, and Tamminen}{Haario
+  et~al.}{2001}]{Haario2001}
+Haario, H., E.~Saksman, and J.~Tamminen (2001).
+\newblock {An Adaptive Metropolis Algorithm}.
+\newblock {\em Bernoulli\/}~{\em 7\/}(2), 223.
+
+\end{thebibliography}
