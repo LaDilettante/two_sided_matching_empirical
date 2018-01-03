@@ -138,9 +138,16 @@ for (i in 1:S) {
 
 tmp <- lapply(all_res, function(res) mcmc(res$alpha))
 gelman.diag(tmp)
-pdf("../figure/trace_alpha_adaptive_multiple_starting_points.pdf", w = 4, h = 12)
+
+pdf("../figure/trace_alpha_adaptive_replicate1.pdf", w = 5, h = 5)
 plot(tmp[[1]])
+dev.off()
+
+pdf("../figure/trace_alpha_adaptive_replicate2.pdf", w = 5, h = 5)
 plot(tmp[[2]])
+dev.off()
+
+pdf("../figure/trace_alpha_adaptive_replicate3.pdf", w = 5, h = 5)
 plot(tmp[[3]])
 dev.off()
 
