@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99d (TeX Live 2017)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: dissertation.aux
+A level-1 auxiliary file: ./Abstract/abstract.aux
+A level-1 auxiliary file: ./Abbreviations/listofabbr.aux
+A level-1 auxiliary file: ./Acknowledgements/acknowledgements.aux
+A level-1 auxiliary file: ./Chapter1/introduction.aux
+A level-1 auxiliary file: ./Chapter2/guide-notes.aux
+A level-1 auxiliary file: ./Chapter3/chRegularLook.aux
+A level-1 auxiliary file: ./Chapter4/chLorem.aux
+A level-1 auxiliary file: ./Chapter5/chLorem2.aux
+A level-1 auxiliary file: ./Appendix1/chLorem3.aux
+The style file: ./Bibliography/jasa.bst
+A level-1 auxiliary file: ./Biography/biography.aux
+Database file #1: library.bib
+Warning--I didn't find a database entry for "fancy"
+Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
+[Haario2001]
+You've used 1 entry,
+            2332 wiz_defined-function locations,
+            550 strings with 4508 characters,
+and the built_in function-call counts, 456 in all, are:
+= -- 40
+> -- 28
+< -- 0
++ -- 8
+- -- 8
+* -- 44
+:= -- 87
+add.period$ -- 2
+call.type$ -- 1
+change.case$ -- 5
+chr.to.int$ -- 1
+cite$ -- 2
+duplicate$ -- 17
+empty$ -- 27
+format.name$ -- 9
+if$ -- 85
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 1
+newline$ -- 7
+num.names$ -- 4
+pop$ -- 6
+preamble$ -- 1
+purify$ -- 6
+quote$ -- 0
+skip$ -- 12
+stack$ -- 2
+substring$ -- 22
+swap$ -- 3
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 9
+warning$ -- 0
+while$ -- 4
+width$ -- 0
+write$ -- 14
+(There was 1 warning)
