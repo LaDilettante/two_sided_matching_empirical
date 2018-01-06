@@ -1,8 +1,16 @@
 \begin{thebibliography}{}
 \newcommand{\enquote}[1]{``#1''}
 
+\bibitem[Gale and Shapley(1962)Gale and Shapley]{Gale1962}
+Gale, D. and Shapley, L.~S. (1962), \enquote{{College Admissions and the
+  Stability of Marrige},} \emph{The American Mathematical Monthly}, 69, 9--15.
+
 \bibitem[Haario et~al.(2001)Haario, Saksman, and Tamminen]{Haario2001}
 Haario, H., Saksman, E., and Tamminen, J. (2001), \enquote{{An Adaptive
   Metropolis Algorithm},} \emph{Bernoulli}, 7, 223.
+
+\bibitem[Rysman(2009)Rysman]{Rysman2009}
+Rysman, M. (2009), \enquote{{The Economics of Two-Sided Markets},}
+  \emph{Journal of Economic Perspectives}, 23, 125--143.
 
 \end{thebibliography}
