@@ -1,13 +1,55 @@
 \begin{thebibliography}{}
 \newcommand{\enquote}[1]{``#1''}
 
+\bibitem[Abowd et~al.(1999)Abowd, Kramarz, and Margolis]{Abowd1999}
+Abowd, J.~M., Kramarz, F., and Margolis, D.~N. (1999), \enquote{{High wage
+  workers and high wage firms},} \emph{Econometrica}, 67, 251--333.
+
+\bibitem[Adachi(2003)Adachi]{Adachi2003}
+Adachi, H. (2003), \enquote{{A search model of two-sided matching under
+  nontransferable utility},} \emph{Journal of Economic Theory}, 113, 182--198.
+
+\bibitem[Bonica et~al.(2017)Bonica, Chilton, Goldin, Rozema, and
+  Sen]{Bonica2017}
+Bonica, A., Chilton, A.~S., Goldin, J., Rozema, K., and Sen, M. (2017),
+  \enquote{{The political ideologies of law clerks},} \emph{American Law and
+  Economics Review}, 19, 96--128.
+
 \bibitem[Gale and Shapley(1962)Gale and Shapley]{Gale1962}
 Gale, D. and Shapley, L.~S. (1962), \enquote{{College Admissions and the
   Stability of Marrige},} \emph{The American Mathematical Monthly}, 69, 9--15.
 
+\bibitem[Gulati and Posner(2016)Gulati and Posner]{Gulati2016}
+Gulati, M. and Posner, R.~A. (2016), \enquote{{The management of staff by
+  federal court of appeals judges},} \emph{Vanderbilt Law Review}, 69,
+  479--497.
+
 \bibitem[Haario et~al.(2001)Haario, Saksman, and Tamminen]{Haario2001}
 Haario, H., Saksman, E., and Tamminen, J. (2001), \enquote{{An Adaptive
   Metropolis Algorithm},} \emph{Bernoulli}, 7, 223.
+
+\bibitem[Posner(2001)Posner]{Posner2001}
+Posner, R.~A. (2001), \enquote{{The Market for Federal Judicial Law Clerks},}
+  \emph{The University of Chicago Law Review}, 68, 793--902.
+
+\bibitem[Posner et~al.(2007)Posner, Avery, Jolls, and Roth]{Posner2007}
+Posner, R.~A., Avery, C., Jolls, C., and Roth, A. (2007), \enquote{{The New
+  Market for Federal Judicial Law Clerks},} \emph{The University of Chicago Law
+  Review}, 74, 447.
+
+\bibitem[Roth and Sotomayor(1992)Roth and Sotomayor]{Roth1992}
+Roth, A.~E. and Sotomayor, M. (1992), \enquote{{Two-sided matching},} in
+  \emph{Handbook of Game Theory}, eds. S.~Hart and R.~Aumann, vol.~1, chap.~16,
+  pp. 486--541, Elsevier Science Publishers, 1st edn.
+
+\bibitem[Roth and Vate(1990)Roth and Vate]{Roth2016}
+Roth, A.~E. and Vate, J. H.~V. (1990), \enquote{{Random Paths to Stability in
+  Two-Sided Matching},} \emph{Econometrica}, 58, 1475.
+
+\bibitem[Rozema and Peng(2016)Rozema and Peng]{Rozema2016}
+Rozema, K. and Peng, S. (2016), \enquote{{The Role of External Referrals in
+  Hiring: Evidence from Judicial Law Clerks},} \emph{Available at SSRN
+  2822952}.
 
 \bibitem[Rysman(2009)Rysman]{Rysman2009}
 Rysman, M. (2009), \enquote{{The Economics of Two-Sided Markets},}

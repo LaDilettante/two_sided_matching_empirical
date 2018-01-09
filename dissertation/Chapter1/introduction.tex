@@ -71,9 +71,24 @@ for any set of preference, there will always be a stable matching. This means
 that it is reasonable for us to assume that the process that generates the final
 match we observe in the data is one of agents maximizing their utilities.
 Crucially, this provides the justification for us modeling their choice using the familiar tools in the
-discrete choice literature. 
+discrete choice literature.\footnote{\citep{Gale1962} provides a constructive
+  proof of stable matching. They describe the process, called
+  \textit{deferred acceptance}, that produces the stable matching. The process
+  works as follows. In the first stage, every man proposes to his preferred mate. Every
+  woman rejects all of her suitors except the one that she most prefers.
+  However, she does not yet accept her favorite suitor (so far), but keep him along. In the
+  second stage, every man that was rejected proposes to his second choice. Every
+  woman then picks her favorite from the set of new proposers and the man she
+  keeps along from the last round. The procedure continues until there is no longer any
+woman that is unmatched. The resulting match is stable because, throughout the process, every woman has received all
+the offers that would have been made to her, and she has chosen her favorite
+among all of those offers. If there is any other man that she would prefer to
+her current match, that man would not be available to her. Therefore, the final match cannot be further improved
+by any man or woman.}
 
-When generalize this model to many-to-one matching setting of firm and workers,
+\citep{Gale1962} treats the case of many-to-one matching (which they call the
+``college admission'' game) essentially the same. However, \cite{Roth1992} shows
+that a well defined many-to-one matching game is slightly different. However, hen generalize this model to many-to-one matching setting of firm and workers,
 all the striking results remain, but we do have to make the assumption of
 substitutability, meaning that firms treat workers as substitute, not
 complements. Formally, this means that firm never regret hiring a worker if
@@ -82,13 +97,96 @@ true: a football team strategizing for passing play may want to hire both a good
 passer and a good running back, and in the case one does not accept, will go to
 another strategy altogether.
 
-\subsection{Current way to measure preference}
+So we know that a stable match always exist, meaning it is possible for agents
+to reach a final match that maximize their utilities. A central coordinator
+employing the \textit{deferred acceptance} algorithm is guaranteed to reach this
+stable match. However, in a decentralized market without a central coordinator,
+would agents be able to reach this outcome by themselves? How likely is that
+this will happen. This matters for our empirical approach because we need to
+know whether the final outcome we observe is indeed a stable match, i.e. which
+would inform our estimation strategy.\citep{Roth2016} shows that, starting from
+an arbitrary matching, the matching can converge to a stable matching with
+probability 1 if we allow random blocking pairs, i.e. a woman and a man that are
+not matched to one another but prefer each other to their current match, to
+match. In addition, \citep{Adachi2003} shows that a random search process, in
+which man and woman randomly meet, evaluate, and decide to pair or not, will
+converge towards a stable match assuming that the search cost is negligible
+(specified as having a time discount = 1). This gives us confidence that the
+data we observed is close to a stable match, a fact that will guide us in our
+modeling strategy.
 
-The marriage market
+\subsection{Empirical studies of two-sided matching market}
 
-The law graduate markets
+Given the importance of many two sided matching markets, there have been many
+empirical studies that try to estimate the preference of participants in these
+markets. Below I discuss several examples, starting with the marriage and the
+labor market, where the two-sided matching literature started. Then I discuss
+the law graduate market and the FDI market, two markets that are relevant to
+politics, whose two-sided nature has not been fully appreciated and modeled
+accordingly.
 
-The FDI market
+Estimating preference is a difficult task, and throughout the discussion it will
+become apparent that most empirical approaches either 1) use survey to get the
+stated preference, not revealed preference, or 2) failing to consider the
+two-sided nature of the market in their estimation method, thus unable to
+distinguish between preference and opportunity. Our two-sided matching model
+aims to address both these shortcomings: it will estimate preference based on
+observed match, i.e. revealed preference, and will be able to distinguish
+between the effect of opportunity and choice.
+
+\subsubsection{Labor market}
+
+\citep{Abowd1999} is also estimating preference, disentangling the two-sided
+effect, but require salary data.
+
+\subsubsection{Law graduate market}
+
+In the United States, graduates at top law schools vie for the best federal
+clerkship. These temporary, one-to-two-year position are the launching pad for Supreme Court clerkship,
+prestigious teaching jobs or positions at top law firms. On the other hand,
+federal judges also compete for the best law graduates, who help reduce the
+judges' workload, from copy-editing, to research, and even drafting the opinions
+\citep[795]{Gulati2016, Posner2001}
+
+\citep{Rozema2016} is the first quantitative model of the law clerk market. It's
+the first to model the process as a discrete choice problem, in which clerks are
+differentiated products that the Supreme Court justices pick in order to
+maximize their utilities. However, it doesn't consider the other side of the
+market, i.e. the decision of the clerks. This article gets away with this
+assumption because a Supreme Court clerkship is the most prestigious legal
+position for law graduates, so the authors argue that no graduates will turn
+down an offered clerkship. However, if we want to extend the model to the
+broader market for law clerks, it is imperative to consider the utility of the
+law clerks as well.
+
+Indeed, as \citep{Posner2001, Posner2007} surveyed, the competition among
+federal judges for top law graduates is fierce, causing the starting date for
+making offer to law graduates to be continually pushed up. Law graduates not
+only care about the prestige of the job, but also other factors of a job like
+quality of life. A judge confessed that, living in a country town, he feels
+pressured to start making offer earlier to have any chance of recruiting a good
+law graduates \citep{Posner2001}. The competition is so fierce that, despite a moratorium on making
+offer earlier than the 3rd year of the law graduates, most judges say that their
+peers mostly don't adhere to the moratorium \citep{Posner2007}.
+
+\citep{Bonica2017} is another example of how empirical study that doesn't take
+into the two sided nature of the market will produce curious empirical study.
+For example, they argues that Judges hire clerks with consistent ideology (p
+21), and that they tend to hire clerks with the same ideology as theirs.
+However, they also note that conservative tend to hire more liberal clerks, more
+so than liberal clerks hiring conservative clerk. This potentially is because
+most top school clerks are liberal. Without taking the pool of applicant into
+account, we can wrongly mistake this as conservative judges having a preference
+for liberal clerks. Indeed, they calculate clerk-based ideology for judge by
+simply taking the average (p 35). This will be wrong because what a true
+clerk-based measure of ideology would be the judge's preference for the clerk's
+ideology, which I can measure here.
+
+\subsubsection{Government formation}
+
+
+
+\subsubsection{The FDI market}
 
 \subsection{The two-sided matching approach}
 

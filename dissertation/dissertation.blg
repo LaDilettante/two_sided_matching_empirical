@@ -15,48 +15,57 @@ A level-1 auxiliary file: ./Biography/biography.aux
 Database file #1: library.bib
 Warning--I didn't find a database entry for "fancy"
 Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
+[Abowd1999]
+[Adachi2003]
+[Bonica2017]
 [Gale1962]
+[Gulati2016]
 [Haario2001]
+[Posner2001]
+[Posner2007]
+[Roth1992]
+[Roth2016]
+[Rozema2016]
 [Rysman2009]
-You've used 3 entries,
+You've used 12 entries,
             2332 wiz_defined-function locations,
-            566 strings with 4764 characters,
-and the built_in function-call counts, 1297 in all, are:
-= -- 129
-> -- 61
-< -- 2
-+ -- 17
-- -- 17
-* -- 121
-:= -- 231
-add.period$ -- 6
-call.type$ -- 3
-change.case$ -- 16
-chr.to.int$ -- 3
-cite$ -- 6
-duplicate$ -- 51
-empty$ -- 84
-format.name$ -- 22
-if$ -- 249
+            635 strings with 6091 characters,
+and the built_in function-call counts, 5517 in all, are:
+= -- 544
+> -- 281
+< -- 11
++ -- 79
+- -- 79
+* -- 524
+:= -- 954
+add.period$ -- 24
+call.type$ -- 12
+change.case$ -- 66
+chr.to.int$ -- 12
+cite$ -- 24
+duplicate$ -- 217
+empty$ -- 356
+format.name$ -- 101
+if$ -- 1083
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 3
-newline$ -- 13
-num.names$ -- 12
-pop$ -- 15
+missing$ -- 12
+newline$ -- 40
+num.names$ -- 50
+pop$ -- 66
 preamble$ -- 1
-purify$ -- 19
+purify$ -- 77
 quote$ -- 0
-skip$ -- 36
-stack$ -- 4
-substring$ -- 89
-swap$ -- 9
-text.length$ -- 0
+skip$ -- 157
+stack$ -- 13
+substring$ -- 381
+swap$ -- 47
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 27
+type$ -- 108
 warning$ -- 0
-while$ -- 14
+while$ -- 57
 width$ -- 0
-write$ -- 36
+write$ -- 137
 (There was 1 warning)

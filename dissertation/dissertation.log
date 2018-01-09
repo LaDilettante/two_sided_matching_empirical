@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  6 JAN 2018 17:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  8 JAN 2018 22:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -782,82 +782,82 @@ Chapter 1.
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
 (hyperref)                than one, level fixed on input line 50.
 
-[2]) [3]
+[2] [3] [4] [5] [6]) [7]
 \openout2 = `./Chapter2/guide-notes.aux'.
 
  (./Chapter2/guide-notes.tex
 Chapter 2.
-[4
+[8
 
 
 
-] [5]
+] [9]
 Overfull \hbox (20.61768pt too wide) in paragraph at lines 82--84
 []\OT1/cmr/m/n/12 Macro. En-ables the op-tions sin-glespace, no-grad-school, an
 d nobind. \OT1/cmr/bx/n/12 Changed
  []
 
-[6] [7]) [8]
+[10] [11]) [12]
 \openout2 = `./Chapter3/chRegularLook.aux'.
 
  (./Chapter3/chRegularLook.tex
 Chapter 3.
-[9
+[13
 
 
 
-] [10]
+] [14]
 
-Package natbib Warning: Citation `fancy' on page 11 undefined on input line 114
+Package natbib Warning: Citation `fancy' on page 15 undefined on input line 114
 .
 
-[11] <./Pictures/dukeshield.pdf, id=353, 222.8325pt x 277.035pt>
+[15] <./Pictures/dukeshield.pdf, id=414, 222.8325pt x 277.035pt>
 File: ./Pictures/dukeshield.pdf Graphic file (type pdf)
 
 <use ./Pictures/dukeshield.pdf>
 Package pdftex.def Info: ./Pictures/dukeshield.pdf used on input line 142.
 (pdftex.def)             Requested size: 216.81pt x 269.55215pt.
- [12] [13 <./Pictures/dukeshield.pdf>] [14]
-[15]
+ [16] [17 <./Pictures/dukeshield.pdf>] [18]
+[19]
 File: ./Pictures/dukeshield.pdf Graphic file (type pdf)
  <use ./Pictures/dukeshield.pdf>
 Package pdftex.def Info: ./Pictures/dukeshield.pdf used on input line 261.
 (pdftex.def)             Requested size: 87.19333pt x 108.405pt.
-) [16] [17]
+) [20] [21]
 \openout2 = `./Chapter4/chLorem.aux'.
 
  (./Chapter4/chLorem.tex
 Chapter 4.
-[18
-
-
-
-] [19] [20]) [21]
-\openout2 = `./Chapter5/chLorem2.aux'.
-
- (./Chapter5/chLorem2.tex
-Chapter 5.
 [22
 
 
 
 ] [23] [24]) [25]
-\openout2 = `./Appendix1/chLorem3.aux'.
+\openout2 = `./Chapter5/chLorem2.aux'.
 
- (./Appendix1/chLorem3.tex
-Appendix A.
+ (./Chapter5/chLorem2.tex
+Chapter 5.
 [26
 
 
 
-] [27] [28] [29]) [30] (./dissertation.bbl) [31
+] [27] [28]) [29]
+\openout2 = `./Appendix1/chLorem3.aux'.
+
+ (./Appendix1/chLorem3.tex
+Appendix A.
+[30
+
+
+
+] [31] [32] [33]) [34] (./dissertation.bbl) [35
 
 
 
 ]
 \openout2 = `./Biography/biography.aux'.
 
- (./Biography/biography.tex) [32
+ (./Biography/biography.tex) [36
 
 
 ]
@@ -874,7 +874,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 156.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 156.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 156.
 Package rerunfilecheck Info: File `dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: B9940AC238CF9A3430CCB837741B2A87;2538.
+(rerunfilecheck)             Checksum: 9533192FB0EE945AE21588C5AEFBB029;2551.
 
 
 LaTeX Warning: There were multiply-defined labels.
@@ -882,11 +882,11 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 156.
  ) 
 Here is how much of TeX's memory you used:
- 7598 strings out of 492995
- 107021 string characters out of 6132704
- 198330 words of memory out of 5000000
- 10799 multiletter control sequences out of 15000+600000
- 31497 words of font info for 110 fonts, out of 8000000 for 9000
+ 7644 strings out of 492995
+ 107720 string characters out of 6132704
+ 197793 words of memory out of 5000000
+ 10827 multiletter control sequences out of 15000+600000
+ 31843 words of font info for 111 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  34i,18n,30p,586b,467s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
@@ -910,10 +910,10 @@ ive/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha8.pfb></usr/local/tex
 live/2017/texmf-dist/fonts/type1/public/mathabx-type1/mathb12.pfb></usr/local/t
 exlive/2017/texmf-dist/fonts/type1/public/mathabx-type1/mathx10.pfb></usr/local
 /texlive/2017/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on dissertation.pdf (43 pages, 268333 bytes).
+Output written on dissertation.pdf (47 pages, 285367 bytes).
 PDF statistics:
- 560 PDF objects out of 1000 (max. 8388607)
- 488 compressed objects within 5 object streams
- 122 named destinations out of 1000 (max. 500000)
+ 624 PDF objects out of 1000 (max. 8388607)
+ 547 compressed objects within 6 object streams
+ 140 named destinations out of 1000 (max. 500000)
  270 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -230,9 +230,6 @@ OUTPUT ./Chapter1/introduction.aux
 INPUT ./Chapter1/introduction.tex
 INPUT ./Chapter1/introduction.tex
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
-OUTPUT ./Chapter2/guide-notes.aux
-INPUT ./Chapter2/guide-notes.tex
-INPUT ./Chapter2/guide-notes.tex
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmss10.tfm
@@ -257,6 +254,10 @@ INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/mathabx/mathb7.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/mathabx/mathb5.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/mathabx/mathx10.tfm
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/mathabx/mathx10.tfm
+INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
+OUTPUT ./Chapter2/guide-notes.aux
+INPUT ./Chapter2/guide-notes.tex
+INPUT ./Chapter2/guide-notes.tex
 OUTPUT ./Chapter3/chRegularLook.aux
 INPUT ./Chapter3/chRegularLook.tex
 INPUT ./Chapter3/chRegularLook.tex
