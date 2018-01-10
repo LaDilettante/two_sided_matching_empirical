@@ -15,6 +15,10 @@ Bonica, A., Chilton, A.~S., Goldin, J., Rozema, K., and Sen, M. (2017),
   \enquote{{The political ideologies of law clerks},} \emph{American Law and
   Economics Review}, 19, 96--128.
 
+\bibitem[Cameron and Trivedi(2005)Cameron and Trivedi]{Cameron2005}
+Cameron, A. and Trivedi, P. (2005), \emph{{Microeconometrics: methods and
+  applications}}, Cambridge University Press, Cambridge.
+
 \bibitem[Gale and Shapley(1962)Gale and Shapley]{Gale1962}
 Gale, D. and Shapley, L.~S. (1962), \enquote{{College Admissions and the
   Stability of Marrige},} \emph{The American Mathematical Monthly}, 69, 9--15.
@@ -24,9 +28,18 @@ Gulati, M. and Posner, R.~A. (2016), \enquote{{The management of staff by
   federal court of appeals judges},} \emph{Vanderbilt Law Review}, 69,
   479--497.
 
-\bibitem[Haario et~al.(2001)Haario, Saksman, and Tamminen]{Haario2001}
-Haario, H., Saksman, E., and Tamminen, J. (2001), \enquote{{An Adaptive
-  Metropolis Algorithm},} \emph{Bernoulli}, 7, 223.
+\bibitem[Laver(1998)Laver]{Laver1998}
+Laver, M.~J. (1998), \enquote{{Models of Government Formation},} \emph{Annual
+  Review of Political Science}, 1, 1--25.
+
+\bibitem[Logan(1998)Logan]{Logan1998}
+Logan, J.~A. (1998), \enquote{{Estimating Two-Sided Logit Models},}
+  \emph{Sociological methodology}, 28, 139--173.
+
+\bibitem[Peppers et~al.(2008)Peppers, Giles, and Tainer-Parkins]{Peppers2008}
+Peppers, T.~C., Giles, M.~W., and Tainer-Parkins, B. (2008), \enquote{{Inside
+  Judicial Chambers: How Federal District Court Judges Select and Use Their Law
+  Clerks},} \emph{Albany Law Review}, 71, 8--23.
 
 \bibitem[Posner(2001)Posner]{Posner2001}
 Posner, R.~A. (2001), \enquote{{The Market for Federal Judicial Law Clerks},}
@@ -54,5 +67,9 @@ Rozema, K. and Peng, S. (2016), \enquote{{The Role of External Referrals in
 \bibitem[Rysman(2009)Rysman]{Rysman2009}
 Rysman, M. (2009), \enquote{{The Economics of Two-Sided Markets},}
   \emph{Journal of Economic Perspectives}, 23, 125--143.
+
+\bibitem[Slotnick(1984)Slotnick]{Slotnick1984}
+Slotnick, E.~E. (1984), \enquote{{The paths to the federal bench: gender, race
+  and judicial recruitment variation},} \emph{Judicature}, 67, 371--388.
 
 \end{thebibliography}

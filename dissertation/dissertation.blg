@@ -5,10 +5,8 @@ A level-1 auxiliary file: ./Abstract/abstract.aux
 A level-1 auxiliary file: ./Abbreviations/listofabbr.aux
 A level-1 auxiliary file: ./Acknowledgements/acknowledgements.aux
 A level-1 auxiliary file: ./Chapter1/introduction.aux
-A level-1 auxiliary file: ./Chapter2/guide-notes.aux
+A level-1 auxiliary file: ./Chapter2/model.aux
 A level-1 auxiliary file: ./Chapter3/chRegularLook.aux
-A level-1 auxiliary file: ./Chapter4/chLorem.aux
-A level-1 auxiliary file: ./Chapter5/chLorem2.aux
 A level-1 auxiliary file: ./Appendix1/chLorem3.aux
 The style file: ./Bibliography/jasa.bst
 A level-1 auxiliary file: ./Biography/biography.aux
@@ -18,54 +16,58 @@ Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
 [Abowd1999]
 [Adachi2003]
 [Bonica2017]
+[Cameron2005]
 [Gale1962]
 [Gulati2016]
-[Haario2001]
+[Laver1998]
+[Logan1998]
+[Peppers2008]
 [Posner2001]
 [Posner2007]
 [Roth1992]
 [Roth2016]
 [Rozema2016]
 [Rysman2009]
-You've used 12 entries,
+[Slotnick1984]
+You've used 16 entries,
             2332 wiz_defined-function locations,
-            635 strings with 6091 characters,
-and the built_in function-call counts, 5517 in all, are:
-= -- 544
-> -- 281
-< -- 11
-+ -- 79
-- -- 79
-* -- 524
-:= -- 954
-add.period$ -- 24
-call.type$ -- 12
-change.case$ -- 66
-chr.to.int$ -- 12
-cite$ -- 24
-duplicate$ -- 217
-empty$ -- 356
-format.name$ -- 101
-if$ -- 1083
+            663 strings with 6621 characters,
+and the built_in function-call counts, 7089 in all, are:
+= -- 707
+> -- 336
+< -- 15
++ -- 94
+- -- 94
+* -- 663
+:= -- 1226
+add.period$ -- 31
+call.type$ -- 16
+change.case$ -- 87
+chr.to.int$ -- 16
+cite$ -- 32
+duplicate$ -- 284
+empty$ -- 469
+format.name$ -- 122
+if$ -- 1388
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 12
-newline$ -- 40
-num.names$ -- 50
-pop$ -- 66
+missing$ -- 17
+newline$ -- 52
+num.names$ -- 66
+pop$ -- 87
 preamble$ -- 1
-purify$ -- 77
+purify$ -- 102
 quote$ -- 0
-skip$ -- 157
-stack$ -- 13
-substring$ -- 381
-swap$ -- 47
+skip$ -- 202
+stack$ -- 17
+substring$ -- 505
+swap$ -- 58
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 108
+type$ -- 141
 warning$ -- 0
-while$ -- 57
+while$ -- 76
 width$ -- 0
-write$ -- 137
+write$ -- 181
 (There was 1 warning)
