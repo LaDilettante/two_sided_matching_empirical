@@ -123,21 +123,21 @@ cond_Tau_beta <- function(mu_beta, prior, beta) {
 # ---- Adaptive MCMC utilities ----
 
 #' Calculate the vcov matrix recursively
-#' @param X_sample matrix n_samples x length(X), the MCMC samples of X so far
+#' @param X_sample the latest sample of X
 calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
-  d <- ncol(X_sample)
+  d <- length(X_sample)
   sd <- (2.4 ** 2) / d
   
   C_old <- C
   Xbar_old <- Xbar
-      
-  Xbar <- 1 / (t - 1) * ((t - 2) * Xbar_old + X_sample[t - 1, ])
+  
+  Xbar <- 1 / (t - 1) * ((t - 2) * Xbar_old + X_sample)
   C <- (t - 3) / (t - 2) * C_old +
     sd / (t - 2) * ((t - 2) * Xbar_old %*% t(Xbar_old) -
                       (t - 1) * Xbar %*% t(Xbar) +
-                      X_sample[t - 1, ] %*% t(X_sample[t - 1, ]) +
-                        eps * diag(d))
-
+                      X_sample %*% t(X_sample) +
+                      eps * diag(d))
+  
   return(list(C = C, Xbar = Xbar))
 }
 
@@ -216,6 +216,7 @@ match2sided <- function(iter, t0 = iter / 10,
   Tau_betasave[1, ,] <- Tau_beta
   
   # ---- Loop ----
+  start <- Sys.time()
   for (i in 2:iter) {
     # Update opp
     num_new_offers <- floor(frac_opp * n_j) # per i
@@ -242,18 +243,19 @@ match2sided <- function(iter, t0 = iter / 10,
       C_ab_est <- as.matrix(Matrix::bdiag(c(list(C_alpha), 
                                           rep(list(C_beta), n_j))))
     } else if (i > t0) {
-      alpha_samples <- asave[1:(i - 1), ]
-      beta_samples <- bsave[1:(i - 1), , ]
-      dim(beta_samples) <- c(i - 1, p_i * n_j)
-      ab_samples <- cbind(alpha_samples, beta_samples)
       if (i == t0 + 1) {
         # Calculate Cs and Xbars for the first time
+        alpha_samples <- asave[1:(i - 1), ]
+        beta_samples <- bsave[1:(i - 1), , ]
+        dim(beta_samples) <- c(i - 1, p_i * n_j)
+        ab_samples <- cbind(alpha_samples, beta_samples)
         C_ab_est <- sd * cov(ab_samples) + sd * eps * diag(p_j + p_i * n_j)
         Xbar_ab_est <- colMeans(ab_samples)
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        res <- calculate_C(X_sample = ab_samples, t = i, 
+        res <- calculate_C(X_sample = c(asave[i - 1, ], bsave[i - 1, , ]), 
+                           t = i, 
                            C = C_ab_est, Xbar = Xbar_ab_est)
         C_ab_est <- res$C
         Xbar_ab_est <- res$Xbar
@@ -300,7 +302,10 @@ match2sided <- function(iter, t0 = iter / 10,
     Tau_betasave[i, ,] <- Tau_beta
     
     # Increment
-    if (i %% 100 == 0) cat("Iteration", i, "done", "\n")
+    if (i %% 100 == 0) {
+      cat("Iteration", i, "done", Sys.time() - start, "\n")
+      start <- Sys.time()
+    }
   }
   
   if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
