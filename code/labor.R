@@ -99,15 +99,15 @@ dev.off()
 S <- 3
 all_res <- vector("list", S)
 for (i in 1:S) {
-  # starting_alpha <- runif(p_j, min = -5, max = 5)
-  # starting_beta <- matrix(runif(p_i * n_j, min = -5, max = 5),
-  #                         nrow = p_i, ncol = n_j)
+  starting_alpha <- runif(p_j, min = -5, max = 5)
+  starting_beta <- matrix(runif(p_i * n_j, min = -5, max = 5),
+                          nrow = p_i, ncol = n_j)
   
-  res <- match2sided(iter = 20000, t0 = 500,
+  res <- match2sided(iter = 1e6, t0 = 500,
                      C_alpha = (1 ** 2) * diag(ncol(ww)), 
                      C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                     # starting_alpha = starting_alpha,
-                     # starting_beta = starting_beta,
+                     starting_alpha = starting_alpha,
+                     starting_beta = starting_beta,
                      frac_opp = 0.25,
                      ww = ww, xx = xx,
                      choice = choice, opp = opp)  
