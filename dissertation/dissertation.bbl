@@ -23,10 +23,21 @@ Cameron, A. and Trivedi, P. (2005), \emph{{Microeconometrics: methods and
 Gale, D. and Shapley, L.~S. (1962), \enquote{{College Admissions and the
   Stability of Marrige},} \emph{The American Mathematical Monthly}, 69, 9--15.
 
+\bibitem[Goswami et~al.(2014)Goswami, Hedayati, and Mohapatra]{Goswami2014}
+Goswami, A., Hedayati, F., and Mohapatra, P. (2014), \enquote{{Recommendation
+  systems for markets with two sided preferences},} \emph{Proceedings - 2014
+  13th International Conference on Machine Learning and Applications, ICMLA
+  2014}, pp. 282--287.
+
 \bibitem[Gulati and Posner(2016)Gulati and Posner]{Gulati2016}
 Gulati, M. and Posner, R.~A. (2016), \enquote{{The management of staff by
   federal court of appeals judges},} \emph{Vanderbilt Law Review}, 69,
   479--497.
+
+\bibitem[Hitsch et~al.(2010)Hitsch, Horta{\c{c}}su, and Ariely]{Hitsch2010}
+Hitsch, G.~J., Horta{\c{c}}su, A., and Ariely, D. (2010), \enquote{{What makes
+  you click?-Mate preferences in online dating},} \emph{Quantitative Marketing
+  and Economics}, pp. 1--35.
 
 \bibitem[Laver(1998)Laver]{Laver1998}
 Laver, M.~J. (1998), \enquote{{Models of Government Formation},} \emph{Annual
@@ -71,5 +82,11 @@ Rysman, M. (2009), \enquote{{The Economics of Two-Sided Markets},}
 \bibitem[Slotnick(1984)Slotnick]{Slotnick1984}
 Slotnick, E.~E. (1984), \enquote{{The paths to the federal bench: gender, race
   and judicial recruitment variation},} \emph{Judicature}, 67, 371--388.
+
+\bibitem[Tu et~al.(2014)Tu, Ribeiro, Jiang, Wang, Jensen, Liu, and
+  Towsley]{Tu2014}
+Tu, K., Ribeiro, B., Jiang, H., Wang, X., Jensen, D., Liu, B., and Towsley, D.
+  (2014), \enquote{{Online Dating Recommendations: Matching Markets and
+  Learning Preferences},} .
 
 \end{thebibliography}

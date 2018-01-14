@@ -134,10 +134,51 @@ aims to address both these shortcomings: it will estimate preference based on
 observed match, i.e. revealed preference, and will be able to distinguish
 between the effect of opportunity and choice.
 
+Or they have demanding requirement on data, going further than just the simple match.
+
 \subsubsection{Labor market}
 
 \citep{Abowd1999} is also estimating preference, disentangling the two-sided
 effect, but require salary data.
+
+\subsubsection{Recommender system for online two-sided markets}
+
+In recent years, many online market place proliferate such as AirBnB, dating
+site like eHarmony, or job board like o-lance. To save money, these sites must
+make recommendations to their users in a way that resembles a stable match so
+that their users are more engaged with the site instead of being dissatisfied
+with the match.\footnote{To clarify, the term ``recommender system'' typically
+  refers to how platform make recommendation to users based on the reviews of
+  users like them. This is not what we are discussing here. Even though there is
+also a latent preference we want to uncover in that system, there is not a two
+sides choosing one another there.}
+
+Even though most of these algorithms are proprietary, there exists some academic
+publication addressing this problem. \citep{Hitsch2010, Goswami2014} are two
+attempts using one-sided approach, ignoring any strategic component.
+
+An interesting approach is \citep{Tu2014} which uses the Latent Dirichlet
+allocation (LDA) model to uncover thethe latent
+types of the users and their preferences based on their observed match on an
+online dating platform. In the original application of LDA model on
+topic modeling, each document is a mixture of latent topics, and each
+topic is a distribution over words. In this application, each user is a mixture
+of latent ``types,'' and each type is a distribution signifying relative
+preference over mates' feature. For example, the ``outdoor type'' may have
+higher preference for athleticism or dog ownership over other traits of their
+mates.
+
+However, these kinds of models only work because they either flat out ignore the
+two sided nature, or have access to data of users making multiple actions (i.e.
+reaching out to multiple partner) instead of just the final match. However,
+considering that these sites typically put a limit on the number of outreach you
+can have in a given time, or considering the simple time cost of making an
+outreach, we cannot ignore the strategic component of an user only reaching out
+to users that they think they have a chance with. So the preference they
+estimate is already confounded by the type of opportunity available. While these
+models have decent predictive performance when the pool of applicants are
+static, they cannot predict well the change in matches when there is a change in
+the opportunity pool.
 
 \subsubsection{Law graduate market}
 
@@ -227,11 +268,3 @@ Estimating the preference: democracy and FDI attraction, survey, comparing FDI
 and equity, type of FDI (greenfield vs brownfield).
 
 Also demand for the type of FDI.
-
-\subsection{The two-sided matching approach}
-
-The labor market
-
-The marriage market
-
-The machine learning approach

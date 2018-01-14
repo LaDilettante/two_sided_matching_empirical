@@ -18,7 +18,9 @@ Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
 [Bonica2017]
 [Cameron2005]
 [Gale1962]
+[Goswami2014]
 [Gulati2016]
+[Hitsch2010]
 [Laver1998]
 [Logan1998]
 [Peppers2008]
@@ -29,45 +31,47 @@ Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
 [Rozema2016]
 [Rysman2009]
 [Slotnick1984]
-You've used 16 entries,
+[Tu2014]
+Warning--empty journal in Tu2014
+You've used 19 entries,
             2332 wiz_defined-function locations,
-            663 strings with 6621 characters,
-and the built_in function-call counts, 7089 in all, are:
-= -- 707
-> -- 336
-< -- 15
-+ -- 94
-- -- 94
-* -- 663
-:= -- 1226
-add.period$ -- 31
-call.type$ -- 16
-change.case$ -- 87
-chr.to.int$ -- 16
-cite$ -- 32
-duplicate$ -- 284
-empty$ -- 469
-format.name$ -- 122
-if$ -- 1388
+            681 strings with 7255 characters,
+and the built_in function-call counts, 8680 in all, are:
+= -- 851
+> -- 444
+< -- 17
++ -- 126
+- -- 126
+* -- 813
+:= -- 1500
+add.period$ -- 37
+call.type$ -- 19
+change.case$ -- 102
+chr.to.int$ -- 19
+cite$ -- 39
+duplicate$ -- 348
+empty$ -- 557
+format.name$ -- 157
+if$ -- 1706
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 17
-newline$ -- 52
-num.names$ -- 66
-pop$ -- 87
+missing$ -- 20
+newline$ -- 61
+num.names$ -- 78
+pop$ -- 113
 preamble$ -- 1
-purify$ -- 102
+purify$ -- 120
 quote$ -- 0
-skip$ -- 202
-stack$ -- 17
-substring$ -- 505
-swap$ -- 58
-text.length$ -- 3
+skip$ -- 253
+stack$ -- 20
+substring$ -- 595
+swap$ -- 80
+text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 141
-warning$ -- 0
-while$ -- 76
+type$ -- 168
+warning$ -- 1
+while$ -- 91
 width$ -- 0
-write$ -- 181
-(There was 1 warning)
+write$ -- 212
+(There were 2 warnings)

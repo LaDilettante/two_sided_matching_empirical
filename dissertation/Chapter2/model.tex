@@ -1,11 +1,56 @@
 \chapter{Two-Sided Matching Model}
 \label{chap:model}
 
-This section lays out the set-up of the two-sided matching model, including the utilities of countries' officials and of MNCs. Then, the matching process is a natural consequence of actors' choosing the best option available to them.
+Here I present a behavioral model of the two-sided matching market, focusing on
+the case of many-to-one matching. For easier exposition, throughout the chapter
+I will use the example of the labor market, where many workers can be matched to
+one firm, to demonstrate the features of this model.
+
+In this model, there are two separate sets of actors: firms and workers. There
+are two sub-components of the model, happening sequentially. In the first stage, each firm
+evaluates each worker in the sample, then decide whether to extend an offer or
+not. In the second stage, 
+
+meaning that the model rests on the behavioral assumption that
+people make choices by maximizing their utilities. The parameters estimated will
+be the preference of people, and can be interpreted as how much they value
+different features. Since utility is unit-less, it won't have a scale, we only
+care about the relative values of different parameters.
+Cite McFadden here
+
+- one sided model won't be able to distinguish the effect between preference and opportunity
+- follows the tradition of discrete choice, in which actors choose from a set of
+finite and discrete alternatives (firms choosing from workers, workers choosing
+offers). Here we do make the assumption that the sample is representative of the
+population, i.e. the workers in the sample are also the workers that are
+presented to firm
+
+This section describes the two-sided matching model, a behavioral model in the
+sense that actors which is the
+behavioincluding the utilities of countries' officials and of MNCs. Then, the matching process is a natural consequence of actors' choosing the best option available to them.
+
+This model is a parametric version of the matching game by Roth 
+
+Describe the model: there are two sets of actors, one is employers, the other is
+employee. Employer consider every single worker, determine the utility of hiring
+him over not hiring him. This makes the assumption that the hiring decision does
+not depend on whether other candidates will accept the offer (substitutability).
+It also assumes that firm can theoretically hire all workers in the pool if they
+accept (assuming that there is no quota).
+
+IIA the ratio of the probabilities of choosing between two alternatives is
+independent of the attributes of all other alternatives. (This applies to the
+worker side).
+
+Stress that this is only one way to reach stable matching
+
+For the case of FDI, if we assume that all firms have the same preference, then
+even if we don't include the firms who decide not to invest, that's fine.
 
 \subsection{Officials' Utility}
 
-Following \citet{Logan1998}, we consider the utility function of two actors, the official and the firm.\footnote{For ease of exposition, in this section I will refer to country $j$ and official $j$ interchangeably.} For official $j$, the utility of having firm $i$ invest in his country is:
+Following \citet{Logan1998}, we consider the utility function of two set of
+actors, firms and workers. For firm $j$, the utility of hiring worker $i$ is:
 
 \begin{align}
 U_j(i) &= \bm{\beta}_j' X_i + \epsilon_{1ij}
