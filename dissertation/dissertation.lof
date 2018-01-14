@@ -1,6 +1,11 @@
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
+<<<<<<< HEAD
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Short caption for table of figures.}}{21}{figure.3.1}
 \contentsline {figure}{\numberline {3.2}{\ignorespaces The Duke logo again, but now with a really long rambling caption. This caption should be set single-spaced in the LoF and in the body text. What do you think about having graphics in the main directory of a project? I'd prefer them in a folder, then put 'foldername/picturename' as the argument to includegraphics.}}{25}{figure.3.2}
+=======
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Short caption for table of figures.}}{22}{figure.3.1}
+\contentsline {figure}{\numberline {3.2}{\ignorespaces The Duke logo again, but now with a really long rambling caption. This caption should be set single-spaced in the LoF and in the body text. What do you think about having graphics in the main directory of a project? I'd prefer them in a folder, then put 'foldername/picturename' as the argument to includegraphics.}}{26}{figure.3.2}
+>>>>>>> 5a25e367faf0028957b544b0025571f85941a03e
 \addvspace {10\p@ }

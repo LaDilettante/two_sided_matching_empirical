@@ -52,6 +52,44 @@ even if we don't include the firms who decide not to invest, that's fine.
 Following \citet{Logan1998}, we consider the utility function of two set of
 actors, firms and workers. For firm $j$, the utility of hiring worker $i$ is:
 
+This section describes the behavioral model of many-to-one matching. To aid the
+exposition, as an example for many-to-one matching I will use the labor market
+where many workers can be matched with one firm.
+
+We assume that the matching process in the labor market happens in two stage.
+In the first stage, each firm evaluates each worker in the sample, then
+decide whether to hire that worker or not. At the end of this stage, each worker
+has a set of offers from firms, which we call his \textit{opportunity
+  set}. In the second stage, each worker evaluates the firms in his
+opportunity set and chooses the firm that he likes best. This constitutes a
+final, observed match between a worker and a firm. This is a many-to-one
+matching problem because a firm can make offers to multiple
+workers, none, some, or all of which can be accepted by workers.
+
+If we assume that firms and workers are utility-maximizing agents, at the end of
+this process, no firm or worker would voluntarily change their final matches.
+This property is called \textit{stability} in the game theoretic two-sided
+matching literature. We want the model to have this property because real life
+matching market tends to be stable as well. Indeed, \citep{Roth1992} show that
+for any given set of preferences, a stable match always exist. Furthermore,
+\citep{Roth2016} and \citep{Adachi2003} show that a decentralized market with
+agents making independent, utility-maximizing decisions can also reach a stable
+match by itself.
+
+This stability property does not implies that the matches will not change.
+Indeed, if actors' preference shift, their characteristics change, or new actors
+enter the market, the matches will also change as a result of actors'
+recalculating their utility and adjust their decisions. Therefore, since we are
+estimating the actors' preference using only a snapshot of matching market, we
+are making the assumption that on a systemic level, the average characteristics of the
+actors and their preference remain sufficiently static for our estimates to be meaningful.
+
+\subsection{The decision making of firms}
+
+A firm $j$'s decision on whether to hire worker $i$ rests on two utility
+functions. First, firm $j$'s utility for hiring worker $i$ is:
+>>>>>>> 5a25e367faf0028957b544b0025571f85941a03e
+
 \begin{align}
 U_j(i) &= \bm{\beta}_j' X_i + \epsilon_{1ij}
 \end{align}
@@ -59,12 +97,12 @@ U_j(i) &= \bm{\beta}_j' X_i + \epsilon_{1ij}
 where
 
 \begin{align*}
-\beta_j &\text{ is a vector of official $j$'s preference for relevant characteristics of firms} \\
-x_i &\text{ is a vector of firm $i$'s measured values on those characteristics} \\
-\epsilon_{1ij} &\text{ is the unobserved component that influences official $j$'s utility}
+\beta_j &\text{ is a vector of firm $j$'s preference for worker characteristics} \\
+x_i &\text{ is a vector of worker $i$'s measured values on those characteristics} \\
+\epsilon_{1ij} &\text{ is the unobserved component that influences firm $j$'s utility}
 \end{align*}
 
-On the other hand, the utility of not having firm $i$ investing is:
+On the other hand, the utility of not hiring worker $i$ is:
 
 \begin{align}
 U_j(\neg i) &= b_j + \epsilon_{0ij}
@@ -73,13 +111,36 @@ U_j(\neg i) &= b_j + \epsilon_{0ij}
 where
 
 \begin{align*}
-b_j &\text{ is the baseline utility of official $j$ without any firm investing} \\
-\epsilon_{0ij} &\text{ is the component that influences official $j$'s utility}
+b_j &\text{ is the baseline utility of firm $j$} \\
+\epsilon_{0ij} &\text{ is the unobserved component that influences firm $j$'s utility}
 \end{align*}
 
-For each firm $i$, official $j$ will make an offer to invest if $U_j(i) > U_j(\neg i)$. Relevant firm characteristics (i.e. $X_i$) that the official may consider are: technological intensity, number of jobs, and size of capital. The corresponding $\beta$'s represent the official's preference for these characteristics.
+For each worker $i$, firm $j$ will make an offer to hire if $U_j(i) > U_j(\neg
+i)$. Relevant worker characteristics (i.e. $X_i$) that a firm may consider are
+age, education, or experience. The corresponding $\beta$'s represent the firm's
+preference for these characteristics.
 
-Following the discrete choice literature, we model $\epsilon_{1ij}, \epsilon_{0ij}$ as having the Gumbel distribution. Then, the probability of official $j$ making an offer to firm $i$ takes the familiar binomial logit form:
+We make several assumptions that are standard in the discrete choice literature.
+First, we assume a linear utility function. Second, we assume that the error
+terms $\epsilon_{1ij}, \epsilon_{0ij}$ are uncorrelated. This assumption is most
+likely not true: unobserved factors in one firm's utility are likely to share
+some components with unobserved factors in another firm's utility, and thus
+correlated. The hope is that we have modeled the observed portion of firm's
+utility sufficiently well that the remaining unobserved factors are close to
+white noise. In any case, this issue afflicts any application of discrete choice
+models and is not unique to our case.\footnote{The discrete choice model has
+  developed solutions for correlated error structure, such as nested logit,
+  probit, and mixed logit, that can be applied here if we suspect that firms'
+  unobserved utility is strong correlated.} 
+
+Third, we assume that the as error terms $\epsilon_{1ij}, \epsilon_{0ij}$ follow
+the Gumbel distribution, which has a slightly fatter tail the normal
+distribution allowing for slightly more extreme variation in the unobserved
+utility. In practice, the difference between using Gumbel and independent normal
+error terms is small \citep{Train2009}. The choice of the Gumbel distribution is largely motivated by its
+convenience since we can derive the probability of firm $j$ making an offer to worker $i$ as the familiar binomial logit form:
+
+Also discuss IIA here
 
 \begin{align}
 Pr(o_{ij} = 1) &= Pr(U_j(i) > U_j(\neg i)) \\

@@ -1,6 +1,7 @@
 \begin{thebibliography}{}
 \newcommand{\enquote}[1]{``#1''}
 
+<<<<<<< HEAD
 \bibitem[Abowd et~al.(1999)Abowd, Kramarz, and Margolis]{Abowd1999}
 Abowd, J.~M., Kramarz, F., and Margolis, D.~N. (1999), \enquote{{High wage
   workers and high wage firms},} \emph{Econometrica}, 67, 251--333.
@@ -89,4 +90,6 @@ Tu, K., Ribeiro, B., Jiang, H., Wang, X., Jensen, D., Liu, B., and Towsley, D.
   (2014), \enquote{{Online Dating Recommendations: Matching Markets and
   Learning Preferences},} .
 
+=======
+>>>>>>> 5a25e367faf0028957b544b0025571f85941a03e
 \end{thebibliography}

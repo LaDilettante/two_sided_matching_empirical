@@ -1,5 +1,5 @@
-This is BibTeX, Version 0.99d (TeX Live 2017)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: dissertation.aux
 A level-1 auxiliary file: ./Abstract/abstract.aux
 A level-1 auxiliary file: ./Abbreviations/listofabbr.aux
@@ -9,10 +9,32 @@ A level-1 auxiliary file: ./Chapter2/model.aux
 A level-1 auxiliary file: ./Chapter3/chRegularLook.aux
 A level-1 auxiliary file: ./Appendix1/chLorem3.aux
 The style file: ./Bibliography/jasa.bst
+I couldn't open database file library.bib
+---line 29 of file dissertation.aux
+ : \bibdata{library
+ :                 }
+I'm skipping whatever remains of this command
 A level-1 auxiliary file: ./Biography/biography.aux
-Database file #1: library.bib
+I found no database files---while reading file dissertation.aux
+Warning--I didn't find a database entry for "Rysman2009"
+Warning--I didn't find a database entry for "Gale1962"
+Warning--I didn't find a database entry for "Roth1992"
+Warning--I didn't find a database entry for "Roth2016"
+Warning--I didn't find a database entry for "Adachi2003"
+Warning--I didn't find a database entry for "Abowd1999"
+Warning--I didn't find a database entry for "Gulati2016"
+Warning--I didn't find a database entry for "Posner2001"
+Warning--I didn't find a database entry for "Slotnick1984"
+Warning--I didn't find a database entry for "Posner2007"
+Warning--I didn't find a database entry for "Peppers2008"
+Warning--I didn't find a database entry for "Bonica2017"
+Warning--I didn't find a database entry for "Rozema2016"
+Warning--I didn't find a database entry for "Laver1998"
+Warning--I didn't find a database entry for "Train2009"
+Warning--I didn't find a database entry for "Cameron2005"
 Warning--I didn't find a database entry for "fancy"
 Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
+<<<<<<< HEAD
 [Abowd1999]
 [Adachi2003]
 [Bonica2017]
@@ -75,3 +97,47 @@ while$ -- 91
 width$ -- 0
 write$ -- 212
 (There were 2 warnings)
+=======
+You've used 0 entries,
+            2332 wiz_defined-function locations,
+            572 strings with 4642 characters,
+and the built_in function-call counts, 20 in all, are:
+= -- 0
+> -- 0
+< -- 0
++ -- 0
+- -- 0
+* -- 0
+:= -- 7
+add.period$ -- 0
+call.type$ -- 0
+change.case$ -- 0
+chr.to.int$ -- 0
+cite$ -- 0
+duplicate$ -- 0
+empty$ -- 1
+format.name$ -- 0
+if$ -- 1
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 4
+num.names$ -- 0
+pop$ -- 0
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1
+stack$ -- 1
+substring$ -- 0
+swap$ -- 0
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 0
+while$ -- 0
+width$ -- 0
+write$ -- 3
+(There were 2 error messages)
+>>>>>>> 5a25e367faf0028957b544b0025571f85941a03e
