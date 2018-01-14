@@ -2,7 +2,7 @@
 \label{chap:model}
 
 Here I present a behavioral model of the two-sided matching market, focusing on
-the case of many-to-one matching. For easier exposition, throughout the chapter
+the case of many-to-one matching, first proposed by \cite{Logan1996}. For easier exposition, throughout the chapter
 I will use the example of the labor market, where many workers can be matched to
 one firm, to demonstrate the features of this model.
 
@@ -31,30 +31,10 @@ behavioincluding the utilities of countries' officials and of MNCs. Then, the ma
 
 This model is a parametric version of the matching game by Roth 
 
-Describe the model: there are two sets of actors, one is employers, the other is
-employee. Employer consider every single worker, determine the utility of hiring
-him over not hiring him. This makes the assumption that the hiring decision does
-not depend on whether other candidates will accept the offer (substitutability).
-It also assumes that firm can theoretically hire all workers in the pool if they
-accept (assuming that there is no quota).
 
 IIA the ratio of the probabilities of choosing between two alternatives is
 independent of the attributes of all other alternatives. (This applies to the
 worker side).
-
-Stress that this is only one way to reach stable matching
-
-For the case of FDI, if we assume that all firms have the same preference, then
-even if we don't include the firms who decide not to invest, that's fine.
-
-\subsection{Officials' Utility}
-
-Following \citet{Logan1998}, we consider the utility function of two set of
-actors, firms and workers. For firm $j$, the utility of hiring worker $i$ is:
-
-This section describes the behavioral model of many-to-one matching. To aid the
-exposition, as an example for many-to-one matching I will use the labor market
-where many workers can be matched with one firm.
 
 We assume that the matching process in the labor market happens in two stage.
 In the first stage, each firm evaluates each worker in the sample, then
@@ -88,7 +68,6 @@ actors and their preference remain sufficiently static for our estimates to be m
 
 A firm $j$'s decision on whether to hire worker $i$ rests on two utility
 functions. First, firm $j$'s utility for hiring worker $i$ is:
->>>>>>> 5a25e367faf0028957b544b0025571f85941a03e
 
 \begin{align}
 U_j(i) &= \bm{\beta}_j' X_i + \epsilon_{1ij}
@@ -119,6 +98,20 @@ For each worker $i$, firm $j$ will make an offer to hire if $U_j(i) > U_j(\neg
 i)$. Relevant worker characteristics (i.e. $X_i$) that a firm may consider are
 age, education, or experience. The corresponding $\beta$'s represent the firm's
 preference for these characteristics.
+
+This model makes two important assumptions about firms' hiring process. First, a
+firm's decision to hire worker A depends on the characteristics of worker A
+alone, and it will continue to hire worker A even if worker B is not available.
+In other words, firms regard workers as substitutes rather than complements.\footnote{In the terminology of \citep{Roth1992}, this assumption means
+  that firms' preference has the property of substitutability, or that firms
+  have substitutable preference.} This assumption is not universally true. A
+Hollywood producer may need to hire two specific lead actors for their
+complementary chemistry, and if one is unavailable, the other also has to be
+replaced. However, for large firms where workers are closer to
+swappable cogs than unique superstars, this assumption is more reasonable.
+
+
+Assumption: substitutability, and no decreasing marginal return to productivity
 
 We make several assumptions that are standard in the discrete choice literature.
 First, we assume a linear utility function. Second, we assume that the error
