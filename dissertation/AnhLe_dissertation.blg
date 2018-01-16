@@ -1,6 +1,6 @@
 This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: dissertation.aux
+The top-level auxiliary file: AnhLe_dissertation.aux
 A level-1 auxiliary file: ./Abbreviations/listofabbr.aux
 A level-1 auxiliary file: ./Chapter1/introduction.aux
 A level-1 auxiliary file: ./Chapter2/model.aux
@@ -42,7 +42,7 @@ Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
 [Tu2014]
 You've used 32 entries,
             2332 wiz_defined-function locations,
-            766 strings with 9116 characters,
+            766 strings with 9128 characters,
 and the built_in function-call counts, 13999 in all, are:
 = -- 1379
 > -- 699

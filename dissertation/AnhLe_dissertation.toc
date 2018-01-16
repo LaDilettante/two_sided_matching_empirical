@@ -2,7 +2,7 @@
 \contentsline {chapter}{List of Figures}{vii}{chapter*.3}
 \contentsline {chapter}{List of Abbreviations and Symbols}{viii}{chapter*.4}
 \contentsline {chapter}{\numberline {1}Introduction}{1}{chapter.1}
-\contentsline {section}{\numberline {1.1}Game theoretic models of matching markets}{2}{section.1.1}
+\contentsline {section}{\numberline {1.1}Game theory models of matching markets}{2}{section.1.1}
 \contentsline {section}{\numberline {1.2}Empirical models of matching markets}{4}{section.1.2}
 \contentsline {subsection}{\numberline {1.2.1}US federal clerkship market}{5}{subsection.1.2.1}
 \contentsline {subsection}{\numberline {1.2.2}The market for forming a coalition government}{7}{subsection.1.2.2}

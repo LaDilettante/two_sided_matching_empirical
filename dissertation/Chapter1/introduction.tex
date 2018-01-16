@@ -16,20 +16,20 @@ Two-sided matching market is substantively consequential because it often
 involves scarce, indivisible goods, such as life commitment to a marital partner
 or political allegiance in a coalition government. It is also intellectually
 interesting because the market outcome depends on the actions of both sides,
-requiring different game theoretic and empirical approaches from those used to
-analyze one-sided markets.
+demanding a different analytical approach from what's used for one-sided
+markets.
 
-This chapter will proceed as follows. First, I discuss the game theoretic
+This chapter will proceed as follows. First, I discuss the game theory
 literature of two-sided matching models, where much of the terminology and
 insight originate. I will highlight key results that are relevant to our goal of
 estimating actors' preference in matching markets. Second, I examine existing
-empirical studies of matching markets. Where existing studies have not take into
-account the market's two-sided nature, I discuss how doing so can improve our
-understanding of the subject area. Where existing studies do model the two-sided
-dynamics, I discuss how they may or may not be used to study subjects that
-political scientists are interested in.
+empirical studies of matching markets. Where existing studies have not taken
+into account the market's two-sided nature, I discuss how doing so can improve
+our understanding of the subject area. Where existing studies do model the
+two-sided dynamics, I discuss how they may or may not be used to study subjects
+that political scientists are interested in.
 
-\section{Game theoretic models of matching markets}
+\section{Game theory models of matching markets}
 \label{sec:game_theory}
 
 \citet{Gale1962} was the first to study the matching market, using marriage as
@@ -44,17 +44,18 @@ $\mu$, which is a one-to-one function that matches a man with a woman. We refer
 to $\mu(x)$ as the \textit{mate} of $x$. For convenience, we say that if an
 individual decides to remain single, they are matched with themselves.
 
-A matching can be improved in two ways. First, an individual may prefer to
-remain single than to be matched with his or her mate $\mu(x)$ under the current
-matching $\mu$. Second, a man and a woman may prefer to be with one another
-rather than whom they are currently matched with. We define that a matching
-$\mu$ is \textit{stable} if it cannot be improved upon by any individual or any
-pair of agents.
+We define a matching $\mu$ as \textit{stable} if it cannot be improved by any
+individual or any pair of agents. A matching can be improved in two ways. First,
+an individual may prefer to remain single than to be matched with his or her
+mate $\mu(x)$ under the current matching $\mu$. Second, a man and a woman may
+prefer to be with one another rather than whom they are currently matched with.
+Therefore, if a matching is stable, no one has a better option than their
+current situation.
 
 The first key result from the game theory literature is that for any set of
-preference, there will always exist a stable matching
-\citep{Gale1962}.\footnote{\citet{Gale1962} prove a stable matching always
-  exists by describing a procedure that produces such a stable matching. The
+preference, there always exists a stable matching \citep{Gale1962}. The proof is
+constructive, describing the ``deferred acceptance'' procedure that is
+guaranteed to produce a stable matching.\footnote{The ``deferred acceptance''
   procedure works as follows. In the first stage, every man proposes to his
   preferred mate. Every woman rejects all of her suitors except the one that she
   most prefers. However, she does not yet accept her (so far) favorite suitor,
@@ -95,20 +96,20 @@ woman randomly meet and decide whether each other is better than their current
 mates, will converge towards a stable matching if the search cost is
 negligible.\footnote{In this model, searching has a time cost. Thus, negligible
   search cost is modeled as agents having a time discount close to 1.} These
-results further suggest that the empirical matching we observed is likely
-stable, compelling our empirical model to describe a process that produces a
-stable matching.
+results further suggest that the matching we observe in decentralized markets is
+likely stable. Therefore, our empirical model of matching markets to describe a
+process that produces a stable matching.
 
-In generalizing the one-to-one matching market (e.g. marriage) to the
-many-to-one matching market (e.g. college admission, labor market),
-\citet{Roth1992} show that the key results remain valid, albeit requiring
-additional assumptions. One important assumption is that firms treat workers as
+The third key result is that all conclusions regarding the one-to-one matching
+market (e.g. marriage) generalize to the many-to-one matching market (e.g.
+college admission, labor market), albeit requiring additional assumptions
+\citet{Roth1992}. One important assumption is that firms treat workers as
 substitutes, not complements. In other words, firms never regret hiring a worker
-even if another worker is no longer available. Therefore, our empirical analysis
-should focus on many-to-one matching markets where agents have such
-``substitutable preference.'' Otherwise, a stable matching is not guaranteed,
-agents' utility functions are interdependent, and it becomes unclear what kind
-of matching process our empirical model should approximate.
+even if another worker is no longer available. Therefore, when we conduct
+empirical analysis of many-to-one markets, we should focus on markets where
+agents have such ``substitutable preference.'' Otherwise, a stable matching is
+not guaranteed, agents' utility functions are interdependent, and it becomes
+unclear what kind of matching process our empirical model should approximate.
 
 \section{Empirical models of matching markets}
 
@@ -181,12 +182,12 @@ Other approaches estimate revealed preference by using observed hiring outcome.
 However, no existing study has properly taken into account the two-sided nature
 of the market, thus confusing the effects of preference and opportunity. For
 example, \citet{Bonica2017} use political contribution data (DIME dataset) to
-measure political ideology, then correlates the ideology of the hiring judge and
+measure political ideology, then correlate the ideology of the hiring judge and
 the ideology of his clerks. This approach does not take into account the pool of
 applicants, leading to conclusions such as conservative judges hire more liberal
 clerks than conservative clerks \citep[31]{Bonica2017}. This curious finding has
 a potentially simple explanation: the pool of top law graduates tend to be
-overwhelmingly liberal, leaving conservative judges not much choice. Despite
+overwhelmingly liberal, leaving conservative judges with no choice. Despite
 this issue, the authors proceed to measure judges' ideology by taking the
 average of their clerks' ideology. Without taking the pool of applicants into
 account, they may wrongly conclude that conservative judges are more liberal
@@ -225,7 +226,7 @@ height or income.\footnote{In contrast, when politicians are office-seeking, the
   dominant parties are all about how parties can bring its controlled seats to a
   coalition to turn it into a winning coalition.} As the game theory literature
 suggests, ideologically compact coalitions are more valuable because they entail
-fewer costs in policy compromises \citep{DeSwaan1973}. With the empirical
+a smaller cost in terms of policy compromises \citep{DeSwaan1973}. With the empirical
 matching model, we can test if parties do indeed prefer others that are
 ideologically close to themselves.
 
@@ -243,30 +244,30 @@ To be introduced here, or kept until its own empirical chapter?
 In recent years, the Internet underwent a proliferation of two-sided matching
 markets such as online marketplaces (e.g. AirBnB), dating sites (e.g. eHarmony),
 or job board (e.g. Elance). To help their users discover a match quicker, these
-sites often build a recommender system that suggest potential
+sites often build a recommender system that suggests potential
 matches.\footnote{To clarify, the term ``recommender system'' typically refers
   to systems that recommend items to users based on the reviews of users like
   them. That is not what we are discussing here. Instead, we focus on matching
   markets where the recommender system recommends users to one another.} To
 maximize user engagement and profitability, these sites are incentivized to make
 recommendations that resemble a stable matching so that their users get the best
-match possible. And fo find the stable matching, they have to first estimate the preferences
-of their users.
+match possible. And fo find the stable matching, they have to first estimate the
+preferences of their users.
 
 While most of these algorithms are proprietary, some academic publications have
-addressed this problem. An interesting approach is the paper by \citet{Tu2014}, which uses the
-Latent Dirichlet allocation (LDA) model to uncover the latent types of users
-based on their activities on an online dating platform.\footnote{Besides
-  \citet{Tu2014}, \citet{Hitsch2010, Goswami2014} are two other attempts to
-  estimate users' preference in online matching markets. However, these papers
-  take a simple one-sided approach, ignoring the interplay between preference
-  and opportunity. Therefore, I don't discuss them further here.} In the
-original application of LDA model in topic modeling, each document is a mixture
-of latent topics, and each topic is a distribution over words. In this
-application, each user is a mixture of latent ``types,'' and each type is a
-distribution signifying relative preference over various mates' features. For
-example, the ``outdoor type'' may have higher preference for athleticism or dog
-ownership over other traits.
+addressed this problem. An interesting approach is the paper by \citet{Tu2014},
+which uses the Latent Dirichlet allocation (LDA) model to uncover the latent
+types of users based on their activities on an online dating
+platform.\footnote{Besides \citet{Tu2014}, \citet{Hitsch2010, Goswami2014} are
+  two other attempts to estimate users' preference in online matching markets.
+  However, these papers take a simple one-sided approach, ignoring the interplay
+  between preference and opportunity. Therefore, I don't discuss them further
+  here.} In the original application of LDA model in topic modeling, each
+document is a mixture of latent topics, and each topic is a distribution over
+words. In this application, each user is a mixture of latent ``types,'' and each
+type is a distribution signifying relative preference over various mates'
+features. For example, the ``outdoor type'' may have higher preference for
+athleticism or dog ownership over other traits.
 
 While the LDA model works well for the online dating market, it is not
 applicable to most social science problems for two reasons. First, this model
