@@ -2,37 +2,45 @@
 \label{chap:model}
 
 Here I present a behavioral model of the two-sided matching market, focusing on
-the case of many-to-one matching, first proposed by \cite{Logan1996}. For easier exposition, throughout the chapter
-I will use the example of the labor market, where many workers can be matched to
-one firm, to demonstrate the features of this model.
+the case of many-to-one matching, proposed by \cite{Logan1996}. For easier
+exposition, throughout the chapter I will use the example of the labor market,
+where many workers can be matched to one firm.
 
 We assume that the matching process in the labor market happens in two stages.
-In the first stage, each firm evaluates each worker in the sample, then
-decide whether to hire that worker or not. At the end of this stage, each worker
-has a set of offers from firms, which we call his \textit{opportunity
-  set}. In the second stage, each worker evaluates the firms in his
-opportunity set and chooses the firm that he likes best. This constitutes a
-final, observed match between a worker and a firm. This is a many-to-one
-matching problem because a firm can make offers to multiple
-workers, none, some, or all of which can be accepted by workers.
+In the first stage, each firm evaluates each worker in the sample, then decides
+whether to hire that worker or not. At the end of this stage, each worker will
+have received a set of offers from firms, which we call his \textit{opportunity
+  set}. In the second stage, each worker evaluates the firms in his opportunity
+set and chooses the firm that he likes best. This constitutes the final,
+observed match between a worker and a firm. This is a many-to-one matching
+problem because a firm can make offers to multiple workers, none, some, or all
+of which can be accepted by workers.
 
 If we assume that firms and workers are utility-maximizing agents, at the end of
-this process, no firm or worker would voluntarily change their final matches.
-This property is called \textit{stability} in the game theoretic two-sided
-matching literature. We want the model to have this property because real life
-matching market tends to be stable as well. Indeed, \citet{Roth1992} show that
-for any given set of preferences, a stable match always exist. Furthermore,
-\citet{Roth2016} and \citet{Adachi2003} show that a decentralized market with
-agents making independent, utility-maximizing decisions can also reach a stable
-match by itself.
+this process, no firm or worker would voluntarily change their final matches. As
+discussed in Section~\ref{sec:game_theory}, this property is called
+\textit{stability} in the game theoretic two-sided matching literature. We want
+our model to have this property because matching markets tend to produce stable
+matching. Indeed, \citet{Roth1992} show that for any given set of preferences, a
+stable match always exist. Furthermore, \citet{Roth2016} and \citet{Adachi2003}
+show that a decentralized market with agents making independent,
+utility-maximizing decisions can also reach a stable match by itself.
 
-This stability property does not implies that the matches will not change.
+This stability property does not implies that the matches will never change.
 Indeed, if actors' preference shift, their characteristics change, or new actors
 enter the market, the matches will also change as a result of actors'
 recalculating their utility and adjust their decisions. Therefore, since we are
-estimating the actors' preference using only a snapshot of matching market, we
-are making the assumption that on a systemic level, the average characteristics of the
-actors and their preference remain sufficiently static for our estimates to be meaningful.
+estimating actors' preference using only a snapshot of matching market, we are
+making the assumption that on a systemic level, the average characteristics of
+the actors and their preference remain sufficiently static for our estimates to
+be meaningful.
+
+This chapter will proceed as follows. First, I discuss the utility model for how
+firms make offers to workers. Second, I discuss the utility model for how
+workers choose the best offer among those extended by firms. Third, I show why
+estimating the model with MLE is difficult, and how we can use Bayesian MCMC
+approach for estimation. Fourth, I analyze US labor data and demonstrate how to
+interpret the model's result.
 
 \section{Modeling firms' decision making}
 
@@ -40,92 +48,101 @@ A firm $j$'s decision on whether to hire worker $i$ rests on two utility
 functions. First, firm $j$'s utility for hiring worker $i$ is:
 
 \begin{align}
-U_j(i) &= \bm{\beta}_j' X_i + \epsilon_{1ij}
+  U_j(i) &= \bm{\beta}_j' X_i + \epsilon_{1ij}
 \end{align}
 
 where $\beta_j$ is a vector of firm $j$'s preference for worker characteristics,
-$x_i$ is a vector of worker $i$'s measured values on those characteristics, $\epsilon_{1ij}$ is the unobserved component that influences firm $j$'s utility.
+$x_i$ is a vector of worker $i$'s measured values on those characteristics, and
+$\epsilon_{1ij}$ is the unobserved component that influences firm $j$'s utility.
 
 On the other hand, the utility of not hiring worker $i$ is:
 
 \begin{align}
-U_j(\neg i) &= b_j + \epsilon_{0ij}
+  U_j(\neg i) &= b_j + \epsilon_{0ij}
 \end{align}
 
-where $b_j$ is the baseline utility of firm $j$, $\epsilon_{0ij}$ is the unobserved component that influences firm $j$'s utility.
+where $b_j$ is the baseline utility of firm $j$, and $\epsilon_{0ij}$ is the
+unobserved component that influences firm $j$'s utility.
 
-For each worker $i$, firm $j$ will make an offer to hire if $U_j(i) > U_j(\neg
-i)$. Relevant worker characteristics (i.e. $X_i$) that a firm may consider are
-age, education, or experience. The corresponding $\beta$'s represent the firm's
+Firm $j$ will make an offer to hire worker $i$ if $U_j(i) > U_j(\neg i)$.
+Relevant worker characteristics (i.e. $X_i$) that a firm may consider are age,
+education, or experience. The corresponding $\beta$'s represent the firm's
 preference for these characteristics.
 
-This model makes two important assumptions about firms' hiring process. First, a
-firm decides whether to hire worker A depends on the characteristics of worker A
-alone, and it will continue to hire worker A even if worker B is no longer available.
-In other words, firms regard workers as substitutes rather than
+This model makes two important assumptions about firms' hiring process. First,
+whether a firm decides to hire worker A depends on the characteristics of worker
+A alone, and it will continue to hire worker A even if worker B is no longer
+available. In other words, firms regard workers as substitutes rather than
 complements.\footnote{In the terminology of \citet{Roth1992}, firms are assumed
-  to have ``substitutable preference,'' or firms' preference is assumed to have the property of
-  substitutability. This assumption is necessary to prove the existence of stable matching
-  in the case of many-to-one matching.} This assumption is not universally true. A
-Hollywood producer may want to hire two specific lead actors for their
-chemistry, and if one is unavailable, the other also has to be
-replaced. However, for large firms where workers are closer to
-swappable cogs than unique superstars, this assumption is more reasonable.
+  to have ``substitutable preference,'' or firms' preference is assumed to have
+  the property of substitutability. As discussed in
+  Section~\ref{sec:game_theory}, this assumption is necessary to prove the
+  existence of stable matching in the case of many-to-one matching.} This
+assumption is not universally true. A Hollywood producer may want to hire two
+specific lead actors for their chemistry, and if one is unavailable, the other
+also has to be replaced. However, for large firms where workers are closer to
+swappable cogs than unique superstars, this assumption is reasonable.
 
 Second, the model assumes that the utility of hiring a worker does not depend on
-how many other workers accept the offer. In other words, the
-firm is large enough to employ all the workers to whom it extends offer without feeling
-the effect of diminishing marginal productivity of labor. This assumption is less
-restrictive than it may seem. Indeed, we can capture the fact that the workers under
-consideration have less productivity than the previous batch of workers as firm
-$j$ having a baseline utility $b_j$. Therefore, this assumption does not require
-that there is never any diminishing marginal productivity of labor, only that
-there is negligible diminishing effect between one or all of the workers
-under consideration. This assumption is a reasonable approximation if the firm's labor force is
-large compared to the number of workers being considered.\footnote{While not
-  concerned with diminishing marginal productivity, \citet{Roth1992} also
-  assume that firms' quota, i.e. the number of workers they can accept, is
-  sufficiently large to hire everyone in the set of workers under consideration. This assumption
+how many other workers accept the offer. In other words, the firm is large
+enough to employ all the workers to whom it extends offer without feeling the
+effect of diminishing marginal productivity of labor. This assumption is less
+restrictive than it may seem. Indeed, we can model the fact that the workers
+under consideration are less productive than the previous batch of workers by
+allowing firm $j$ to have a high baseline utility $b_j$. Therefore, this
+assumption does not require that there is never any diminishing marginal
+productivity of labor, only that there is negligible diminishing effect between
+the first and the last of the workers under consideration. This assumption is a
+reasonable approximation if the firm's labor force is large compared to the
+number of workers being considered.\footnote{While not concerned with
+  diminishing marginal productivity, \citet{Roth1992} also assume that firms'
+  quota, i.e. the number of workers they can accept, is sufficiently large to
+  hire everyone in the set of workers under consideration. This assumption
   simplifies the proof that a stable match always exists in the case of
   many-to-one matching.}
 
 In addition to two above assumptions about the process of firm's decision
-making, we make three parametric assumptions that are standard in the discrete choice literature.
-First, we assume a linear utility function. Second, we assume that the error
-terms $\epsilon_{1ij}, \epsilon_{0ij}$ are uncorrelated with one another and
-across firms. Third, we assume that the as error terms $\epsilon_{1ij}, \epsilon_{0ij}$ follow
-the Gumbel distribution.\footnote{The Gumbel distribution is very similar to the
-  normal, only with a slightly fatter tail that allows for slightly more extreme variation in the unobserved
-utility. Its density function is $\exp^{-(x + \exp^{-x})}$, with mode 0, mean 0.5772 and fixed
-variance $\frac{\pi^2}{6}$. In practice, the difference between using Gumbel and independent normal
-error terms is small \citep{Train2009}.} The choice of the Gumbel distribution is largely motivated by its
-convenience since we can derive the probability of firm $j$ making an offer to worker $i$ as the familiar binomial logit form:
+making, we make three parametric assumptions that are standard in the discrete
+choice literature. First, we assume a linear utility function. Second, we assume
+that the error terms $\epsilon_{1ij}, \epsilon_{0ij}$ are uncorrelated with one
+another and across firms. Third, we assume that the as error terms
+$\epsilon_{1ij}, \epsilon_{0ij}$ follow the Gumbel distribution.\footnote{The
+  Gumbel distribution is very similar to the normal, only with a slightly fatter
+  tail that allows for slightly more extreme variation in the unobserved
+  utility. Its density function is $\exp^{-(x + \exp^{-x})}$, with mode 0, mean
+  0.5772, and fixed variance $\frac{\pi^2}{6}$. In practice, the difference
+  between using Gumbel and independent normal error terms is small
+  \citep{Train2009}.} The choice of the Gumbel distribution is largely motivated
+by convenience since it allows us to derive the probability of firm $j$ making
+an offer to worker $i$ as the familiar binomial logit form:
 
 \begin{align}
-Pr(o_{ij} = 1) &= Pr(U_j(i) > U_j(\neg i)) \\
-&= Pr(\epsilon_{0ij} - \epsilon_{1ij} <  \bm{\beta}_j ' X_i - b_j) \\
-&= \frac{\exp({\bm{\beta}_j'X_i})}{1 + \exp({\bm{\beta}_j'X_i})} \label{eq:prob_offer_ij}
+  Pr(o_{ij} = 1) &= Pr(U_j(i) > U_j(\neg i)) \\
+                 &= Pr(\epsilon_{0ij} - \epsilon_{1ij} <  \bm{\beta}_j ' X_i - b_j) \\
+                 &= \frac{\exp({\bm{\beta}_j'X_i})}{1 + \exp({\bm{\beta}_j'X_i})} \label{eq:prob_offer_ij}
 \end{align}
 
-The term $b_j$ is absorbed into $\bm{\beta}$ when we add an intercept term to the covariate matrix $X$.
+The term $b_j$ is absorbed into $\bm{\beta}$ when we add an intercept term to
+the covariate matrix $X$.
 
 Once firms have made their offers, each worker $i$ will have a set of offers
 from which to pick her favorite. We call this set of offers the
 \textit{opportunity set} of worker $i$, denoted $O_i$. Since unemployment is
-always an available option, every opportunity set includes unemployment as an ``offer.''\footnote{In our model setup, firms and workers decide sequentially, with firms making
-offers first in order for workers to have opportunity sets to choose from. While
-firms and workers in real life certainly do not act in this sequential manner,
-the idea of the opportunity set is still applicable. Workers in the real
-labor market may not know their exact set of offers, but they can certainly
-guess which firms are within their reach based on their characteristics and on
-guesses about firms' preference.}
+always an available option, every opportunity set includes unemployment as an
+``offer.''\footnote{In our model setup, firms and workers decide sequentially,
+  with firms making offers first in order for workers to have opportunity sets
+  to choose from. While firms and workers in real life certainly do not act in
+  this sequential manner, the idea of the opportunity set is still applicable.
+  Workers in the real labor market may not know their exact set of offers, but
+  they can certainly guess which firms are within their reach based on their
+  characteristics and on guesses about firms' preference.}
 
 The probability of worker $i$ obtaining the opportunity set $O_i$ is:
 
 \begin{align}
-p(O_i | \bm{\beta}) &= \prod_{j \in O_i} p(o_{ij} = 1 | \bm{\beta}) \prod_{j \notin O_i} p(o_{ij} = 0 | \bm{\beta}) \\
-&= \prod_{j \in O_i} \frac{\exp(\bm{\beta_j} ' X_i)}{1 + \exp(\bm{\beta_j}' X_i)}
- \prod_{j \notin O_i} \frac{1}{1 + \exp(\bm{\beta_j}' X_i)} \label{eq:conditional_probability_of_offer}
+  p(O_i | \bm{\beta}) &= \prod_{j \in O_i} p(o_{ij} = 1 | \bm{\beta}) \prod_{j \notin O_i} p(o_{ij} = 0 | \bm{\beta}) \\
+                      &= \prod_{j \in O_i} \frac{\exp(\bm{\beta_j} ' X_i)}{1 + \exp(\bm{\beta_j}' X_i)}
+                        \prod_{j \notin O_i} \frac{1}{1 + \exp(\bm{\beta_j}' X_i)} \label{eq:conditional_probability_of_offer}
 \end{align}
 
 \section{Modeling workers' decision making}
@@ -133,51 +150,58 @@ p(O_i | \bm{\beta}) &= \prod_{j \in O_i} p(o_{ij} = 1 | \bm{\beta}) \prod_{j \no
 Worker $i$'s utility for the accepting an offer from firm $j$ is:
 
 \begin{align}
-V_i(j) &= \alpha' W_{j} + v_{ij}
+  V_i(j) &= \alpha' W_{j} + v_{ij}
 \end{align}
 
-where $\alpha$ is a vector of workers' preference for relevant characteristics of
-firms, $W_j$ is a vector of firm $j$'s measured values on those characteristics,
-and $v_{ij}$ is the unobserved component that influences worker $i$'s utility.
+where $\alpha$ is a vector of workers' preference for relevant characteristics
+of firms, $W_j$ is a vector of firm $j$'s measured values on those
+characteristics, and $v_{ij}$ is the unobserved component that influences worker
+$i$'s utility.
 
-Worker $i$ evaluates all the firms in her opportunity set and selects the offers
-that brings the highest utility. This decision of worker $i$ concludes the matching process, resulting in the observed final match between a firm and a worker in our data.
+Worker $i$ evaluates all the firms in her opportunity set and selects the offer
+that brings the highest utility. This decision of worker $i$ concludes the
+matching process, resulting in the observed final match between a worker and her
+chosen firm in our data.
 
 We make two assumptions in modeling the worker's decision making. First, for
 simplicity, we assume that workers all firms share the same set of
-preferences--hence $\alpha$ does not have a subscript $i$. The model can be 
+preferences--hence $\alpha$ does not have a subscript $i$. The model can be
 extended so that there is heterogeneous preference among workers, either by
 estimating a separate model for each worker type (i.e. no pooling) or by
 building a hierarchical model for worker preference (i.e. partial pooling).
 
-Second, we assume that the error term $v_{ij}$ are uncorrelated across $j$, i.e.
-the unobserved factors in the utility of one job offer is uncorrelated to the
-unobserved factors in the utility of another job offer.\footnote{This assumption
-also gives rise to the Independence of the Irrelevant Alternatives (IIA)
-property. It means that the relative odds of choosing between two
-alternatives depend only on the two alternatives under consideration. It does
-not depend on whether other alternatives are available or what their
-characteristics may be. Hence, other alternatives are considered ``irrelevant.''} This assumption is most
-likely not true: if worker $i$ values some factors of an offer, she is likely
-to consider those same factors in another offer as well. The hope is that we
-have modeled the observed portion sufficiently well that the remaining
-unobserved factors are close to white noise. Indeed, this issue afflicts any application of discrete choice
-models and is not unique to our setup.\footnote{The discrete choice literature has
-  developed solutions for such correlated error structure, such as nested logit,
-  probit, and mixed logit, that can be applied here if we suspect that the
-  unobserved portion is strongly correlated.}
+Second, we assume that the error term $v_{ij}$ are uncorrelated across $j$. In
+other words, the unobserved factors in the utility of one job offer is
+uncorrelated to the unobserved factors in the utility of another job
+offer.\footnote{This assumption also gives rise to the Independence of the
+  Irrelevant Alternatives (IIA) property. IIA implies that the relative odds of
+  choosing between two alternatives depend only on the two alternatives under
+  consideration. It does not depend on whether other alternatives are available
+  or what their characteristics may be. Hence, other alternatives are considered
+  ``irrelevant.''} This assumption is most likely not true: if worker $i$ values
+some unobserved factors of an offer, she is likely to consider those same
+factors in another offer as well. The hope is that we have modeled the observed
+portion sufficiently well that the remaining unobserved factors are close to
+white noise. In any case, this issue afflicts any application of discrete choice
+models and is not unique to our setup.\footnote{The discrete choice literature
+  has developed solutions for such correlated error structure, such as nested
+  logit, probit, and mixed logit, that can be applied here if we suspect that
+  the unobserved portion is strongly correlated.}
 
 Similar to our model of firm's utility, our model of worker's utility has three
 additional parametric assumptions that are standard in the literature. First, we
 assume that utility is linear. Second, the error term $v_{ij}$ are uncorrelated
-across $i$. Third, we model $v_{ij}$ having a Gumbel distribution so that the probability that worker $i$ will accept the offer of firm $j$ out of all the offers in its opportunity set $O_i$ takes the conditional logit form \citep{Cameron2005}:
+across $i$. Third, we model $v_{ij}$ having a Gumbel distribution so that the
+probability that worker $i$ will accept the offer of firm $j$ out of all the
+offers in its opportunity set $O_i$ takes the conditional logit form
+\citep{Cameron2005}:
 
 \begin{align}
-p(A_i = a_i | O_i, \alpha_i) = \frac{\exp(\alpha'W_{a_i})}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)} \label{eq:conditional_probability_of_accept}
+  p(A_i = a_i | O_i, \alpha_i) = \frac{\exp(\alpha'W_{a_i})}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)} \label{eq:conditional_probability_of_accept}
 \end{align}
 
-where $a_i$ is the index of the firm that $i$ accepts to to work for. Unemployment
-is indexed as 0.
+where $a_i$ is the index of the firm that $i$ accepts to to work for.
+Unemployment is indexed as 0.
 
 \section{Model estimation}
 
@@ -189,70 +213,76 @@ estimated with familiar tools like Maximum Likelihood Estimation (MLE).
 
 However, in most social science research problems, the researcher only observes
 the final match $A$ and not the opportunity set $O$. For example, labor market
-data typically does not include the set of offers a worker received (or would have
-received if they had applied), while data on her current job is widely
+data typically does not include the set of offers a worker received (or would
+have received if she had applied), while data on her current job is widely
 available. Similarly in the marriage market or the FDI market, researchers often
 do not have the data on the offers being made, and only observe the final
 matching between men and women (i.e. who is married to whom) and between MNCs
 and countries (i.e. which factory is located where).
 
 \citet{Logan1998}'s solution to this problem is to use the
-Expectation-Maximization (EM) algorithm, an iterative method capable of
-finding the maximum likelihood estimates when the model depends on unobserved
-latent variables (i.e. the unobserved opportunity set in this case)
-\citep{Dempster1977}. Our innovation is to estimate this model using a Bayesian
+Expectation-Maximization (EM) algorithm, an iterative method capable of finding
+the maximum likelihood estimates when the model depends on unobserved latent
+variables (i.e. the unobserved opportunity set in this case)
+\citep{Dempster1977}. Our innovation is to estimate the model using a Bayesian
 MCMC approach, which offers several advantages. First, our MCMC approach
-produces the full posterior distributions, making inference easy. In contrast, EM only produces point estimates out of the box.\footnote{\citet{Jamshidian2000} does propose a
-  method for estimating the standard error of EM estimates. However, to do
-  hypothesis testing, we need further assumptions about the distribution
-  of the EM estimates.} Second, our MCMC approach can be faster than EM when the latent variable, i.e. the
-opportunity set, is high dimensional \citep{Ryden2008}.\footnote{Indeed, our opportunity set $O$ is a $(I \times J)$ matrix of 0s and 1s,
-  where $I$ is the number of workers and $J$ is the number of firms. Thus, there
-are $2^{IJ}$ potential values for the opportunity set, which quickly becomes
-untenable even for a small number of $I$ and $J$. The high dimension of $O$
-forces \citet{Logan1998} to reduce the data dimension by aggregating 17
-employers in the data into 5 employer types, e.g. professional or blue collar jobs.} Third,
-within the Bayesian framework, we can naturally put a hierarchical structure on
-firms' preference. This allows us to borrow information across firms, thus estimating a firm's preference with more
-precision even when there is not a lot of data for that specific firm.
+produces the full posterior distribution, making inference easy. In contrast, EM
+only produces point estimates out of the box.\footnote{\citet{Jamshidian2000}
+  propose a method for estimating the standard error of EM estimates. However,
+  for hypothesis testing, we need further assumptions about the distribution of
+  the EM estimates.} Second, our MCMC approach can be faster than EM when the
+latent variable, i.e. the opportunity set, is high dimensional
+\citep{Ryden2008}.\footnote{Indeed, our opportunity set $O$ is a $(I \times J)$
+  matrix of 0s and 1s, where $I$ is the number of workers and $J$ is the number
+  of firms. Thus, there are $2^{IJ}$ potential values for the opportunity set,
+  which quickly becomes untenable even for a small number of $I$ and $J$. The
+  high dimension of $O$ forces \citet{Logan1998} to reduce the data dimension by
+  aggregating 17 employers in the data into 5 employer types, e.g. professional
+  or blue collar jobs.} Third, within the Bayesian framework, we can naturally
+put a hierarchical structure on firms' preference. This allows us to borrow
+information across firms, producing more precise estimates even when there is
+not a lot of data for a specific firm.
 
 The rest of this section describes how we conduct model estimation.
 
 \subsection{Estimating the model using Metropolis-Hastings}
 
-Our goal is to estimate the posterior distribution of workers' and firms'
+We are interested in the posterior distribution of workers' and firms'
 preference given the observed final match, i.e. $p(\alpha, \beta | A)$.
-As discussed above, unconditioned on the opportunity set, this posterior is difficult to
-derive or sample from. Therefore, we
-instead sample from the augmented posterior $p(\alpha, \beta, O | A)$, whose
-density is much simpler to derive.\footnote{See \citep{Tanner1987} for a
-  discussion of such data augmentation techniques.} Specifically,
+Unconditioned on the opportunity set, this posterior is difficult to derive or
+sample from. Therefore, we instead sample from the augmented posterior
+$p(\alpha, \beta, O | A)$, whose density is much simpler to derive.\footnote{See
+  \citet{Tanner1987} for a discussion of such data augmentation techniques.}
+Specifically,
 
 \begin{align}
   p(\alpha, \beta, O | A) &= \frac{p(A | \alpha, \beta, O) p(\alpha, \beta, O)}{p(A)} \\
-  &\propto p(A|O, \alpha) p(O|\beta) p(\alpha) p(\beta) 
-    \label{eq:posterior_density}
+                          &\propto p(A|O, \alpha) p(O|\beta) p(\alpha) p(\beta) 
+                            \label{eq:posterior_density}
 \end{align}
 
-$p(A|O, \alpha)$ is derived in
+where $p(A|O, \alpha)$ is derived in
 \eqref{eq:conditional_probability_of_accept}, $p(O|\beta)$ is derived in
 \eqref{eq:conditional_probability_of_offer}, $p(\alpha)$ and $p(\beta)$ are
-prior distribution.
+prior distributions for $\alpha$ and $\beta$. A key insight of this equation is
+that the acceptance of offers, i.e. $p(A|O, \alpha)$, depends only on the
+opportunity set and on the workers' preference. Similarly, the opportunity sets,
+i.e. $p(O|\beta)$, depend only on firms' preference.
 
-A key insight is that the acceptance of offers, i.e. $p(A|O, \alpha)$, depends only on the opportunity
-set and on the workers' preference. Similarly, the opportunity sets, i.e.
-$p(O|\beta)$, depend only on firms' and not on workers' preference. 
-
-Because the opportunity set $O$ is a discrete matrix of 0s and 1s, there is not
-any convenient conjugate model for \eqref{eq:posterior_density}, making Gibbs
-sampling impossible. Therefore, we use Metropolis-Hastings instead, which
-entails the following steps to sample from an arbitrary distribution $p(\theta)$:
+Because the opportunity set $O$ is a discrete matrix of 0's and 1's, there is
+not any convenient conjugate model for \eqref{eq:posterior_density}, making
+Gibbs sampling impossible. Therefore, we use Metropolis-Hastings instead, a
+technique to sample from an arbitrary distribution $p(\theta)$ using the
+following steps:
 
 \begin{enumerate}
 \item Start from an arbitrary value of $\theta$
-\item Generate a proposal value $\theta^*$ from the proposal distribution $q(\theta^*|\theta)$
-\item Calculate the acceptance ratio $MH_{\theta} = \frac{p(\theta^*)q(\theta|\theta*)}{p(\theta)q(\theta^*|\theta)}$
-\item Accept the proposed value $\theta^*$ with probability $\max(1, MH_{\theta})$
+\item Generate a proposal value $\theta^*$ from the proposal distribution
+  $q(\theta^*|\theta)$
+\item Calculate the acceptance ratio $MH_{\theta} =
+  \frac{p(\theta^*)q(\theta|\theta*)}{p(\theta)q(\theta^*|\theta)}$
+\item Accept the proposed value $\theta^*$ with probability $\max(1,
+  MH_{\theta})$
 \item Repeat step 2-4 until convergence
 \end{enumerate}
 
@@ -261,12 +291,16 @@ $p(\theta^*|\theta)$ = $p(\theta | \theta^*) \forall \theta, \theta^*$, so that
 the MH acceptance ratio simplifies to $MH_{\theta} =
 \frac{p(\theta^*)}{p(\theta)}$. In addition, because preference parameters tend
 to be correlated, we use an adaptive proposal distribution so that our MCMC
-samples have a faster convergence rate \citep{Haario2001}.\footnote{Description
+samples have a faster convergence rate \citep{Haario1999, Haario2001}.\footnote{Description
   of the Adaptive Metropolis procedure?}
 
 Below we describe how to sample from the posterior of each parameter in the
-model using the Metropolis-Hastings (MH) algorithm. More detailed derivation of the Metropolis acceptance ratio is included
-in Appendix~\ref{chap:MH_ratio}.
+model using the Metropolis-Hastings (MH) algorithm. More detailed derivation of
+the Metropolis acceptance ratio is included in Appendix~\ref{chap:MH_ratio}. We
+ensure that our derivation and implementation of the acceptance ratio is correct
+using the unit-testing approach suggested by
+\citet{Grosse2014}.\footnote{Describe the unit-testing framework to ensure the
+  correctness of MCMC code?}
 
 \subsection{Posterior of the opportunity set $p(O|A, \alpha, \beta)$}
 
@@ -275,8 +309,9 @@ the current value $O_i$ from 0 to 1 and 1 to 0. Substantively, this is
 equivalent to perturbing the opportunity set by randomly making new offers or
 withdrawing existing offers. Note that this proposal distribution is indeed
 symmetric because proposing $O_i^*$ from $O_i$ and proposing $O_i$ from $O_i^*$
-both involve flipping the same cells in the opportunity set matrix. Hence,
-$p(O_i^*|O_i) = p(O_i|O_i^*) =$ the probability of selecting these cells to flip.
+both involve flipping the same cells in the opportunity set. Hence,
+$p(O_i^*|O_i) = p(O_i|O_i^*) =$ the probability of selecting these particular
+cells out of the opportunity set.
 
 The Metropolis acceptance ratio for the proposed opportunity set $O_i^*$ is
 
@@ -285,8 +320,8 @@ The Metropolis acceptance ratio for the proposed opportunity set $O_i^*$ is
        &= \frac{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j) \pm \exp(\alpha' W_{j^*})} \times \exp(\pm \bm{\beta}_{j^*}'X_i)
 \end{align}
 
-where $\pm$ evaluates to $+$ if $j^*$ is a new offer being added to the
-current opportunity set, and to $-$ if $j^*$ is an existing offer being withdrawn from
+where $\pm$ evaluates to $+$ if $j^*$ is a new offer being added to the current
+opportunity set, and evaluates to $-$ if $j^*$ is an existing offer being withdrawn from
 the current opportunity set.
 
 \subsection{Posterior of firms' preference $p(\alpha|A, O, \beta)$}
@@ -294,17 +329,17 @@ the current opportunity set.
 At the beginning of the MCMC chain, we propose a new $\alpha^*$ using a Normal
 proposal distribution centered on the current value $\alpha$ with a hand-tuned
 diagonal covariance matrix. Later in the MCMC chain, the covariance matrix of
-the proposal distribution is learned from past samples to take into account the
-correlations across preference parameters.
+the proposal distribution is adapted based on past samples to take into account the
+correlations across preference parameters \citep{Haario2001}.
 
 The Metropolis acceptance ratio for the proposed $\alpha^*$ is\footnote{We
   log-transform the Metropolis acceptance ratio for better numerics.}
 
 \begin{align}
-\log MH_\alpha &= \sum_i \Bigl[ \epsilon_\alpha' W_{a_i} + \nonumber \\
-  & \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) -
-  \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) + \nonumber\\
-  & \log p(\alpha^*) - \log p(\alpha) \Bigr]
+  \log MH_\alpha &= \sum_i \Bigl[ (\alpha^* - \alpha)' W_{a_i} + \nonumber \\
+                 & \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) -
+                   \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) + \nonumber\\
+                 & \log p(\alpha^*) - \log p(\alpha) \Bigr]
 \end{align}
 
 \subsection{Posterior of workers' preference $p(\beta|A, O, \alpha)$}
@@ -318,7 +353,7 @@ The Metropolis acceptance ratio for the proposed $\beta$ is
 
 \begin{align}
   \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \beta_j^{*\prime}X_i - \beta_j^{\prime}X_i + \sum_{j} \log(1 + {\exp({\beta_j^{*\prime}X_i})) - \log(1 +  \exp(\beta_j^{\prime}X_i})) \right] \nonumber \\
- & + \log p(\bm{\beta}^*) - \log p(\bm{\beta})
+                & + \log p(\bm{\beta}^*) - \log p(\bm{\beta})
 \end{align}
 
 
@@ -348,7 +383,7 @@ $\mu_{\beta}$ is:
 The full conditional distribution of $\tau_{\beta}$ is:
 
 \begin{align}
- p(\tau_{\beta}) &\sim \text{Wishart}(\nu_0, S_0^{-1}) \\
+  p(\tau_{\beta}) &\sim \text{Wishart}(\nu_0, S_0^{-1}) \\
   p(\tau_{\beta} | \beta, \mu_{\beta}) &\sim \text{Wishart}(\nu, S^{-1}) \text{ where } \\
   \nu &= \nu_0 + n \\
   S^{-1} &= \left(S_0 + \sum (\beta - \mu_{\beta})(\beta - \mu_{\beta})^{\prime}\right)^{-1}
