@@ -1,10 +1,6 @@
 \begin{thebibliography}{}
 \newcommand{\enquote}[1]{``#1''}
 
-\bibitem[Abowd et~al.(1999)Abowd, Kramarz, and Margolis]{Abowd1999}
-Abowd, J.~M., Kramarz, F., and Margolis, D.~N. (1999), \enquote{{High wage
-  workers and high wage firms},} \emph{Econometrica}, 67, 251--333.
-
 \bibitem[Adachi(2003)Adachi]{Adachi2003}
 Adachi, H. (2003), \enquote{{A search model of two-sided matching under
   nontransferable utility},} \emph{Journal of Economic Theory}, 113, 182--198.
@@ -18,6 +14,16 @@ Bonica, A., Chilton, A.~S., Goldin, J., Rozema, K., and Sen, M. (2017),
 \bibitem[Cameron and Trivedi(2005)Cameron and Trivedi]{Cameron2005}
 Cameron, A. and Trivedi, P. (2005), \emph{{Microeconometrics: methods and
   applications}}, Cambridge University Press, Cambridge.
+
+\bibitem[{De Swaan}(1973){De Swaan}]{DeSwaan1973}
+{De Swaan}, A. (1973), \emph{{Coalition Theories and Cabinet Formations: A
+  Study of Formal Theories of Coalition Formation Applied to Nine European
+  Parliaments after 1948}}, Jossey-Bass.
+
+\bibitem[Dempster et~al.(1977)Dempster, Laird, and Rubin]{Dempster1977}
+Dempster, A.~P., Laird, N.~M., and Rubin, D.~B. (1977), \enquote{{Maximum
+  likelihood from incomplete data via the EM algorithm},} \emph{Journal of the
+  Royal Statistical Society. Series B (Statistical Methodology)}, 39, 1--38.
 
 \bibitem[Gale and Shapley(1962)Gale and Shapley]{Gale1962}
 Gale, D. and Shapley, L.~S. (1962), \enquote{{College Admissions and the
@@ -34,18 +40,41 @@ Gulati, M. and Posner, R.~A. (2016), \enquote{{The management of staff by
   federal court of appeals judges},} \emph{Vanderbilt Law Review}, 69,
   479--497.
 
+\bibitem[Haario et~al.(2001)Haario, Saksman, and Tamminen]{Haario2001}
+Haario, H., Saksman, E., and Tamminen, J. (2001), \enquote{{An Adaptive
+  Metropolis Algorithm},} \emph{Bernoulli}, 7, 223.
+
 \bibitem[Hitsch et~al.(2010)Hitsch, Horta{\c{c}}su, and Ariely]{Hitsch2010}
 Hitsch, G.~J., Horta{\c{c}}su, A., and Ariely, D. (2010), \enquote{{What makes
   you click?-Mate preferences in online dating},} \emph{Quantitative Marketing
   and Economics}, pp. 1--35.
 
+\bibitem[Jamshidian and Jennrich(2000)Jamshidian and Jennrich]{Jamshidian2000}
+Jamshidian, M. and Jennrich, R.~I. (2000), \enquote{{Standard Errors for EM
+  Estimation},} \emph{Journal of the Royal Statistical Society. Series B
+  (Statistical Methodology)}, 62, 257--270.
+
 \bibitem[Laver(1998)Laver]{Laver1998}
 Laver, M.~J. (1998), \enquote{{Models of Government Formation},} \emph{Annual
   Review of Political Science}, 1, 1--25.
 
+\bibitem[Liptak(2007)Liptak]{Liptak2007}
+Liptak, A. (2007), \enquote{{A Sign of Court's Polarization - Choice of
+  Clerks},} .
+
+\bibitem[Logan(1996)Logan]{Logan1996}
+Logan, J.~A. (1996), \enquote{{Opportunity and Choice in Socially Structured
+  Labor Markets},} \emph{American Journal of Sociology}, 102, 114.
+
 \bibitem[Logan(1998)Logan]{Logan1998}
 Logan, J.~A. (1998), \enquote{{Estimating Two-Sided Logit Models},}
   \emph{Sociological methodology}, 28, 139--173.
+
+\bibitem[Logan et~al.(2008)Logan, Hoff, and Newton]{Logan2008}
+Logan, J.~A., Hoff, P.~D., and Newton, M.~a. (2008), \enquote{{Two-Sided
+  Estimation of Mate Preferences for Similarities in Age, Education, and
+  Religion},} \emph{Journal of the American Statistical Association}, 103,
+  559--569.
 
 \bibitem[Peppers et~al.(2008)Peppers, Giles, and Tainer-Parkins]{Peppers2008}
 Peppers, T.~C., Giles, M.~W., and Tainer-Parkins, B. (2008), \enquote{{Inside
@@ -75,6 +104,11 @@ Rozema, K. and Peng, S. (2016), \enquote{{The Role of External Referrals in
   Hiring: Evidence from Judicial Law Clerks},} \emph{Available at SSRN
   2822952}.
 
+\bibitem[Ryd{\'{e}}n(2008)Ryd{\'{e}}n]{Ryden2008}
+Ryd{\'{e}}n, T. (2008), \enquote{{EM versus Markov chain Monte Carlo for
+  Estimation of Hidden Markov Models: A Computational Perspective},}
+  \emph{Bayesian Analysis}, 3, 659--688.
+
 \bibitem[Rysman(2009)Rysman]{Rysman2009}
 Rysman, M. (2009), \enquote{{The Economics of Two-Sided Markets},}
   \emph{Journal of Economic Perspectives}, 23, 125--143.
@@ -82,6 +116,16 @@ Rysman, M. (2009), \enquote{{The Economics of Two-Sided Markets},}
 \bibitem[Slotnick(1984)Slotnick]{Slotnick1984}
 Slotnick, E.~E. (1984), \enquote{{The paths to the federal bench: gender, race
   and judicial recruitment variation},} \emph{Judicature}, 67, 371--388.
+
+\bibitem[Sprecher et~al.(1994)Sprecher, Sullivan, and Hatfield]{Sprecher1994}
+Sprecher, S., Sullivan, Q., and Hatfield, E. (1994), \enquote{{Mate selection
+  preferences: gender differences examined in a national sample.}}
+  \emph{Journal of personality and social psychology}, 66, 1074--1080.
+
+\bibitem[Tanner and Wong(1987)Tanner and Wong]{Tanner1987}
+Tanner, M.~A. and Wong, W.~H. (1987), \enquote{{The calculation of posterior
+  distributions by data augmentation},} \emph{Journal of the American
+  Statistical Association}, 82, 528--540.
 
 \bibitem[Train(2009)Train]{Train2009}
 Train, K.~E. (2009), \emph{{Discrete Choice Methods with Simulation}},
@@ -91,6 +135,6 @@ Train, K.~E. (2009), \emph{{Discrete Choice Methods with Simulation}},
   Towsley]{Tu2014}
 Tu, K., Ribeiro, B., Jiang, H., Wang, X., Jensen, D., Liu, B., and Towsley, D.
   (2014), \enquote{{Online Dating Recommendations: Matching Markets and
-  Learning Preferences},} .
+  Learning Preferences},} \emph{CoRR}, abs/1401.8.
 
 \end{thebibliography}

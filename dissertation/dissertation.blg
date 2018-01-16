@@ -1,71 +1,80 @@
-This is BibTeX, Version 0.99d (TeX Live 2017)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: dissertation.aux
+A level-1 auxiliary file: ./Abbreviations/listofabbr.aux
 A level-1 auxiliary file: ./Chapter1/introduction.aux
 A level-1 auxiliary file: ./Chapter2/model.aux
+A level-1 auxiliary file: ./Appendix1/MH_ratio.aux
 The style file: ./Bibliography/jasa.bst
-Database file #1: library.bib
+Database file #1: /home/anh/Dropbox/texmf/bibtex/bib/library.bib
 Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
-[Abowd1999]
 [Adachi2003]
 [Bonica2017]
 [Cameron2005]
+[DeSwaan1973]
+[Dempster1977]
 [Gale1962]
 [Goswami2014]
 [Gulati2016]
+[Haario2001]
 [Hitsch2010]
+[Jamshidian2000]
 [Laver1998]
+[Liptak2007]
+[Logan1996]
 [Logan1998]
+[Logan2008]
 [Peppers2008]
 [Posner2001]
 [Posner2007]
 [Roth1992]
 [Roth2016]
 [Rozema2016]
+[Ryden2008]
 [Rysman2009]
 [Slotnick1984]
+[Sprecher1994]
+[Tanner1987]
 [Train2009]
 [Tu2014]
-Warning--empty journal in Tu2014
-You've used 20 entries,
+You've used 29 entries,
             2332 wiz_defined-function locations,
-            678 strings with 7157 characters,
-and the built_in function-call counts, 8987 in all, are:
-= -- 877
-> -- 455
-< -- 18
-+ -- 129
-- -- 129
-* -- 837
-:= -- 1557
-add.period$ -- 38
-call.type$ -- 20
-change.case$ -- 107
-chr.to.int$ -- 20
-cite$ -- 41
-duplicate$ -- 364
-empty$ -- 582
-format.name$ -- 161
-if$ -- 1765
+            746 strings with 8743 characters,
+and the built_in function-call counts, 12667 in all, are:
+= -- 1245
+> -- 627
+< -- 24
++ -- 177
+- -- 177
+* -- 1179
+:= -- 2208
+add.period$ -- 55
+call.type$ -- 29
+change.case$ -- 154
+chr.to.int$ -- 29
+cite$ -- 58
+duplicate$ -- 512
+empty$ -- 825
+format.name$ -- 222
+if$ -- 2478
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 22
-newline$ -- 64
-num.names$ -- 82
-pop$ -- 121
+missing$ -- 31
+newline$ -- 91
+num.names$ -- 118
+pop$ -- 167
 preamble$ -- 1
-purify$ -- 126
+purify$ -- 182
 quote$ -- 0
-skip$ -- 263
-stack$ -- 21
-substring$ -- 607
-swap$ -- 82
+skip$ -- 365
+stack$ -- 30
+substring$ -- 863
+swap$ -- 108
 text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 174
-warning$ -- 1
-while$ -- 94
+type$ -- 252
+warning$ -- 0
+while$ -- 133
 width$ -- 0
-write$ -- 223
-(There was 1 warning)
+write$ -- 321

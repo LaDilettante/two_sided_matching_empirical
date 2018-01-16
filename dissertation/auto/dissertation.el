@@ -19,7 +19,7 @@
     "multirow"
     "setspace")
    (LaTeX-add-bibliographies
-    "library")
+    "/home/anh/Dropbox/texmf/bibtex/bib/library")
    (LaTeX-add-amsthm-newtheorems
     "theorem"
     "lemma"
