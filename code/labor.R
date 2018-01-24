@@ -15,7 +15,7 @@ p_i <- 4 # number of worker characteristics per worker; including the intercept
 p_j <- 2  # number of job characteristics per job; in this example, job quality
 
 # ---- Prepare choice ----
-choice <- dat$occ17 + 1
+choice <- dat$occ17 + 1 # so that 0 (unemployment) becomes 1
 
 # ---- Prepare opp, the opportunity set ----
 opp <- matrix(F, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
@@ -53,7 +53,7 @@ xx <- cbind(one, xx)
 res <- match2sided(iter = 20000,
                    C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
                    C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                   frac_opp = 0.25,
+                   frac_opp = 0.15,
                    ww = ww, xx = xx,
                    choice = choice, opp = opp)
 print(res$acceptance_rate)
