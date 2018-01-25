@@ -1,0 +1,30 @@
+(TeX-add-style-hook
+ "AnhLe_dissertation"
+ (lambda ()
+   (TeX-run-style-hooks
+    "latex2e"
+    "{"
+    "dukedissertation"
+    "dukedissertation10"
+    "amsmath"
+    "amssymb"
+    "amsfonts"
+    "amsthm"
+    "graphicx"
+    "natbib"
+    "color"
+    "bm"
+    "subfigure"
+    "mathabx"
+    "multirow"
+    "setspace")
+   (LaTeX-add-bibliographies
+    "/home/anh/Dropbox/texmf/bibtex/bib/library")
+   (LaTeX-add-amsthm-newtheorems
+    "theorem"
+    "lemma"
+    "proposition"
+    "corollary"
+    "result"))
+ :latex)
+
