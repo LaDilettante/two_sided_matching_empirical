@@ -50,10 +50,10 @@ xx <- cbind(one, xx)
 # ---- Run MCMC ----
 
 # Let starting alpha = 0, starting beta = logit estimates
-res <- match2sided(iter = 20000,
-                   C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
+res <- match2sided(iter = 5000,
+                   C_alpha = (0.3 ** 2) * diag(ncol(ww)), 
                    C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                   frac_opp = 0.15,
+                   frac_opp = 0.1,
                    ww = ww, xx = xx,
                    choice = choice, opp = opp)
 print(res$acceptance_rate)

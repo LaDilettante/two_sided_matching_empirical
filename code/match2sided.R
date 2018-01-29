@@ -54,7 +54,9 @@ f_pA_den <- function(opp, ww, alpha) {
 }
 
 #' log_mh opp_set
-#' @param new Indexes of jobs to be flipped, n_i x num_new_offers_each_i
+#' @param new Indexes of jobs to be flipped. It's the index of the cell in the opp matrix
+#' It has approximately n_i x num_new_offers_each_i length, except we'll not
+#' remove unemployment or accepted jobs
 logmh_opp <- function(opp, new, alpha, beta, ww, xx) {
   # browser()
   n_i <- nrow(xx)
@@ -256,6 +258,7 @@ match2sided <- function(iter, t0 = iter / 10,
         C_ab_est <- sd * cov(ab_samples) + sd * eps * diag(p_j + p_i * n_j)
         Xbar_ab_est <- colMeans(ab_samples)
       } else {
+        browser()
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
         res <- calculate_C(X_sample = c(asave[i - 1, ], bsave[i - 1, , ]), 
