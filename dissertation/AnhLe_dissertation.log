@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.12)  16 JAN 2018 11:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.1.12)  25 JAN 2018 10:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -920,10 +920,10 @@ Package rerunfilecheck Info: File `AnhLe_dissertation.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 154.
  ) 
 Here is how much of TeX's memory you used:
- 7569 strings out of 493029
- 106275 string characters out of 6136234
- 196395 words of memory out of 5000000
- 10771 multiletter control sequences out of 15000+600000
+ 7571 strings out of 493029
+ 106300 string characters out of 6136234
+ 196413 words of memory out of 5000000
+ 10773 multiletter control sequences out of 15000+600000
  27799 words of font info for 96 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  34i,12n,33p,467b,477s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -952,7 +952,7 @@ blic/mathabx-type1/matha5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
 habx-type1/matha7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathabx
 -type1/matha8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/mathabx-typ
 e1/mathx10.pfb>
-Output written on AnhLe_dissertation.pdf (36 pages, 308090 bytes).
+Output written on AnhLe_dissertation.pdf (36 pages, 308105 bytes).
 PDF statistics:
  664 PDF objects out of 1000 (max. 8388607)
  594 compressed objects within 6 object streams
