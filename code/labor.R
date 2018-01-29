@@ -129,14 +129,3 @@ dat_beta <- inner_join(X_beta, posterior_mean_beta, by = "occ")
 summary(lm(educ ~ presmean + autmean, data = dat_beta))
 summary(lm(age ~ presmean + autmean, data = dat_beta))
 summary(lm(nonwhite ~ presmean + autmean, data = dat_beta))
-
-# ---- Data viz ---
-
-viz_dat <- dat
-viz_dat <- viz_dat %>%
-  mutate(college = educ > 12)
-
-ggplot(data = viz_dat) +
-  geom_density(aes(presmean)) +
-  facet_wrap(~college, labeller = label_both) +
-  labs(x = "prestige of the job")
