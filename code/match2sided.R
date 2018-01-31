@@ -173,6 +173,7 @@ match2sided <- function(iter, t0 = iter / 10,
   } else {
     alpha <- starting_alpha
   }
+  alphastar <- alpha
   exp_WA <- exp(ww %*% alpha) # linear predictors of
   pA_den <- opp %*% exp_WA # vector of denominators in p(A | O, alpha)
   
@@ -203,6 +204,7 @@ match2sided <- function(iter, t0 = iter / 10,
   # ---- Initialize storage ----
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
   asave <- matrix(NA, iter, p_j)   # saved alphas
+  astarsave <- matrix(NA, iter, p_j)
   bsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas
   bstarsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas proposal
   mu_betasave <- matrix(NA, iter, p_i)
@@ -216,6 +218,7 @@ match2sided <- function(iter, t0 = iter / 10,
   logpost[1, 2] <- f_logp_A(opp, choice, alpha, ww)
   logpost[1, 3] <- f_logp_O(opp, beta, xx)
   asave[1, ] <- alpha
+  astarsave[1, ] <- alphastar
   bsave[1, , ] <- beta # vectorize
   bstarsave[1, , ] <- betastar
   mu_betasave[1, ] <- mu_beta
@@ -224,7 +227,6 @@ match2sided <- function(iter, t0 = iter / 10,
   # ---- Loop ----
   start <- Sys.time()
   for (i in 2:iter) {
-    # browser()
     # Update opp
     new <- sample(n_i * n_j, size = n_i* floor(frac_opp * n_j), replace = FALSE)
     accepted_job <- 1:n_i + (choice - 1) * n_i # note that matrix index is by column as default
@@ -258,7 +260,6 @@ match2sided <- function(iter, t0 = iter / 10,
         C_ab_est <- sd * cov(ab_samples) + sd * eps * diag(p_j + p_i * n_j)
         Xbar_ab_est <- colMeans(ab_samples)
       } else {
-        browser()
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
         res <- calculate_C(X_sample = c(asave[i - 1, ], bsave[i - 1, , ]), 
@@ -303,6 +304,7 @@ match2sided <- function(iter, t0 = iter / 10,
     logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
     logpost[i, 3] <- f_logp_O(opp, beta, xx)
     asave[i, ] <- alpha
+    astarsave[i, ] <- alphastar
     bsave[i, , ] <- beta # vectorize
     bstarsave[i, , ] <- betastar
     mu_betasave[i, ] <- mu_beta
@@ -316,6 +318,7 @@ match2sided <- function(iter, t0 = iter / 10,
   }
   
   if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
+  if (!is.null(colnames(ww))) colnames(astarsave) <- colnames(ww)
   if (!is.null(colnames(xx))) {
     dimnames(bsave)[[2]] <- colnames(xx)
     dimnames(bstarsave)[[2]] <- colnames(xx)
@@ -329,7 +332,7 @@ match2sided <- function(iter, t0 = iter / 10,
   }
   
   return(list(alpha = asave, beta = bsave,
-              betastar = bstarsave,
+              alphastar = astarsave, betastar = bstarsave,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,
               lp = logpost,
               acceptance_rate = acceptance_rate / iter,
