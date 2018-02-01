@@ -1,4 +1,3 @@
-library("testthat")
 context("Metropolis-Hasting acceptance ratio")
 source("match2sided.R")
 
@@ -31,9 +30,11 @@ xx[, 1] <- 1 # The first column is the intercept
 test_that("logmh_opp is correct", {
   # Randomly choose a proportion to be updated of the opp set
   frac_opp <- runif(1, min = 0.5, max = 1)
-  
-  new <- sample(n_i * n_j, size = n_i* floor(frac_opp * n_j), replace = FALSE)
-  indnew <- arrayInd(new, .dim = c(n_i, n_j))
+  num_new_offers <- floor(frac_opp * n_j)
+  new <- c(replicate(n_i,
+                     sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE)))
+  # new <- sample(2:n_j, size=n_i, replace=T) # don't sample unemp. (1)
+  indnew <- cbind(rep(1:n_i, each = num_new_offers), new)
   oppstar <- opp
   oppstar[indnew] <- !(opp[indnew])
   

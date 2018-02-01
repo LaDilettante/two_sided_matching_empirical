@@ -1,26 +1,6 @@
 library("profvis")
 library("microbenchmark")
 
-# ---- Fixing replicate being slow ----
-
-n_i <- 2000
-n_j <- 20
-frac_opp <- 0.25
-
-sample(n_i * n_j, size = n_i * floor(frac_opp * n_j), replace = FALSE)
-
-microbenchmark(
-  replicate(n_i, sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE)),
-  sample(n_i * n_j, size = n_i * floor(frac_opp * n_j), replace = FALSE)
-)
-
-microbenchmark(
-  replicate(n_i, sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
-)
-
-
-# ---- Checking the entire process ----
-
 res <- match2sided(iter = 20000,
                    C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
                    C_beta = (0.025 ** 2) * diag(ncol(xx)),
@@ -45,11 +25,8 @@ calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
   return(list(C = C, Xbar = Xbar))
 }
 
-iter <- 1000
-t0 <- 100
-C_alpha = (0.4 ** 2) * diag(ncol(ww))
-C_beta = (0.025 ** 2) * diag(ncol(xx))
-frac_opp = 0.25
+iter <- 10000
+t0 <- 1000
 profvis({
   n_i <- nrow(xx)
   n_j <- nrow(ww)
@@ -119,22 +96,21 @@ profvis({
     start <- Sys.time()
     # Update opp
     start_opp <- Sys.time()
-    
-    new <- sample(n_i * n_j, size = n_i* floor(frac_opp * n_j), replace = FALSE)
-    accepted_job <- 1:n_i + (choice - 1) * n_i # note that matrix index is by column as default
-    new <- setdiff(new, accepted_job) # remove accepted job from flipping consideration
-    unemployment <- 1:n_i # unemp is the first column
-    new <- setdiff(new, unemployment) # remove unemployment from flipping consideration
-    ind <- arrayInd(new, .dim = c(n_i, n_j))
+    num_new_offers <- floor(frac_opp * n_j) # per i
+    new <- replicate(n_i, sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
+    new <- c(new) # Flatten 1-column matrix into a vector
+    ind <- cbind(rep(1:n_i, each = num_new_offers), new)
     
     my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
     ok_opp <- log(runif(n_i)) <= my_logmh_opp
     
+    # Don't change an offer for an accepted job
+    accepted_jobs_sampled <- colSums(matrix(new == rep(choice, each = num_new_offers),
+                                            nrow = num_new_offers)) > 0
+    ok_opp[accepted_jobs_sampled] <- F  # don't change an offer for an accepted job
     if (any(ok_opp)) {
-      old_opp <- opp
-      opp[ind] <- !(old_opp[ind]) # Update the opportunity set
-      opp[!ok_opp, ] <- old_opp[!ok_opp, ] # Un-update the rows that should not be updated 
-      acceptance_rate[1] <- acceptance_rate[1] + mean(ok_opp)
+      opp[ind][rep(ok_opp, each = num_new_offers)] <- !(opp[ind][rep(ok_opp, each=num_new_offers)]) # Update the opportunity set
+      acceptance_rate[1] <- acceptance_rate[1] + 1
     }
     timesave[i, 1] <- Sys.time() - start_opp
     
@@ -227,6 +203,15 @@ profvis({
   }  
 })
 
+microbenchmark(
+  replicate(n_i, sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE)),
+  sample(2:n_j, size = floor(frac_opp * n_j), replace = FALSE),
+  sample(2:n_j, size = n_i, replace = TRUE)
+)
+
+microbenchmark(
+  replicate(n_i, sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
+)
 
 microbenchmark(
   replicate(n_i, sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE)),

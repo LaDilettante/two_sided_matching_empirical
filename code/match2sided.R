@@ -58,9 +58,10 @@ f_pA_den <- function(opp, ww, alpha) {
 logmh_opp <- function(opp, new, alpha, beta, ww, xx) {
   # browser()
   n_i <- nrow(xx)
+  num_new_offers <- length(new) / n_i
   n_j <- nrow(ww)
   
-  indnew <- arrayInd(new, .dim = c(n_i, n_j))
+  indnew <- cbind(rep(1:n_i, each = num_new_offers), new)
   oo <- opp[indnew] # current offer status of the jobs under consideration
   plusminus <- ifelse(oo, -1, 1)
   
@@ -68,17 +69,12 @@ logmh_opp <- function(opp, new, alpha, beta, ww, xx) {
   pA_den <- opp %*% exp_WA
   # browser()
   # Part of MH ratio from P(A|O,alpha)
-  tmp_plusminus_expWA <- tapply(exp_WA[indnew[, 2]] * plusminus, indnew[, 1], FUN = sum)
-  plusminus_expWA <- rep(0, length = n_i)  # Pad the vector tmp to have length n_i
-  plusminus_expWA[as.numeric(names(tmp_plusminus_expWA))] <- tmp_plusminus_expWA
-  pA_denstar <- pA_den + plusminus_expWA
+  pA_denstar <- pA_den +
+    colSums(matrix(exp_WA[new] * plusminus, ncol = n_i)) # recall: matrix() lays out by column
   # Part of MH ratio from P(O|beta)  (logistic model)
   xb <- (xx %*% beta)[indnew]
-  tmp_plusminus_xb <- tapply(plusminus * xb, indnew[, 1], FUN = sum)
-  plusminus_xb <- rep(0, length = n_i)
-  plusminus_xb[as.numeric(names(tmp_plusminus_xb))] <- tmp_plusminus_xb
   
-  return(log(pA_den) - log(pA_denstar) + plusminus_xb)
+  return(log(pA_den) - log(pA_denstar) + colSums(matrix(plusminus * xb, ncol = n_i)))
 }
 
 #' log_mh alpha
@@ -226,21 +222,22 @@ match2sided <- function(iter, t0 = iter / 10,
   start <- Sys.time()
   for (i in 2:iter) {
     # Update opp
-    new <- sample(n_i * n_j, size = n_i* floor(frac_opp * n_j), replace = FALSE)
-    accepted_job <- 1:n_i + (choice - 1) * n_i # note that matrix index is by column as default
-    new <- setdiff(new, accepted_job) # remove accepted job from flipping consideration
-    unemployment <- 1:n_i # unemp is the first column
-    new <- setdiff(new, unemployment) # remove unemployment from flipping consideration
-    ind <- arrayInd(new, .dim = c(n_i, n_j))
+    num_new_offers <- floor(frac_opp * n_j) # per i
+    new <- replicate(n_i,
+                     sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
+    new <- c(new) # Flatten 1-column matrix into a vector
+    ind <- cbind(rep(1:n_i, each = num_new_offers), new)
     
     my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
     ok_opp <- log(runif(n_i)) <= my_logmh_opp
     
+    # Don't change an offer for an accepted job
+    accepted_jobs_sampled <- colSums(matrix(new == rep(choice, each = num_new_offers),
+                                            nrow = num_new_offers)) > 0
+    ok_opp[accepted_jobs_sampled] <- F  # don't change an offer for an accepted job
     if (any(ok_opp)) {
-      old_opp <- opp
-      opp[ind] <- !(old_opp[ind]) # Update the opportunity set
-      opp[!ok_opp, ] <- old_opp[!ok_opp, ] # Un-update the rows that should not be updated 
-      acceptance_rate[1] <- acceptance_rate[1] + mean(ok_opp)
+      opp[ind][rep(ok_opp, each = num_new_offers)] <- !(opp[ind][rep(ok_opp, each=num_new_offers)]) # Update the opportunity set
+      acceptance_rate[1] <- acceptance_rate[1] + 1
     }
     
     # Update alpha and beta
