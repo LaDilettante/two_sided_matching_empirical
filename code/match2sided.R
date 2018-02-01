@@ -54,9 +54,7 @@ f_pA_den <- function(opp, ww, alpha) {
 }
 
 #' log_mh opp_set
-#' @param new Indexes of jobs to be flipped. It's the index of the cell in the opp matrix
-#' It has approximately n_i x num_new_offers_each_i length, except we'll not
-#' remove unemployment or accepted jobs
+#' @param new Indexes of jobs to be flipped, n_i x num_new_offers_each_i
 logmh_opp <- function(opp, new, alpha, beta, ww, xx) {
   # browser()
   n_i <- nrow(xx)
