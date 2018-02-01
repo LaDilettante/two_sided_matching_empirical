@@ -240,42 +240,60 @@ match2sided <- function(iter, t0 = iter / 10,
       acceptance_rate[1] <- acceptance_rate[1] + 1
     }
     
-    # Update alpha and beta
-    sd <- (2.4 ** 2) / (p_j + p_i * n_j)
+    # Update alpha
+    sd <- (2.4 ** 2) / p_j # Scaling factor for alpha proposal
     if (i <= t0) {
-      C_ab_est <- as.matrix(Matrix::bdiag(c(list(C_alpha), 
-                                          rep(list(C_beta), n_j))))
+      C_alpha_est <- C_alpha
     } else if (i > t0) {
+      alpha_samples <- asave[1:(i - 1), ]
       if (i == t0 + 1) {
         # Calculate Cs and Xbars for the first time
-        alpha_samples <- asave[1:(i - 1), ]
-        beta_samples <- bsave[1:(i - 1), , ]
-        dim(beta_samples) <- c(i - 1, p_i * n_j)
-        ab_samples <- cbind(alpha_samples, beta_samples)
-        C_ab_est <- sd * cov(ab_samples) + sd * eps * diag(p_j + p_i * n_j)
-        Xbar_ab_est <- colMeans(ab_samples)
+        C_alpha_est <- sd * cov(alpha_samples) + sd * eps * diag(p_j)
+        Xbar_alpha_est <- colMeans(alpha_samples)
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        res <- calculate_C(X_sample = c(asave[i - 1, ], bsave[i - 1, , ]), 
-                           t = i, 
-                           C = C_ab_est, Xbar = Xbar_ab_est)
-        C_ab_est <- res$C
-        Xbar_ab_est <- res$Xbar
+        res <- calculate_C(X_sample = alpha_samples, t = i, 
+                           C = C_alpha_est, Xbar = Xbar_alpha_est)
+        Xbar_alpha_est <- res$Xbar
+        C_alpha_est <- res$C
+      }
+    }
+    alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
+    
+    my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
+    ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
+    if (ok_alpha) {
+      alpha <- alphastar
+      acceptance_rate[2] <- acceptance_rate[2] + 1
+    }
+    
+    # Update beta
+    sd <- (2.4 ** 2) / (p_i * n_j) # Scaling factor for beta proposal
+    if (i <= t0) {
+      C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
+    } else if (i > t0) {
+      beta_samples <- bsave[1:(i - 1), , ]
+      dim(beta_samples) <- c(i - 1, p_i * n_j)
+      if (i == t0 + 1) {
+        # Calculate Cs and Xbars for the first time
+        C_beta_est <- sd * cov(beta_samples) + sd * eps * diag(p_i * n_j)
+        Xbar_beta_est <- colMeans(beta_samples)
+      } else {
+        # Calculate Cs and Xbars recursively
+        # (notice we're passing in old values of Cs and Xbars)
+        res <- calculate_C(X_sample = beta_samples, t = i, 
+                    C = C_beta_est, Xbar = Xbar_beta_est)
+        Xbar_beta_est <- res$Xbar
+        C_beta_est <- res$C
       }
     }
     
-    deviation <- c(rmvnorm(1, sigma = C_ab_est))
-    alphastar <- alpha + deviation[1:p_j]
-    beta_deviation <- matrix(deviation[(p_j + 1):(p_j + p_i * n_j)], 
-                             nrow = p_i, ncol = n_j)
-    betastar <- beta + beta_deviation
-    
-    my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
+    deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
+    betastar <- beta + deviation
     my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
-    ok_ab <- ifelse(log(runif(1)) <= my_logmh_alpha + my_logmh_beta, T, F)
-    if (ok_ab) {
-      alpha <- alphastar
+    ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
+    if (ok_beta) {
       beta <- betastar
       acceptance_rate[2] <- acceptance_rate[2] + 1
       acceptance_rate[3] <- acceptance_rate[3] + 1
