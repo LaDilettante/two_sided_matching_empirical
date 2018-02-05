@@ -204,6 +204,7 @@ match2sided <- function(iter, t0 = iter / 10,
   mu_betasave <- matrix(NA, iter, p_i)
   Tau_betasave <- array(NA, dim = c(iter, p_i, p_i))
   logpost <- matrix(NA, iter, 3) # posterior density, i.e. joint, lp_A, lp_O
+  ok <- matrix(NA, iter, 3) # ok_opp, ok_alpha, ok_beta
   
   # Store results
   logpost[1, 1] <- joint_lpdf(opp, choice,
@@ -211,6 +212,7 @@ match2sided <- function(iter, t0 = iter / 10,
                               ww, xx)
   logpost[1, 2] <- f_logp_A(opp, choice, alpha, ww)
   logpost[1, 3] <- f_logp_O(opp, beta, xx)
+  ok[1, ] <- c(0, 0, 0)
   asave[1, ] <- alpha
   astarsave[1, ] <- alphastar
   bsave[1, , ] <- beta # vectorize
@@ -237,7 +239,7 @@ match2sided <- function(iter, t0 = iter / 10,
     ok_opp[accepted_jobs_sampled] <- F  # don't change an offer for an accepted job
     if (any(ok_opp)) {
       opp[ind][rep(ok_opp, each = num_new_offers)] <- !(opp[ind][rep(ok_opp, each=num_new_offers)]) # Update the opportunity set
-      acceptance_rate[1] <- acceptance_rate[1] + 1
+      acceptance_rate[1] <- acceptance_rate[1] + mean(ok_opp)
     }
     
     # Update alpha
@@ -245,15 +247,15 @@ match2sided <- function(iter, t0 = iter / 10,
     if (i <= t0) {
       C_alpha_est <- C_alpha
     } else if (i > t0) {
-      alpha_samples <- asave[1:(i - 1), ]
       if (i == t0 + 1) {
         # Calculate Cs and Xbars for the first time
+        alpha_samples <- asave[1:(i - 1), ]
         C_alpha_est <- sd * cov(alpha_samples) + sd * eps * diag(p_j)
         Xbar_alpha_est <- colMeans(alpha_samples)
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        res <- calculate_C(X_sample = alpha_samples, t = i, 
+        res <- calculate_C(X_sample = asave[i - 1, ], t = i, 
                            C = C_alpha_est, Xbar = Xbar_alpha_est)
         Xbar_alpha_est <- res$Xbar
         C_alpha_est <- res$C
@@ -273,16 +275,17 @@ match2sided <- function(iter, t0 = iter / 10,
     if (i <= t0) {
       C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
     } else if (i > t0) {
-      beta_samples <- bsave[1:(i - 1), , ]
-      dim(beta_samples) <- c(i - 1, p_i * n_j)
       if (i == t0 + 1) {
         # Calculate Cs and Xbars for the first time
+        beta_samples <- bsave[1:(i - 1), , ]
+        dim(beta_samples) <- c(i - 1, p_i * n_j)
         C_beta_est <- sd * cov(beta_samples) + sd * eps * diag(p_i * n_j)
         Xbar_beta_est <- colMeans(beta_samples)
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        res <- calculate_C(X_sample = beta_samples, t = i, 
+        beta_sample <- c(bsave[i - 1, , ])
+        res <- calculate_C(X_sample = beta_sample, t = i, 
                     C = C_beta_est, Xbar = Xbar_beta_est)
         Xbar_beta_est <- res$Xbar
         C_beta_est <- res$C
@@ -295,7 +298,6 @@ match2sided <- function(iter, t0 = iter / 10,
     ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
     if (ok_beta) {
       beta <- betastar
-      acceptance_rate[2] <- acceptance_rate[2] + 1
       acceptance_rate[3] <- acceptance_rate[3] + 1
     }
     
@@ -316,6 +318,7 @@ match2sided <- function(iter, t0 = iter / 10,
                               ww, xx)
     logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
     logpost[i, 3] <- f_logp_O(opp, beta, xx)
+    ok[i, ] <- c("ok_opp" = mean(ok_opp), "ok_alpha" = ok_alpha, "ok_beta" = ok_beta)
     asave[i, ] <- alpha
     astarsave[i, ] <- alphastar
     bsave[i, , ] <- beta # vectorize
@@ -347,7 +350,7 @@ match2sided <- function(iter, t0 = iter / 10,
   return(list(alpha = asave, beta = bsave,
               alphastar = astarsave, betastar = bstarsave,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,
-              lp = logpost,
+              lp = logpost, ok = ok,
               acceptance_rate = acceptance_rate / iter,
               mcmc_settings = list(iter = iter,
                                    frac_opp = frac_opp)))

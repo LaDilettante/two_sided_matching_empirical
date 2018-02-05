@@ -50,10 +50,10 @@ xx <- cbind(one, xx)
 # ---- Run MCMC ----
 
 # Let starting alpha = 0, starting beta = logit estimates
-res <- match2sided(iter = 20000,
+res <- match2sided(iter = 5000,
                    C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
-                   C_beta = (0.025 ** 2) * diag(ncol(xx)),
-                   frac_opp = 0.25,
+                   C_beta = (0.05 ** 2) * diag(ncol(xx)),
+                   frac_opp = 0.1,
                    ww = ww, xx = xx,
                    choice = choice, opp = opp)
 print(res$acceptance_rate)
@@ -74,12 +74,12 @@ dev.off()
 
 beta_educ <- mcmc(res$beta[, 'educ', ])
 pdf("../figure/trace_beta_educ_adaptive.pdf", w = 7, h = 7)
-plot(beta_educ[, c('Professionals, Salaried', 'Farm laborers')])
+plot(beta_educ[, c('Professionals, Salaried', "Craftsmen, Manufacturing", 'Farm laborers')])
 dev.off()
 
 betastar_educ <- mcmc(res$betastar[, 'educ', ])
 pdf("../figure/trace_betastar_educ_adaptive.pdf", w = 7, h = 7)
-plot(betastar_educ[, c('Professionals, Salaried', 'Farm laborers')])
+plot(betastar_educ[, c('Professionals, Salaried', "Craftsmen, Manufacturing", 'Farm laborers')])
 dev.off()
 
 beta_age <- mcmc(res$beta[, 'age', ])
