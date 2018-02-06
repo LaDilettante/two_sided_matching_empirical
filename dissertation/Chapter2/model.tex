@@ -16,9 +16,15 @@ observed match between a worker and a firm. This is a many-to-one matching
 problem because a firm can make offers to multiple workers, none, some, or all
 of which can be accepted by workers.
 
+Our model only needs data on 1) the covariates of firms and workers, and 2) the
+job that workers accept. Such data is widely available in many social science
+surveys of the job market. Importantly, we do not need data on the opportunity
+set. Therefore, our model obviates the need to follow the matching process and
+record who makes offer to whom, which is rarely possible for researchers.
+
 If we assume that firms and workers are utility-maximizing agents, at the end of
-this process, no firm or worker would voluntarily change their final matches. As
-discussed in Section~\ref{sec:game_theory}, this property is called
+the matching process, no firm or worker would voluntarily change their final
+matches. As discussed in Section~\ref{sec:game_theory}, this property is called
 \textit{stability} in the game theoretic two-sided matching literature. We want
 our model to have this property because matching markets tend to produce stable
 matching. Indeed, \citet{Roth1992} show that for any given set of preferences, a
@@ -27,13 +33,13 @@ show that a decentralized market with agents making independent,
 utility-maximizing decisions can also reach a stable match by itself.
 
 This stability property does not imply that the matches will never change.
-Indeed, if actors' preference shifts, their characteristics change, or new actors
-enter the market, the matches will also change as a result of actors'
-recalculating their utility and adjusting their decisions. Therefore, since we are
-estimating actors' preference using only a snapshot of matching market, we are
-making the assumption that on a systemic level, the average characteristics of
-the actors and their preference remain sufficiently static for our estimates to
-be meaningful.
+Indeed, if actors' preference shifts, their characteristics change, or new
+actors enter the market, the matches will also change as a result of actors'
+recalculating their utility and adjusting their decisions. Therefore, since we
+are estimating actors' preference using only a snapshot of matching market, we
+are making the assumption that on a systemic level, the average characteristics
+of the actors and their preference remain sufficiently static for our estimates
+to be meaningful.
 
 This chapter will proceed as follows. First, I discuss the utility model for how
 firms make offers to workers. Second, I discuss the utility model for how
@@ -164,11 +170,11 @@ matching process, resulting in the observed final match between a worker and her
 chosen firm in our data.
 
 We make two assumptions in modeling the worker's decision making. First, for
-simplicity, we assume that all workers share the same set of
-preferences--hence $\alpha$ does not have a subscript $i$. The model can be
-extended so that there is heterogeneous preference among workers, either by
-estimating a separate model for each worker type (i.e. no pooling) or by
-building a hierarchical model for worker preference (i.e. partial pooling).
+simplicity, we assume that all workers share the same set of preferences--hence
+$\alpha$ does not have a subscript $i$. The model can be extended so that there
+is heterogeneous preference among workers, either by estimating a separate model
+for each worker type (i.e. no pooling) or by building a hierarchical model for
+worker preference (i.e. partial pooling).
 
 Second, we assume that the error term $v_{ij}$ are uncorrelated across $j$. In
 other words, the unobserved factors in the utility of one job offer is
@@ -291,8 +297,8 @@ $p(\theta^*|\theta)$ = $p(\theta | \theta^*) \forall \theta, \theta^*$, so that
 the MH acceptance ratio simplifies to $MH_{\theta} =
 \frac{p(\theta^*)}{p(\theta)}$. In addition, because preference parameters tend
 to be correlated, we use an adaptive proposal distribution so that our MCMC
-samples have a faster convergence rate \citep{Haario1999, Haario2001}.\footnote{Description
-  of the Adaptive Metropolis procedure?}
+samples have a faster convergence rate \citep{Haario1999,
+  Haario2001}.\footnote{Description of the Adaptive Metropolis procedure?}
 
 Below we describe how to sample from the posterior of each parameter in the
 model using the Metropolis-Hastings (MH) algorithm. More detailed derivation of
@@ -321,16 +327,32 @@ The Metropolis acceptance ratio for the proposed opportunity set $O_i^*$ is
 \end{align}
 
 where $\pm$ evaluates to $+$ if $j^*$ is a new offer being added to the current
-opportunity set, and evaluates to $-$ if $j^*$ is an existing offer being withdrawn from
-the current opportunity set.
+opportunity set, and evaluates to $-$ if $j^*$ is an existing offer being
+withdrawn from the current opportunity set.
+
+To understand the intuition behind this formula for $MH_O$, consider the
+scenario in which we propose a new opportunity set for worker $i$ by adding an
+offer from firm $j$. Since worker $i$ now has one more choice to choose from, it
+becomes less likely that worker $i$'s accepted job is the best choice. This
+makes the proposed opportunity set less consistent with the observed data than
+the current opportunity set, and $MH_O$ should decrease accordingly. This is
+reflected in the formula for $MH_O$ by the $\exp(\alpha'W_{j^*})$ term in the
+denominator.
+
+On the other hand, whether we should add the offer to the opportunity set also
+depends on firm $j$'s preference for worker $i$. If hiring worker $i$ bring firm
+$j$ net positive utility (i.e. $\bm{\beta}_{j^*}'X_i > 0$), we should add the
+offer. This is reflected in the formula for $MH_O$ by the multiplier
+$\exp(\bm{\beta}_{j*}'X_i)$, which is larger than 1 when $\bm{\beta}_{j^*}'X_i >
+0$.
 
 \subsection{Posterior of firms' preference $p(\alpha|A, O, \beta)$}
 
 At the beginning of the MCMC chain, we propose a new $\alpha^*$ using a Normal
 proposal distribution centered on the current value $\alpha$ with a hand-tuned
 diagonal covariance matrix. Later in the MCMC chain, the covariance matrix of
-the proposal distribution is adapted based on past samples to take into account the
-correlations across preference parameters \citep{Haario2001}.
+the proposal distribution is adapted based on past samples to take into account
+the correlations across preference parameters \citep{Haario2001}.
 
 The Metropolis acceptance ratio for the proposed $\alpha^*$ is\footnote{We
   log-transform the Metropolis acceptance ratio for better numerics.}
@@ -352,7 +374,7 @@ only a part of $\bm{\beta}$.
 The Metropolis acceptance ratio for the proposed $\beta$ is
 
 \begin{align}
-  \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \beta_j^{*\prime}X_i - \beta_j^{\prime}X_i + \sum_{j} \log(1 + {\exp({\beta_j^{*\prime}X_i})) - \log(1 +  \exp(\beta_j^{\prime}X_i})) \right] \nonumber \\
+  \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \left(\beta_j^{*\prime}X_i - \beta_j^{\prime}X_i \right) + \sum_{j} \left( \log(1 + {\exp({\beta_j^{\prime}X_i})) - \log(1 +  \exp(\beta_j^{*\prime}X_i})) \right) \right] \nonumber \\
                 & + \log p(\bm{\beta}^*) - \log p(\bm{\beta})
 \end{align}
 
