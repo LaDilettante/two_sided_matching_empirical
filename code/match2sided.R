@@ -253,6 +253,7 @@ match2sided <- function(iter, t0 = iter / 10,
         C_alpha_est <- sd * cov(alpha_samples) + sd * eps * diag(p_j)
         Xbar_alpha_est <- colMeans(alpha_samples)
       } else {
+        browser()
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
         res <- calculate_C(X_sample = asave[i - 1, ], t = i, 
