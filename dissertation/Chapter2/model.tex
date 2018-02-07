@@ -7,7 +7,7 @@ exposition, throughout the chapter I will use the example of the labor market,
 where many workers can be matched to one firm.
 
 We assume that the matching process in the labor market happens in two stages.
-In the first stage, each firm evaluates each worker in the sample, then decides
+In the first stage, each firm evaluates each worker in the sample, deciding
 whether to hire that worker or not. At the end of this stage, each worker will
 have received a set of offers from firms, which we call his \textit{opportunity
   set}. In the second stage, each worker evaluates the firms in his opportunity
@@ -18,7 +18,7 @@ of which can be accepted by workers.
 
 Our model only needs data on 1) the covariates of firms and workers, and 2) the
 job that workers accept. Such data is widely available in many social science
-surveys of the job market. Importantly, we do not need data on the opportunity
+surveys of the job market. Importantly, we do not need to observe the opportunity
 set. Therefore, our model obviates the need to follow the matching process and
 record who makes offer to whom, which is rarely possible for researchers.
 
@@ -43,9 +43,9 @@ to be meaningful.
 
 This chapter will proceed as follows. First, I discuss the utility model for how
 firms make offers to workers. Second, I discuss the utility model for how
-workers choose the best offer among those extended by firms. Third, I show why
-estimating the model with MLE is difficult, and how we can use Bayesian MCMC
-approach for estimation. Fourth, I analyze US labor data and demonstrate how to
+workers choose the best offer among those extended by firms. Third, I show how
+we can use a Bayesian MCMC
+approach to estimate the model. Fourth, I analyze US labor data and demonstrate how to
 interpret the model's result.
 
 \section{Modeling firms' decision making}
@@ -95,8 +95,8 @@ enough to employ all the workers to whom it extends offer without feeling the
 effect of diminishing marginal productivity of labor. This assumption is less
 restrictive than it may seem. Indeed, we can model the fact that the workers
 under consideration are less productive than the previous batch of workers by
-allowing firm $j$ to have a high baseline utility $b_j$. Therefore, this
-assumption does not require that there is never any diminishing marginal
+allowing firm $j$ to have a high baseline utility $b_j$. Therefore, we are not
+assuming that there is never any diminishing marginal
 productivity of labor, only that there is negligible diminishing effect between
 the first and the last of the workers under consideration. This assumption is a
 reasonable approximation if the firm's labor force is large compared to the
@@ -107,7 +107,7 @@ number of workers being considered.\footnote{While not concerned with
   simplifies the proof that a stable match always exists in the case of
   many-to-one matching.}
 
-In addition to two above assumptions about the process of firm's decision
+In addition to the two above assumptions about the process of firm's decision
 making, we make three parametric assumptions that are standard in the discrete
 choice literature. First, we assume a linear utility function. Second, we assume
 that the error terms $\epsilon_{1ij}, \epsilon_{0ij}$ are uncorrelated with one
@@ -340,7 +340,7 @@ reflected in the formula for $MH_O$ by the $\exp(\alpha'W_{j^*})$ term in the
 denominator.
 
 On the other hand, whether we should add the offer to the opportunity set also
-depends on firm $j$'s preference for worker $i$. If hiring worker $i$ bring firm
+depends on firm $j$'s preference for worker $i$. If hiring worker $i$ brings firm
 $j$ net positive utility (i.e. $\bm{\beta}_{j^*}'X_i > 0$), we should add the
 offer. This is reflected in the formula for $MH_O$ by the multiplier
 $\exp(\bm{\beta}_{j*}'X_i)$, which is larger than 1 when $\bm{\beta}_{j^*}'X_i >
@@ -358,10 +358,11 @@ The Metropolis acceptance ratio for the proposed $\alpha^*$ is\footnote{We
   log-transform the Metropolis acceptance ratio for better numerics.}
 
 \begin{align}
+  MH_\alpha &= \frac{\alpha^*|A, O, \beta)}{p(\alpha | A, O, \beta)} \\
   \log MH_\alpha &= \sum_i \Bigl[ (\alpha^* - \alpha)' W_{a_i} + \nonumber \\
                  & \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) -
-                   \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) + \nonumber\\
-                 & \log p(\alpha^*) - \log p(\alpha) \Bigr]
+                   \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \Bigr] + \nonumber\\
+                 & \log p(\alpha^*) - \log p(\alpha)
 \end{align}
 
 \subsection{Posterior of workers' preference $p(\beta|A, O, \alpha)$}
@@ -374,6 +375,7 @@ only a part of $\bm{\beta}$.
 The Metropolis acceptance ratio for the proposed $\beta$ is
 
 \begin{align}
+  MH_\beta &= \frac{p(\beta* | A, O, \alpha)}{p(\beta | A, O, \alpha)} \\
   \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \left(\beta_j^{*\prime}X_i - \beta_j^{\prime}X_i \right) + \sum_{j} \left( \log(1 + {\exp({\beta_j^{\prime}X_i})) - \log(1 +  \exp(\beta_j^{*\prime}X_i})) \right) \right] \nonumber \\
                 & + \log p(\bm{\beta}^*) - \log p(\bm{\beta})
 \end{align}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  6 FEB 2018 18:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  7 FEB 2018 15:44
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -806,70 +806,71 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 367.
+(hyperref)                removing `math shift' on input line 368.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\beta' on input line 367.
+(hyperref)                removing `\beta' on input line 368.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\alpha' on input line 367.
+(hyperref)                removing `\alpha' on input line 368.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 367.
+(hyperref)                removing `math shift' on input line 368.
 
 
-Overfull \hbox (9.78883pt too wide) in paragraph at lines 379--379
+Overfull \hbox (9.78883pt too wide) in paragraph at lines 381--381
 [] 
  []
 
+[20]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 382.
-
-
-Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\beta' on input line 382.
+(hyperref)                removing `math shift' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 382.
+(hyperref)                removing `\beta' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 382.
+(hyperref)                removing `math shift' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\mu' on input line 382.
+(hyperref)                removing `math shift' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 382.
+(hyperref)                removing `\mu' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\beta' on input line 382.
+(hyperref)                removing `subscript' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\tau' on input line 382.
+(hyperref)                removing `\beta' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `subscript' on input line 382.
+(hyperref)                removing `\tau' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\beta' on input line 382.
+(hyperref)                removing `subscript' on input line 384.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `math shift' on input line 382.
+(hyperref)                removing `\beta' on input line 384.
 
-[20]) [21]
+
+Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
+(hyperref)                removing `math shift' on input line 384.
+
+[21]) [22]
 \openout2 = `./Appendix1/MH_ratio.aux'.
 
  (./Appendix1/MH_ratio.tex
@@ -886,7 +887,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 4.
 
-[22
+[23
 
 
 
@@ -903,7 +904,11 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 34.
 
-[23]
+[24]
+Overfull \hbox (69.61284pt too wide) in paragraph at lines 62--62
+[] 
+ []
+
 
 LaTeX Font Warning: Command \boldmath invalid in math mode on input line 64.
 
@@ -911,13 +916,13 @@ LaTeX Font Warning: Command \boldmath invalid in math mode on input line 64.
 LaTeX Font Warning: Command \mathversion invalid in math mode on input line 64.
 
 
-[24]) [25] (./AnhLe_dissertation.bbl [26
+[25]) [26] (./AnhLe_dissertation.bbl [27
 
 
 
-] [27])
+] [28])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 154.
- [28]
+ [29]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 154.
  (./AnhLe_dissertation.aux
 (./Abbreviations/listofabbr.aux) (./Chapter1/introduction.aux)
@@ -929,8 +934,8 @@ Package rerunfilecheck Info: File `AnhLe_dissertation.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 154.
  ) 
 Here is how much of TeX's memory you used:
- 7635 strings out of 492995
- 107832 string characters out of 6132704
+ 7638 strings out of 492995
+ 107869 string characters out of 6132704
  198488 words of memory out of 5000000
  10853 multiletter control sequences out of 15000+600000
  27799 words of font info for 96 fonts, out of 8000000 for 9000
@@ -962,10 +967,10 @@ e/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha6.pfb></usr/local/texli
 ve/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha7.pfb></usr/local/texl
 ive/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha8.pfb></usr/local/tex
 live/2017/texmf-dist/fonts/type1/public/mathabx-type1/mathx10.pfb>
-Output written on AnhLe_dissertation.pdf (36 pages, 309530 bytes).
+Output written on AnhLe_dissertation.pdf (37 pages, 311250 bytes).
 PDF statistics:
- 663 PDF objects out of 1000 (max. 8388607)
- 593 compressed objects within 6 object streams
- 164 named destinations out of 1000 (max. 500000)
+ 673 PDF objects out of 1000 (max. 8388607)
+ 601 compressed objects within 7 object streams
+ 167 named destinations out of 1000 (max. 500000)
  217 words of extra memory for PDF output out of 10000 (max. 10000000)
 

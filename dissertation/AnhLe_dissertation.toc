@@ -19,9 +19,9 @@
 \contentsline {subsection}{\numberline {2.3.3}Posterior of firms' preference $p(\alpha |A, O, \beta )$}{20}{subsection.2.3.3}
 \contentsline {subsection}{\numberline {2.3.4}Posterior of workers' preference $p(\beta |A, O, \alpha )$}{20}{subsection.2.3.4}
 \contentsline {subsection}{\numberline {2.3.5}Posterior of $\beta $'s hyperparameters $\mu _{\beta }, \tau _{\beta }$}{21}{subsection.2.3.5}
-\contentsline {section}{\numberline {2.4}Results for US labor data}{21}{section.2.4}
-\contentsline {chapter}{\numberline {A}Derivation of the Metropolis-Hastings Acceptance Ratio}{22}{appendix.A}
-\contentsline {subsection}{\numberline {A.0.1}Opportunity sets $O$}{22}{subsection.A.0.1}
-\contentsline {subsection}{\numberline {A.0.2}Workers' parameters, $\alpha $}{23}{subsection.A.0.2}
-\contentsline {subsection}{\numberline {A.0.3}Firms' parameters, $\relax \mathversion {bold}\beta $}{24}{subsection.A.0.3}
-\contentsline {chapter}{Bibliography}{26}{equation.A.0.18}
+\contentsline {section}{\numberline {2.4}Results for US labor data}{22}{section.2.4}
+\contentsline {chapter}{\numberline {A}Derivation of the Metropolis-Hastings Acceptance Ratio}{23}{appendix.A}
+\contentsline {subsection}{\numberline {A.0.1}Opportunity sets $O$}{23}{subsection.A.0.1}
+\contentsline {subsection}{\numberline {A.0.2}Workers' parameters, $\alpha $}{24}{subsection.A.0.2}
+\contentsline {subsection}{\numberline {A.0.3}Firms' parameters, $\relax \mathversion {bold}\beta $}{25}{subsection.A.0.3}
+\contentsline {chapter}{Bibliography}{27}{equation.A.0.18}

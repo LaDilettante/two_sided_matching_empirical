@@ -42,23 +42,23 @@ p(\alpha | A, O, \bm{\beta}) &= \frac{p(O, A, \alpha, \bm{\beta})}{p(A, O, \bm{\
 Metropolis-Hasting acceptance ratio:
 
 \begin{align}
-MH_\alpha = \frac{p(\alpha^* | A, O, \bm{\beta})}{p(\alpha | A, O, \bm{\beta})} &= \frac{p(A_i | O_i, \alpha^*)p(O_i|\bm{\beta})}{p(A_i | O_i, \alpha)p(O_i|\bm{\beta})} \\
-&= \frac{p(A_i | O_i, \alpha^*)}{p(A_i | O_i, \alpha)} \label{eq:updatealpha_MHratio_final}
+MH_\alpha = \frac{p(\alpha^* | A, O, \bm{\beta})}{p(\alpha | A, O, \bm{\beta})} &= \frac{p(A_i | O_i, \alpha^*)p(O_i|\bm{\beta}) p(\alpha^*)}{p(A_i | O_i, \alpha)p(O_i|\bm{\beta}) p(\alpha)} \\
+&= \frac{p(A_i | O_i, \alpha^*)p(\alpha^*)}{p(A_i | O_i, \alpha) p(\alpha)} \label{eq:updatealpha_MHratio_final}
 \end{align}
 
-where \eqref{eq:updatealpha_MHratio_final} is due to the flat prior (so $\frac{p(\alpha^*)}{p(\alpha)}=1$) and the symmetric proposal distribution (so $\frac{p(\alpha^*|\alpha)}{p(\alpha|\alpha^*)} = 1$)
+where \eqref{eq:updatealpha_MHratio_final} is due to the symmetric proposal distribution (so $\frac{p(\alpha^*|\alpha)}{p(\alpha|\alpha^*)} = 1$)
 
 If we plug in \eqref{eq:conditional_probability_of_accept},
 
 \begin{align}
-MH_\alpha &= \prod_i \left[ \frac{\exp(\alpha^{*\prime} W_{a_i})}{\exp(\alpha' W_{a_i})} \times \frac{\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime}W_j)} \right] \\
-&= \prod_i \left[ \exp(\epsilon_\alpha ' W_{a_i}) \times \frac{\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime}W_j)} \right]
+MH_\alpha &= \prod_i \left[ \frac{\exp(\alpha^{*\prime} W_{a_i})}{\exp(\alpha' W_{a_i})} \times \frac{\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime}W_j)} \right] \times \frac{p(\alpha^*)}{p(\alpha)}\\
+&= \prod_i \left[ \exp(\epsilon_\alpha ' W_{a_i}) \times \frac{\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime}W_j)} \right] \times \frac{p(\alpha^*)}{p(\alpha)}
 \end{align}
 
 Finally, we log transform the MH acceptance ratio for numerical stability.
 
 \begin{align}
-\log MH_\alpha &= \sum_i \left[ \epsilon_\alpha' W_{a_i} + \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) - \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \right]
+\log MH_\alpha &= \sum_i \left[ \epsilon_\alpha' W_{a_i} + \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) - \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \right] + \log p(\alpha^*) - \log p(\alpha)
 \end{align}
 
 \subsection{Firms' parameters, \texorpdfstring{$\boldmath\beta$}{}}
@@ -76,7 +76,7 @@ MH_\beta = \frac{p(\beta^* | A, O, \alpha)}{p(\beta | A, O, \alpha)} &= \frac{p(
 &= \frac{p(O_i|\bm{\beta}^*)p(\bm{\beta}^*|\mu_{\beta}, \tau_{\beta})}{p(O_i|\bm{\beta})p(\bm{\beta}|\mu_{\beta}, \tau_{\beta})} \label{eq:updatebeta_MHratio_final}
 \end{align}
 
-where \eqref{eq:updatebeta_MHratio_simplify} is due to the flat prior on $\beta$ and the symmetric proposal distribution.
+where \eqref{eq:updatebeta_MHratio_simplify} is due to the symmetric proposal distribution.
 
 We plug in \eqref{eq:conditional_probability_of_offer},
 
