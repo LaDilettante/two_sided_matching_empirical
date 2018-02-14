@@ -1,27 +1,24 @@
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from itertools import compress
-import rpy2.robjects as ro
-from rpy2.robjects import numpy2ri
-numpy2ri.activate()
-from rpy2.robjects.packages import importr
-from rpy2.robjects.packages import SignatureTranslatedAnonymousPackage
+from numpy.random import RandomState
+from scipy.stats import gumbel_r
+
+rng = RandomState(42)
 
 class Employer:
     '''
     w : p_j vector of characteristics
     beta : p_i vector of preferences for employee's characteristics
     '''
-    def __init__(self, w=None, beta=None, reserve_utility=0):
+    def __init__(self, w=None, beta=None):
         self.w = np.random.normal(size=2) if w is None else w
         self.beta = np.random.normal(size=3) if beta is None else beta
-        self.reserve_utility = reserve_utility
 
     def make_offer(self, employee_list):
+        '''Make 0 / 1 offer to a list of employee'''
+        utility_hiring = np.array([self.beta.dot(ee.x) + gumbel_r().rvs(random_state=rng) for ee in employee_list])
+        utility_not_hiring = np.array([gumbel_r().rvs(random_state=rng) for ee in employee_list])
 
-        return [1 if self.beta.dot(employee.x) > self.reserve_utility else 0
-                for employee in employee_list]
+        return (utility_hiring > utility_not_hiring).astype("float64")
 
 class Employee:
     '''
@@ -33,16 +30,14 @@ class Employee:
         self.x = np.random.normal(size=3) if x is None else x
         self.alpha = np.random.normal(size=2) if alpha is None else alpha
 
-    def offer_list(self, offer_logical, employer_list):
-        return employer_list
-
     def pick_best_employer(self, employer_list, offer_list):
         """
         offer_list : a 0/1 mask of which employer made an offer
         """
         # employer values is -inf for the ones that are not offered
         employer_values = np.array([float("-inf")] * len(employer_list))
-        wa = np.array([self.alpha.dot(employer.w) for employer in employer_list])
+        wa = np.array([self.alpha.dot(employer.w) + gumbel_r().rvs(random_state=rng) for employer in employer_list])
+        self.wa = wa
         employer_values[offer_list.astype("bool")] = wa[offer_list.astype("bool")]
         return np.argmax(employer_values)
 
@@ -62,6 +57,7 @@ class Model:
         opportunity_set = np.transpose(np.array([employer.make_offer(employee_list)
                                                 for employer in employer_list]))
         opportunity_set[:, 0] = 1 # Unemployment is always available
+        opportunity_set = opportunity_set.astype("float64")
 
         # Employee choosing where to work
         choice = np.array([ee.pick_best_employer(employer_list, opportunity_set[idx, :])
@@ -69,7 +65,6 @@ class Model:
 
         # Compute the characteristics for R
         xx = np.array([e.x for e in employee_list])
-        xx = np.column_stack((np.ones(xx.shape[0]), xx))
         ww = np.array([e.w for e in employer_list])
 
         # Compute the preferences for R

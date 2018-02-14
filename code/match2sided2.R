@@ -1,7 +1,7 @@
 library("mvtnorm")
 library("plyr")
 
-#' Two sided matching model
+#' Two sided matching model (for when each job offers are different)
 #'
 #' @param opp A matrix of opportunity
 #' @param choice A vector of observed choice
@@ -54,22 +54,23 @@ f_pA_den <- function(opp, ww, alpha) {
 
 #' log_mh opp_set
 #' @param new Indexes of jobs to be flipped, n_i x num_new_offers_each_i
-logmh_opp <- function(opp, new, alpha, beta, ww, xx) {
+#' Returns n_i-length vector of acceptance ratio 
+#' (cuz we updating workers in parallel)
+logmh_opp <- function(opp, new, alpha, beta, jobs, xx) {
   # browser()
   n_i <- nrow(xx)
   num_new_offers <- length(new) / n_i
-  n_j <- nrow(ww)
   
   indnew <- cbind(rep(1:n_i, each = num_new_offers), new)
   oo <- opp[indnew] # current offer status of the jobs under consideration
   plusminus <- ifelse(oo, -1, 1)
+  oppstar <- opp
+  oppstar[indnew] <- 1 - oo
   
-  exp_WA <- exp(ww %*% alpha)
-  pA_den <- opp %*% exp_WA
-  # browser()
   # Part of MH ratio from P(A|O,alpha)
-  pA_denstar <- pA_den +
-    colSums(matrix(exp_WA[new] * plusminus, ncol = n_i)) # recall: matrix() lays out by column
+  exp_WA <- apply(jobs, c(1, 2), function(x) exp(alpha %*% x))
+  pA_den <- rowSums(opp * exp_WA)
+  pA_denstar <- rowSums(oppstar * exp_WA)
   # Part of MH ratio from P(O|beta)  (logistic model)
   xb <- (xx %*% beta)[indnew]
   
@@ -77,29 +78,14 @@ logmh_opp <- function(opp, new, alpha, beta, ww, xx) {
 }
 
 #' log_mh alpha
-logmh_alpha <- function(alpha, alphastar, ww, opp, wa, prior) {
+logmh_alpha <- function(alpha, alphastar, jobs, opp, waccepted, prior) {
+  exp_WA <- apply(jobs, c(1, 2), function(w) alpha %*% w)
+  pA_den <- rowSums(opp * exp_WA)
+  exp_WA_star <- apply(jobs, c(1, 2), function(w) alphastar %*% w)
+  pA_denstar <- rowSums(opp * exp_WA_star)
   
-  # Calculate likelihood ratio
-  exp_WA <- exp(ww %*% alpha)
-  pA_den <- opp %*% exp_WA
-  exp_WA_star <-  exp(ww %*% alphastar)
-  pA_denstar <- opp %*% exp_WA_star
-  
-  logmh_alpha <- sum(wa * (alphastar - alpha)) + sum(log(pA_den) - log(pA_denstar)) +
-    mvtnorm::dmvnorm(alphastar, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) -
-    mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE)
-  return(logmh_alpha)
-}
-
-#' log_mh alpha for when each job offered is slightly different
-logmh_alpha2 <- function(alpha, alphastar, jobs, opp, wa, prior) {
-  waccepted <- jobs[cbind(1:nrow(jobs), choice)]
-  exp_WA <- exp(jobs * alpha)
-  pA_den <- opp %*% exp_WA
-  exp_WA_star <-  exp(jobs * alphastar)
-  pA_denstar <- opp %*% exp_WA_star
-  
-  logmh_alpha <- sum(waccepted * (alphastar - alpha)) + sum(log(pA_den) - log(pA_denstar)) +
+  logmh_alpha <- sum(waccepted * (alphastar - alpha)) + 
+    sum(log(pA_den) - log(pA_denstar)) +
     mvtnorm::dmvnorm(alphastar, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) -
     mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE)
   return(logmh_alpha)
@@ -160,11 +146,11 @@ match2sided <- function(iter, t0 = iter / 10,
                         C_alpha, C_beta,
                         starting_alpha, starting_beta,
                         frac_opp, prior,
-                        ww, xx, choice, opp) {
-  n_i <- nrow(xx)
-  n_j <- nrow(ww)
+                        jobs, xx, choice, opp) {
+  n_i <- nrow(opp)
+  n_j <- ncol(opp)
   p_i <- ncol(xx)
-  p_j <- ncol(ww)
+  p_j <- dim(jobs)[3]
   eps <- 0.01 # Small constant for beta proposal
   
   if (missing(prior)) {
@@ -183,8 +169,6 @@ match2sided <- function(iter, t0 = iter / 10,
     alpha <- starting_alpha
   }
   alphastar <- alpha
-  exp_WA <- exp(ww %*% alpha) # linear predictors of
-  pA_den <- opp %*% exp_WA # vector of denominators in p(A | O, alpha)
   
   # beta starting values (from 1-sided logit estimates)
   if (missing(starting_beta)) {
@@ -207,8 +191,7 @@ match2sided <- function(iter, t0 = iter / 10,
   Tau_beta <- prior$Tau_beta$Sinv
   
   # ---- Pre compute ----
-  tmp <- as.matrix(ww[choice, ])
-  wa <- apply(tmp, 2, sum) # sum of characteristics of accepted jobs; used in alpha update
+  waccepted <- jobs[cbind(1:nrow(jobs), choice)]
   
   # ---- Initialize storage ----
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
@@ -247,7 +230,7 @@ match2sided <- function(iter, t0 = iter / 10,
     new <- c(new) # Flatten 1-column matrix into a vector
     ind <- cbind(rep(1:n_i, each = num_new_offers), new)
     
-    my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
+    my_logmh_opp <- logmh_opp(opp, new, alpha, beta, jobs, xx)
     ok_opp <- log(runif(n_i)) <= my_logmh_opp
     
     # Don't change an offer for an accepted job
@@ -282,7 +265,7 @@ match2sided <- function(iter, t0 = iter / 10,
     alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
     
     # my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
-    my_logmh_alpha <- logmh_alpha2(alpha, alphastar, jobs, opp, wa, prior)
+    my_logmh_alpha <- logmh_alpha(alpha, alphastar, jobs, opp, wa, prior)
     ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
     if (ok_alpha) {
       alpha <- alphastar
@@ -305,7 +288,7 @@ match2sided <- function(iter, t0 = iter / 10,
         # (notice we're passing in old values of Cs and Xbars)
         beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
         res <- calculate_C(X_sample = beta_sample, t = i, 
-                    C = C_beta_est, Xbar = Xbar_beta_est)
+                           C = C_beta_est, Xbar = Xbar_beta_est)
         Xbar_beta_est <- res$Xbar
         C_beta_est <- res$C
       }
@@ -333,8 +316,8 @@ match2sided <- function(iter, t0 = iter / 10,
     
     # Store results
     logpost[i, 1] <- joint_lpdf(opp, choice,
-                              alpha, beta, mu_beta, Tau_beta, prior,
-                              ww, xx)
+                                alpha, beta, mu_beta, Tau_beta, prior,
+                                ww, xx)
     logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
     logpost[i, 3] <- f_logp_O(opp, beta, xx)
     ok[i, ] <- c(mean(ok_opp), ok_alpha, ok_beta)
