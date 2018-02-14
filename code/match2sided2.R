@@ -14,42 +14,36 @@ NULL
 
 # ---- MH and conditionals ----
 
-#' Calculate the log joint pdf, useful for testing
-#'
-#' @rdname match2sided
-#' @importFrom mvtnorm mvtnorm::dmvnorm
-f_logp_A <- function(opp, choice, alpha, ww) {
-  w <- as.matrix(ww[choice, ])
-  logp_A <- sum(w %*% alpha) - sum(log(opp %*% exp(ww %*% alpha)))
-  return(logp_A)
+#' Calculate the denominator in pA (multinomial)
+#' Returns n_i-length vector of the denominator
+f_pA_den <- function(opp, jobs, alpha) {
+  wa <- apply(jobs, c(1, 2), function(w) w %*% alpha)
+  exp_WA <- exp(wa)
+  return(rowSums(opp * exp_WA))
+}
+#' Calculate pA
+#' @param waccepted n_i x p_j matrix of the characterisics of the accepted job
+#' Returns n-i length vector
+f_logp_A <- function(opp, alpha, jobs, waccepted) {
+  (waccepted %*% alpha) / f_pA_den(opp, jobs, alpha)
 }
 f_logp_O <- function(opp, beta, xx) {
   XB <- xx %*% beta
-  logp_O <- sum(opp * XB) - sum(log1p(exp(XB)))
-  return(logp_O)
+  rowSums(opp * XB) - rowSums(log1p(exp(XB)))
 }
-
-joint_lpdf <- function(opp, choice, alpha, beta,
+#' Calculate the log joint pdf, useful for testing
+joint_lpdf <- function(opp, alpha, beta,
                        mu_beta, Tau_beta,
-                       prior, ww, xx) {
+                       prior, waccepted, xx) {
   n_i <- length(choice)
-  logp_A <- f_logp_A(opp, choice, alpha, ww)
-  # w <- as.matrix(ww[choice, ])
-  # logp_A <- sum(w %*% alpha) - sum(log(opp %*% exp(ww %*% alpha)))
+  logp_A <- f_logp_A(opp, alpha, jobs, waccepted)
   
   logp_O <- f_logp_O(opp, beta, xx)
-  # XB <- xx %*% beta
-  # logp_O <- sum(opp * XB) - sum(log1p(exp(XB)))
-  return(logp_A + logp_O +
+  return(sum(logp_A) + sum(logp_O) +
            mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) +
            sum(mvtnorm::dmvnorm(t(beta), mu_beta, solve(Tau_beta), log = TRUE)) +
            mvtnorm::dmvnorm(mu_beta, prior$mu_beta$mu, solve(prior$mu_beta$Tau), log = TRUE) +
            log(MCMCpack::dwish(Tau_beta, prior$Tau_beta$nu, prior$Tau_beta$S)))
-}
-
-f_pA_den <- function(opp, ww, alpha) {
-  exp_WA <- exp(ww %*% alpha)
-  return(c(opp %*% exp_WA))
 }
 
 #' log_mh opp_set
@@ -79,12 +73,12 @@ logmh_opp <- function(opp, new, alpha, beta, jobs, xx) {
 
 #' log_mh alpha
 logmh_alpha <- function(alpha, alphastar, jobs, opp, waccepted, prior) {
-  exp_WA <- apply(jobs, c(1, 2), function(w) alpha %*% w)
+  exp_WA <- apply(jobs, c(1, 2), function(w) exp(alpha %*% w))
   pA_den <- rowSums(opp * exp_WA)
-  exp_WA_star <- apply(jobs, c(1, 2), function(w) alphastar %*% w)
+  exp_WA_star <- apply(jobs, c(1, 2), function(w) exp(alphastar %*% w))
   pA_denstar <- rowSums(opp * exp_WA_star)
   
-  logmh_alpha <- sum(waccepted * (alphastar - alpha)) + 
+  logmh_alpha <- sum(waccepted %*% (alphastar - alpha)) + 
     sum(log(pA_den) - log(pA_denstar)) +
     mvtnorm::dmvnorm(alphastar, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) -
     mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE)
@@ -191,7 +185,11 @@ match2sided <- function(iter, t0 = iter / 10,
   Tau_beta <- prior$Tau_beta$Sinv
   
   # ---- Pre compute ----
-  waccepted <- jobs[cbind(1:nrow(jobs), choice)]
+  # Characteristics of the accepted jobs
+  waccepted <- matrix(NA, nrow = n_i, ncol = p_j)
+  for (i in 1:n_i) {
+    waccepted[i, ] <- jobs[i, choice[i], ]
+  }
   
   # ---- Initialize storage ----
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
@@ -206,11 +204,10 @@ match2sided <- function(iter, t0 = iter / 10,
   ok <- matrix(NA, iter, 3) # ok_opp, ok_alpha, ok_beta
   
   # Store results
-  logpost[1, 1] <- joint_lpdf(opp, choice,
-                              alpha, beta, mu_beta, Tau_beta, prior,
-                              ww, xx)
-  logpost[1, 2] <- f_logp_A(opp, choice, alpha, ww)
-  logpost[1, 3] <- f_logp_O(opp, beta, xx)
+  logpost[1, 1] <- joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta,
+                              prior, waccepted, xx)
+  logpost[1, 2] <- sum(f_logp_A(opp, alpha, jobs, waccepted))
+  logpost[1, 3] <- sum(f_logp_O(opp, beta, xx))
   ok[1, ] <- c(0, 0, 0)
   oppsave[1, , ] <- opp
   asave[1, ] <- alpha
@@ -264,8 +261,7 @@ match2sided <- function(iter, t0 = iter / 10,
     }
     alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
     
-    # my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
-    my_logmh_alpha <- logmh_alpha(alpha, alphastar, jobs, opp, wa, prior)
+    my_logmh_alpha <- logmh_alpha(alpha, alphastar, jobs, opp, waccepted, prior)
     ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
     if (ok_alpha) {
       alpha <- alphastar
@@ -315,11 +311,10 @@ match2sided <- function(iter, t0 = iter / 10,
                                 Tau_beta_posterior$Sinv)
     
     # Store results
-    logpost[i, 1] <- joint_lpdf(opp, choice,
-                                alpha, beta, mu_beta, Tau_beta, prior,
-                                ww, xx)
-    logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
-    logpost[i, 3] <- f_logp_O(opp, beta, xx)
+    logpost[i, 1] <- joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta,
+                                prior, waccepted, xx)
+    logpost[i, 2] <- sum(f_logp_A(opp, alpha, jobs, waccepted))
+    logpost[i, 3] <- sum(f_logp_O(opp, beta, xx))
     ok[i, ] <- c(mean(ok_opp), ok_alpha, ok_beta)
     oppsave[i, , ] <- opp
     asave[i, ] <- alpha
@@ -337,8 +332,10 @@ match2sided <- function(iter, t0 = iter / 10,
   }
   
   names(ok) <- c("mean(opp)", "alpha", "beta")
-  if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
-  if (!is.null(colnames(ww))) colnames(astarsave) <- colnames(ww)
+  if (!is.null(dimnames(jobs)[[3]])) {
+    colnames(asave) <- dimnames(jobs)[[3]]
+    colnames(astarsave) <- dimnames(jobs)[[3]]
+  }
   if (!is.null(colnames(xx))) {
     dimnames(bsave)[[2]] <- colnames(xx)
     dimnames(bstarsave)[[2]] <- colnames(xx)
@@ -346,9 +343,9 @@ match2sided <- function(iter, t0 = iter / 10,
     dimnames(Tau_betasave)[[2]] <- colnames(xx)
     dimnames(Tau_betasave)[[3]] <- rownames(xx)
   }
-  if (!is.null(rownames(ww))) {
-    dimnames(bsave)[[3]] <- rownames(ww)
-    dimnames(bstarsave)[[3]] <- rownames(ww)
+  if (!is.null(dimnames(jobs)[[2]])) {
+    dimnames(bsave)[[3]] <- dimnames(jobs)[[2]]
+    dimnames(bstarsave)[[3]] <- dimnames(jobs)[[2]]
   }
   
   return(list(opp = oppsave, alpha = asave, beta = bsave,

@@ -1,12 +1,9 @@
 rm(list = ls())
-library("checkpoint")
-checkpoint("2017-10-15", scanForPackages = FALSE)
 
-install.packages("~/projects/match2sided/", repos = NULL, type="source")
-try(detach("package:match2sided", unload = TRUE), silent = TRUE)
 library("match2sided")
 library("tidyverse")
 library("coda")
+source("match2sided.R")
 time_start <- Sys.time()
 
 # ---- Data ----
@@ -60,22 +57,37 @@ xx <- as.matrix(xx)
 
 # ---- Run MCMC ----
 
-res <- match2sided::match2sided(iter = 10000,
-                                eps_alpha = 0.05, eps_beta = 0.05, 
-                                frac_beta = 0.5, frac_opp = 0.5,
-                                ww = ww, xx = xx,
-                                choice = choice, opp = opp)
+# res <- match2sided::match2sided(iter = 10000,
+#                                 eps_alpha = 0.05, eps_beta = 0.05, 
+#                                 frac_beta = 0.5, frac_opp = 0.5,
+#                                 ww = ww, xx = xx,
+#                                 choice = choice, opp = opp)
+
+res <- match2sided(iter = 5000, t0 = 6000,
+                   C_alpha = (0.5 ** 2) * diag(ncol(ww)), 
+                   C_beta = (0.5 ** 2) * diag(ncol(xx)),
+                   frac_opp = 0.1,
+                   ww = ww, xx = xx,
+                   choice = choice, opp = opp)
+print(res$acceptance_rate)
 
 saveRDS(res, file = paste0("../result/japan-", 
                            format(Sys.time(), "%Y-%m-%d-%H%M"), ".RData"))
 
 # ---- Results and Diagnostics ----
 
-WARMUP <- res$mcmc_settings$iter / 5
+WARMUP <- res$mcmc_settings$iter / 2
 
-plot(res$lp, type='l',
-     xlab = 'iteration', ylab = 'log posterior density')
+par(mfrow = c(2, 2))
+plot(res$lp[, 1], type='l',
+     xlab = 'iteration', ylab = 'log joint pdf')
+plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
+plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
+par(mfrow = c(1, 1))
 
-alpha <- mcmc(res$alpha) %>% window(start = WARMUP)
+alpha <- mcmc(res$alpha)
 plot(alpha)
 summary(alpha)
+
+beta_capital <- mcmc(res$beta[, 'uscptl', ])
+plot(beta_capital)
