@@ -1,6 +1,7 @@
 rm(list = ls())
 library(RcppCNPy)
 library(coda)
+library(zoo) # moving average for MCMC
 source("match2sided2.R")
 source("0_functions.R")
 
@@ -60,7 +61,7 @@ summary(glm(starting_opp[, 4] ~ . - 1, family = binomial(link = "logit"),
 
 # ---- MCMC ----
 
-iter <- 10000
+iter <- 1e5
 p_i <- ncol(xx)
 prior <- list(alpha = list(mu = 0, Tau = matrix(0.01)),
               mu_beta = list(mu = rnorm(p_i),
@@ -68,32 +69,38 @@ prior <- list(alpha = list(mu = 0, Tau = matrix(0.01)),
               Tau_beta = list(nu = p_i + 2,
                               Sinv = solve(diag(rep(0.01, p_i)))))
 
-
-
 res <- match2sided(iter = iter, t0 = iter + 1,
                    C_alpha = matrix(0.01), 
-                   C_beta = (0.01 ** 2) * diag(ncol(xx)),
+                   C_beta = (0.01 ** 2) * diag(c(100, rep(1, ncol(xx) - 1))),
                    starting_alpha = c(0),
                    frac_opp = 0.25, prior = prior,
                    jobs = jobs, xx = xx,
-                   choice = choice, opp = starting_opp)
+                   choice = choice, opp = obs_opp)
 
 start <- iter / 2
-plot(mcmc(res$alpha))
-plot(mcmc(res$alphastar))
+thin <- 100
+my.plot.mcmc(mcmc(res$alpha), parameters = c(0.05))
+par(oma=c(0, 0, 3, 0))
+mtext("Workers' preference param", side = 3, line = 0, outer = TRUE)
+
 colMeans(res$alpha[start:iter, , drop = FALSE])
 
 mcmcse::mcse.multi(res$alpha)
 
-mcse.multi(res$beta[start:iter, , 2]) # beta for the 2nd employer
-plot(mcmc(res$beta[, , 2]))
+mcmcse::mcse.multi(res$beta[start:iter, , 2]) # beta for the 1st employer
+par(oma=c(0, 0, 3, 0))
+my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-9.0, 0.2, 0.2))
+mtext("Employer 1's preference params",  side = 3, line = 0, outer = TRUE)
+
 plot(mcmc(res$betastar[, , 2]))
 
-mcse.multi(res$beta[start:iter, , 4]) # beta for the 3rd employer
-plot(mcmc(res$beta[, , 3]))
+mcmcse::mcse.multi(res$beta[start:iter, , 4]) # beta for the 3rd employer
+par(oma=c(0, 0, 3, 0))
+my.plot.mcmc(mcmc(res$beta[, , 4]), parameters = c(-5.0, 0.5, -0.05))
+mtext("Employer 3's preference params", side = 3, line = 0, outer = TRUE)
 
 beta_2 <- res$beta[, 2, ] # the beta for the second employee's covariate (educ)
-plot(mcmc(beta_2))
+my.plot.mcmc(mcmc(beta_2))
 colMeans(beta_2[5000:10000, ])
 
 # Check updating of opp
@@ -101,10 +108,27 @@ for (i in 1:5) {
   heatmap2(res$opp[i, , ])
 }
 
-tmp <- t(apply(res$opp, 1, colMeans))
-tmp <- tmp - colMeans(true_opp)
-plot(tmp[, 2], type = "l")
-plot(tmp[, 3], type = "l")
-plot(tmp[, 4], type = "l")
+# See the percentage of offfer for each employers and compare with true_opp
+# This could be an approximation for how stringent the
+tmp <- t(apply(res$opp, 1, 
+               function(sampled_opp) colMeans(sampled_opp) - colMeans(true_opp)))
+par(mfrow = c(4, 2))
+par(oma=c(0, 0, 3, 0))
+f_plot_mcmc(tmp[seq(1, iter, thin), 2], main = "Employer 2")
+f_plot_mcmc(tmp[seq(1, iter, thin), 3], main = "Employer 3")
+f_plot_mcmc(tmp[seq(1, iter, thin), 4], main = "Employer 4")
+f_plot_mcmc(tmp[seq(1, iter, thin), 5], main = "Employer 5")
+mtext("Difference in Offer Rate b/w Sampled Opp Set and True Opp Set", 
+      side = 3, line = 0, outer = TRUE)
 
-sum(abs(res$opp[2, , ] - true_opp))
+# Average difference between the sampled_opp and true_opp for each employer
+tmp <- t(apply(res$opp, 1, 
+               function(sampled_opp) colMeans(abs(sampled_opp - true_opp))))
+par(mfrow = c(4, 2))
+par(oma=c(0, 0, 3, 0))
+f_plot_mcmc(tmp[seq(1, iter, thin), 2], main = "Employer 2")
+f_plot_mcmc(tmp[seq(1, iter, thin), 3], main = "Employer 3")
+f_plot_mcmc(tmp[seq(1, iter, thin), 4], main = "Employer 4")
+f_plot_mcmc(tmp[seq(1, iter, thin), 5], main = "Employer 5")
+mtext("Avg Difference b/w Sampled Opp Set and True Opp Set", 
+      side = 3, line = 0, outer = TRUE)
