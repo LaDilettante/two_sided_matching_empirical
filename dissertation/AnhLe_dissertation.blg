@@ -8,115 +8,116 @@ A level-1 auxiliary file: ./Chapter3/simulation.aux
 A level-1 auxiliary file: ./Chapter4/fdi.aux
 A level-1 auxiliary file: ./Appendix1/MH_ratio.aux
 The style file: ./Bibliography/jasa.bst
-I couldn't open database file /home/anh/Dropbox/texmf/bibtex/bib/library.bib
----line 30 of file AnhLe_dissertation.aux
- : \bibdata{/home/anh/Dropbox/texmf/bibtex/bib/library
- :                                                    ,/Users/anh/Dropbox/texmf/bibtex/bib/library}
-I'm skipping whatever remains of this command
-I found no database files---while reading file AnhLe_dissertation.aux
-Warning--I didn't find a database entry for "Pandya2010"
-Warning--I didn't find a database entry for "Zebregs2002"
-Warning--I didn't find a database entry for "Rysman2009"
-Warning--I didn't find a database entry for "Gale1962"
-Warning--I didn't find a database entry for "Roth2016"
-Warning--I didn't find a database entry for "Adachi2003"
-Warning--I didn't find a database entry for "Roth1992"
-Warning--I didn't find a database entry for "Posner2001"
-Warning--I didn't find a database entry for "Sprecher1994"
-Warning--I didn't find a database entry for "Logan1996"
-Warning--I didn't find a database entry for "Logan2008"
-Warning--I didn't find a database entry for "Gulati2016"
-Warning--I didn't find a database entry for "Ditslear2001"
-Warning--I didn't find a database entry for "Liptak2007"
-Warning--I didn't find a database entry for "Slotnick1984"
-Warning--I didn't find a database entry for "Posner2007"
-Warning--I didn't find a database entry for "Peppers2008"
-Warning--I didn't find a database entry for "Bonica2017"
-Warning--I didn't find a database entry for "Rozema2016"
-Warning--I didn't find a database entry for "Laver1998"
-Warning--I didn't find a database entry for "DeSwaan1973"
-Warning--I didn't find a database entry for "Tu2014"
-Warning--I didn't find a database entry for "Hitsch2010"
-Warning--I didn't find a database entry for "Goswami2014"
-Warning--I didn't find a database entry for "Train2009"
-Warning--I didn't find a database entry for "Cameron2005"
-Warning--I didn't find a database entry for "Logan1998"
-Warning--I didn't find a database entry for "Dempster1977"
-Warning--I didn't find a database entry for "Jamshidian2000"
-Warning--I didn't find a database entry for "Ryden2008"
-Warning--I didn't find a database entry for "Tanner1987"
-Warning--I didn't find a database entry for "Haario1999"
-Warning--I didn't find a database entry for "Haario2001"
-Warning--I didn't find a database entry for "Grosse2014"
-Warning--I didn't find a database entry for "Li2009a"
-Warning--I didn't find a database entry for "Sawant2010"
-Warning--I didn't find a database entry for "Busse2007"
-Warning--I didn't find a database entry for "Jensen2014"
-Warning--I didn't find a database entry for "Li2003"
-Warning--I didn't find a database entry for "Kerner2014"
-Warning--I didn't find a database entry for "Pinto2013"
-Warning--I didn't find a database entry for "Pandya2016"
-Warning--I didn't find a database entry for "Findlay1978"
-Warning--I didn't find a database entry for "Nunnenkamp2004"
-Warning--I didn't find a database entry for "Jensen2003"
-Warning--I didn't find a database entry for "Ahlquist2006"
-Warning--I didn't find a database entry for "Beazer2011"
-Warning--I didn't find a database entry for "Graham2010"
-Warning--I didn't find a database entry for "Dorff2013"
-Warning--I didn't find a database entry for "Broz2001"
-Warning--I didn't find a database entry for "Milner2005a"
-Warning--I didn't find a database entry for "Pinto2008"
-Warning--I didn't find a database entry for "UNCTAD2015"
-Warning--I didn't find a database entry for "Pandya2014"
-Warning--I didn't find a database entry for "Ricupero2000"
-Warning--I didn't find a database entry for "Guangzhou2011"
-Warning--I didn't find a database entry for "Alfaro2003"
-Warning--I didn't find a database entry for "Alfaro2007"
-Warning--I didn't find a database entry for "Javorcik2004"
-Warning--I didn't find a database entry for "Yamawaki1991"
-Warning--I didn't find a database entry for "Luo2010"
-Warning--I didn't find a database entry for "Cheibub2009b"
-Warning--I didn't find a database entry for "OECD2009"
+Database file #1: /Users/anh/Dropbox/texmf/bibtex/bib/library.bib
 Bibliography style `jasa.bst' by Russ Lenth, April 1996 (rev. Mar. 1999)
-You've used 0 entries,
+[Adachi2003]
+[Ahlquist2006]
+[Alfaro2003]
+[Alfaro2007]
+Warning--empty note in Alfaro2007
+[Beazer2011]
+Warning--empty note in Beazer2011
+[Bonica2017]
+[Broz2001]
+[Busse2007]
+[Cameron2005]
+[Cheibub2009b]
+[DeSwaan1973]
+[Dempster1977]
+[Ditslear2001]
+[Dorff2013]
+[Findlay1978]
+[Gale1962]
+[Goswami2014]
+[Graham2010]
+[Grosse2014]
+[Guangzhou2011]
+[Gulati2016]
+[Haario1999]
+[Haario2001]
+[Hitsch2010]
+[Jamshidian2000]
+[Javorcik2004]
+[Jensen2003]
+[Jensen2014]
+[Kerner2014]
+[Laver1998]
+[Li2009a]
+[Li2003]
+[Liptak2007]
+[Logan1996]
+[Logan1998]
+[Logan2008]
+[Luo2010]
+[Milner2005a]
+Warning--can't use both volume and number fields in Milner2005a
+Warning--empty publisher in Milner2005a
+[Nunnenkamp2004]
+[OECD2009]
+[Pandya2010]
+[Pandya2014]
+[Pandya2016]
+[Peppers2008]
+[Pinto2013]
+Warning--empty journal in Pinto2013
+[Pinto2008]
+[Posner2001]
+[Posner2007]
+[Ricupero2000]
+[Roth1992]
+[Roth2016]
+[Rozema2016]
+[Ryden2008]
+[Rysman2009]
+[Sawant2010]
+[Slotnick1984]
+[Sprecher1994]
+[Tanner1987]
+[Train2009]
+[Tu2014]
+[UNCTAD2015]
+[Yamawaki1991]
+[Zebregs2002]
+Warning--empty publisher in Zebregs2002
+You've used 63 entries,
             2332 wiz_defined-function locations,
-            663 strings with 5566 characters,
-and the built_in function-call counts, 20 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 0
-:= -- 7
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
-chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+            957 strings with 13849 characters,
+and the built_in function-call counts, 26152 in all, are:
+= -- 2603
+> -- 1201
+< -- 59
++ -- 335
+- -- 335
+* -- 2379
+:= -- 4562
+add.period$ -- 120
+call.type$ -- 63
+change.case$ -- 337
+chr.to.int$ -- 63
+cite$ -- 132
+duplicate$ -- 1088
+empty$ -- 1718
+format.name$ -- 438
+if$ -- 5105
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 4
-num.names$ -- 0
-pop$ -- 0
+missing$ -- 63
+newline$ -- 193
+num.names$ -- 254
+pop$ -- 362
 preamble$ -- 1
-purify$ -- 0
+purify$ -- 398
 quote$ -- 0
-skip$ -- 1
-stack$ -- 1
-substring$ -- 0
-swap$ -- 0
-text.length$ -- 0
+skip$ -- 787
+stack$ -- 64
+substring$ -- 1744
+swap$ -- 227
+text.length$ -- 10
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
-warning$ -- 0
-while$ -- 0
+type$ -- 549
+warning$ -- 6
+while$ -- 273
 width$ -- 0
-write$ -- 3
-(There were 2 error messages)
+write$ -- 682
+(There were 6 warnings)

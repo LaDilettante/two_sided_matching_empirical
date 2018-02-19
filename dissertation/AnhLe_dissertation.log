@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  18 FEB 2018 20:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017) (preloaded format=pdflatex 2017.5.23)  18 FEB 2018 23:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -719,7 +719,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 
 ]
 
-LaTeX Font Warning: Command \mathversion invalid in math mode on input line 35.
+LaTeX Font Warning: Command \mathversion invalid in math mode on input line 36.
 
 
 )
@@ -732,16 +732,7 @@ LaTeX Font Warning: Command \mathversion invalid in math mode on input line 35.
 
  [6
 
-] (./AnhLe_dissertation.lof
-
-Package natbib Warning: Citation `Pandya2010' on page vii undefined on input li
-ne 5.
-
-
-Package natbib Warning: Citation `Zebregs2002' on page vii undefined on input l
-ine 5.
-
-)
+] (./AnhLe_dissertation.lof)
 \tf@lof=\write6
 \openout6 = `AnhLe_dissertation.lof'.
 
@@ -750,7 +741,8 @@ ine 5.
 ]
 \openout2 = `./Abbreviations/listofabbr.aux'.
 
- (./Abbreviations/listofabbr.tex) [8
+
+(./Abbreviations/listofabbr.tex) [8
 
 
 ]
@@ -758,210 +750,20 @@ ine 5.
 
  (./Chapter1/introduction.tex
 Chapter 1.
-
-Package natbib Warning: Citation `Rysman2009' on page 1 undefined on input line
- 9.
-
 [1
 
 
 
-]
-
-Package natbib Warning: Citation `Gale1962' on page 2 undefined on input line 3
-5.
-
-
-Package natbib Warning: Citation `Gale1962' on page 2 undefined on input line 5
-6.
-
-[2]
-
-Package natbib Warning: Citation `Roth2016' on page 3 undefined on input line 9
-0.
-
-
-Package natbib Warning: Citation `Adachi2003' on page 3 undefined on input line
- 94.
-
-[3]
-
-Package natbib Warning: Citation `Roth1992' on page 4 undefined on input line 1
-06.
-
-
-Package natbib Warning: Citation `Posner2001' on page 4 undefined on input line
- 132.
-
-
-Package natbib Warning: Citation `Sprecher1994' on page 4 undefined on input li
-ne 132.
-
-[4]
-
-Package natbib Warning: Citation `Logan1996' on page 5 undefined on input line 
-149.
-
-
-Package natbib Warning: Citation `Logan2008' on page 5 undefined on input line 
-150.
-
-
-Package natbib Warning: Citation `Gulati2016' on page 5 undefined on input line
- 161.
-
-
-Package natbib Warning: Citation `Posner2001' on page 5 undefined on input line
- 161.
-
-
-Package natbib Warning: Citation `Ditslear2001' on page 5 undefined on input li
-ne 164.
-
-
-Package natbib Warning: Citation `Liptak2007' on page 5 undefined on input line
- 164.
-
-
-Package natbib Warning: Citation `Posner2001' on page 5 undefined on input line
- 168.
-
-
-Package natbib Warning: Citation `Slotnick1984' on page 5 undefined on input li
-ne 170.
-
-
-Package natbib Warning: Citation `Posner2001' on page 5 undefined on input line
- 173.
-
-
-Package natbib Warning: Citation `Posner2007' on page 5 undefined on input line
- 173.
-
-[5]
-
-Package natbib Warning: Citation `Peppers2008' on page 6 undefined on input lin
-e 176.
-
-
-Package natbib Warning: Citation `Bonica2017' on page 6 undefined on input line
- 184.
-
-
-Package natbib Warning: Citation `Bonica2017' on page 6 undefined on input line
- 188.
-
-
-Package natbib Warning: Citation `Rozema2016' on page 6 undefined on input line
- 196.
-
-[6]
-
-Package natbib Warning: Citation `Laver1998' on page 7 undefined on input line 
-218.
-
-
-Package natbib Warning: Citation `DeSwaan1973' on page 7 undefined on input lin
-e 229.
-
-[7]
-
-Package natbib Warning: Citation `Tu2014' on page 8 undefined on input line 258
-.
-
-
-Package natbib Warning: Citation `Tu2014' on page 8 undefined on input line 265
-.
-
-
-Package natbib Warning: Citation `Hitsch2010' on page 8 undefined on input line
- 265.
-
-
-Package natbib Warning: Citation `Goswami2014' on page 8 undefined on input lin
-e 265.
-
-[8]) [9]
+] [2] [3] [4] [5] [6] [7] [8]) [9]
 \openout2 = `./Chapter2/model.aux'.
 
  (./Chapter2/model.tex
 Chapter 2.
-
-Package natbib Warning: Citation `Logan1996' on page 10 undefined on input line
- 5.
-
 [10
 
 
 
-]
-
-Package natbib Warning: Citation `Roth1992' on page 11 undefined on input line 
-30.
-
-
-Package natbib Warning: Citation `Roth2016' on page 11 undefined on input line 
-31.
-
-
-Package natbib Warning: Citation `Adachi2003' on page 11 undefined on input lin
-e 31.
-
-[11]
-
-Package natbib Warning: Citation `Roth1992' on page 12 undefined on input line 
-86.
-
-
-Package natbib Warning: Citation `Roth1992' on page 12 undefined on input line 
-108.
-
-[12]
-
-Package natbib Warning: Citation `Train2009' on page 13 undefined on input line
- 121.
-
-[13] [14]
-
-Package natbib Warning: Citation `Cameron2005' on page 15 undefined on input li
-ne 203.
-
-[15]
-
-Package natbib Warning: Citation `Logan1998' on page 16 undefined on input line
- 229.
-
-
-Package natbib Warning: Citation `Dempster1977' on page 16 undefined on input l
-ine 233.
-
-
-Package natbib Warning: Citation `Jamshidian2000' on page 16 undefined on input
- line 239.
-
-
-Package natbib Warning: Citation `Ryden2008' on page 16 undefined on input line
- 241.
-
-
-Package natbib Warning: Citation `Logan1998' on page 16 undefined on input line
- 247.
-
-[16]
-
-Package natbib Warning: Citation `Tanner1987' on page 17 undefined on input lin
-e 261.
-
-[17]
-
-Package natbib Warning: Citation `Haario1999' on page 18 undefined on input lin
-e 301.
-
-
-Package natbib Warning: Citation `Haario2001' on page 18 undefined on input lin
-e 301.
-
-
+] [11] [12] [13] [14] [15] [16] [17]
 Overfull \hbox (13.15498pt too wide) in paragraph at lines 295--302
 []\OT1/cmr/m/n/12 In our case, we will use sym-met-ric pro-posal dis-tri-bu-tio
 ns, i.e. $\OML/cmm/m/it/12 p\U/matha/m/n/12 p\OML/cmm/m/it/12 ^^R[]\U/matha/m/n
@@ -969,10 +771,6 @@ ns, i.e. $\OML/cmm/m/it/12 p\U/matha/m/n/12 p\OML/cmm/m/it/12 ^^R[]\U/matha/m/n
  p\U/matha/m/n/12 p\OML/cmm/m/it/12 ^^R\U/matha/m/n/12 |\OML/cmm/m/it/12 ^^R[]\
 U/matha/m/n/12 q@\OML/cmm/m/it/12 ^^R; ^^R[]$\OT1/cmr/m/n/12 ,
  []
-
-
-Package natbib Warning: Citation `Grosse2014' on page 18 undefined on input lin
-e 308.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
@@ -990,7 +788,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 311.
 
-[18]
+[18] [19]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 349.
@@ -1007,11 +805,6 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 349.
 
-
-Package natbib Warning: Citation `Haario2001' on page 19 undefined on input lin
-e 355.
-
-[19]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 368.
@@ -1033,6 +826,7 @@ Overfull \hbox (9.78883pt too wide) in paragraph at lines 381--381
 [] 
  []
 
+[20]
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 384.
@@ -1077,12 +871,12 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 384.
 
-[20]) [21]
+[21]) [22]
 \openout2 = `./Chapter3/simulation.aux'.
 
  (./Chapter3/simulation.tex
 Chapter 3.
-) [22
+) [23
 
 
 
@@ -1091,226 +885,28 @@ Chapter 3.
 
  (./Chapter4/fdi.tex
 Chapter 4.
+[24
 
-Package natbib Warning: Citation `Li2009a' on page 23 undefined on input line 7
-.
 
 
-Package natbib Warning: Citation `Sawant2010' on page 23 undefined on input lin
-e 7.
+] [25]
 
+LaTeX Warning: Reference `sec:model' on page 26 undefined on input line 19.
 
-Package natbib Warning: Citation `Busse2007' on page 23 undefined on input line
- 7.
-
-
-Package natbib Warning: Citation `Jensen2014' on page 23 undefined on input lin
-e 7.
-
-
-Package natbib Warning: Citation `Li2003' on page 23 undefined on input line 7.
-
-
-
-Package natbib Warning: Citation `Kerner2014' on page 23 undefined on input lin
-e 9.
-
-[23
-
-
-
-]
-
-Package natbib Warning: Citation `Pinto2013' on page 24 undefined on input line
- 11.
-
-
-Package natbib Warning: Citation `Pandya2016' on page 24 undefined on input lin
-e 11.
-
-
-Package natbib Warning: Citation `Findlay1978' on page 24 undefined on input li
-ne 13.
-
-
-Package natbib Warning: Citation `Nunnenkamp2004' on page 24 undefined on input
- line 13.
-
-[24]
-
-LaTeX Warning: Reference `sec:model' on page 25 undefined on input line 19.
-
-
-Package natbib Warning: Citation `Jensen2003' on page 25 undefined on input lin
-e 31.
-
-
-Package natbib Warning: Citation `Ahlquist2006' on page 25 undefined on input l
-ine 31.
-
-
-Package natbib Warning: Citation `Beazer2011' on page 25 undefined on input lin
-e 31.
-
-
-Package natbib Warning: Citation `Graham2010' on page 25 undefined on input lin
-e 31.
-
-
-Package natbib Warning: Citation `Kerner2014' on page 25 undefined on input lin
-e 31.
-
-[25]
-
-Package natbib Warning: Citation `Kerner2014' on page 26 undefined on input lin
-e 33.
-
-
-Package natbib Warning: Citation `Li2009a' on page 26 undefined on input line 3
-3.
-
-
-Package natbib Warning: Citation `Dorff2013' on page 26 undefined on input line
- 35.
-
-[26]
-
-Package natbib Warning: Citation `Pinto2013' on page 27 undefined on input line
- 43.
-
-
-Package natbib Warning: Citation `Pandya2016' on page 27 undefined on input lin
-e 43.
-
-
-Package natbib Warning: Citation `Broz2001' on page 27 undefined on input line 
-43.
-
-
-Package natbib Warning: Citation `Milner2005a' on page 27 undefined on input li
-ne 43.
-
-
-Package natbib Warning: Citation `Pinto2013' on page 27 undefined on input line
- 43.
-
-
-Package natbib Warning: Citation `Pandya2016' on page 27 undefined on input lin
-e 43.
-
-
-Package natbib Warning: Citation `Pinto2013' on page 27 undefined on input line
- 47.
-
-
-Package natbib Warning: Citation `Pinto2008' on page 27 undefined on input line
- 47.
-
-
-Package natbib Warning: Citation `UNCTAD2015' on page 27 undefined on input lin
-e 47.
-
-[27]
-
-Package natbib Warning: Citation `Pinto2013' on page 28 undefined on input line
- 49.
-
-
-Package natbib Warning: Citation `Pandya2014' on page 28 undefined on input lin
-e 49.
-
-
-Package natbib Warning: Citation `Pandya2016' on page 28 undefined on input lin
-e 49.
-
-[28] <../figure/china_fdi_restriction.pdf, id=456, 505.89pt x 252.945pt>
+[26] [27] [28] [29]
+<../figure/china_fdi_restriction.pdf, id=684, 505.89pt x 252.945pt>
 File: ../figure/china_fdi_restriction.pdf Graphic file (type pdf)
 
 <use ../figure/china_fdi_restriction.pdf>
 Package pdftex.def Info: ../figure/china_fdi_restriction.pdf used on input line
  59.
 (pdftex.def)             Requested size: 322.5pt x 161.25127pt.
+ [30 <../figure/china_fdi_restriction.pdf>]
 
-
-Package natbib Warning: Citation `Pandya2010' on page 29 undefined on input lin
-e 60.
-
-
-Package natbib Warning: Citation `Zebregs2002' on page 29 undefined on input li
-ne 60.
-
-
-Package natbib Warning: Citation `Pandya2010' on page 29 undefined on input lin
-e 60.
-
-
-Package natbib Warning: Citation `Zebregs2002' on page 29 undefined on input li
-ne 60.
-
-
-Package natbib Warning: Citation `UNCTAD2015' on page 29 undefined on input lin
-e 69.
-
-
-Package natbib Warning: Citation `Ricupero2000' on page 29 undefined on input l
-ine 69.
-
-
-Package natbib Warning: Citation `Guangzhou2011' on page 29 undefined on input 
-line 69.
-
-[29 <../figure/china_fdi_restriction.pdf>]
-
-Package natbib Warning: Citation `Alfaro2003' on page 30 undefined on input lin
-e 71.
-
-
-Package natbib Warning: Citation `Alfaro2007' on page 30 undefined on input lin
-e 71.
-
-
-Package natbib Warning: Citation `Javorcik2004' on page 30 undefined on input l
-ine 71.
-
-
-Package natbib Warning: Citation `Yamawaki1991' on page 30 undefined on input l
-ine 82.
-
-
-LaTeX Warning: Reference `tab:list_of_countries' on page 30 undefined on input 
+LaTeX Warning: Reference `tab:list_of_countries' on page 31 undefined on input 
 line 84.
 
-[30]
-
-Package natbib Warning: Citation `Luo2010' on page 31 undefined on input line 8
-9.
-
-
-Package natbib Warning: Citation `Ahlquist2006' on page 31 undefined on input l
-ine 95.
-
-
-Package natbib Warning: Citation `Li2003' on page 31 undefined on input line 95
-.
-
-
-Package natbib Warning: Citation `Jensen2003' on page 31 undefined on input lin
-e 95.
-
-
-Package natbib Warning: Citation `Pandya2016' on page 31 undefined on input lin
-e 95.
-
-
-Package natbib Warning: Citation `Cheibub2009b' on page 31 undefined on input l
-ine 95.
-
-[31]
-
-Package natbib Warning: Citation `OECD2009' on page 32 undefined on input line 
-105.
-
-[32]) [33]
+[31] [32] [33]) [34]
 \openout2 = `./Appendix1/MH_ratio.aux'.
 
  (./Appendix1/MH_ratio.tex
@@ -1327,7 +923,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 4.
 
-[34
+[35
 
 
 
@@ -1344,7 +940,7 @@ Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
 (hyperref)                removing `math shift' on input line 34.
 
-[35]
+[36]
 Overfull \hbox (69.61284pt too wide) in paragraph at lines 62--62
 [] 
  []
@@ -1356,20 +952,31 @@ LaTeX Font Warning: Command \boldmath invalid in math mode on input line 64.
 LaTeX Font Warning: Command \mathversion invalid in math mode on input line 64.
 
 
-[36]) [37]
-No file AnhLe_dissertation.bbl.
+[37]) [38] (./AnhLe_dissertation.bbl [39
 
-Package natbib Warning: There were undefined citations.
 
+
+] [40] [41]
+Missing character: There is no â in font cmti12!
+Missing character: There is no € in font cmti12!
+Missing character: There is no “ in font cmti12!
+
+Underfull \hbox (badness 1259) in paragraph at lines 199--201
+[]\OT1/cmr/m/n/12 Pandya, S. S. (2016), \OT1/cmr/m/it/12 Trad-ing Spaces For-ei
+gn Di-rect In-vest-ment Reg-u-la-tion,
+ []
+
+[42])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 155.
+ [43]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 155.
-(./AnhLe_dissertation.aux (./Abbreviations/listofabbr.aux)
+ (./AnhLe_dissertation.aux (./Abbreviations/listofabbr.aux)
 (./Chapter1/introduction.aux) (./Chapter2/model.aux) (./Chapter3/simulation.aux
 ) (./Chapter4/fdi.aux) (./Appendix1/MH_ratio.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 155.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 155.
 Package rerunfilecheck Info: File `AnhLe_dissertation.out' has not changed.
-(rerunfilecheck)             Checksum: CD20C9E1E274FBEABCF211C053FA302C;2907.
+(rerunfilecheck)             Checksum: E0CF2ABE52F71F622AEA28C9056111C1;3036.
 
 
 LaTeX Warning: There were undefined references.
@@ -1377,44 +984,43 @@ LaTeX Warning: There were undefined references.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 155.
  ) 
 Here is how much of TeX's memory you used:
- 7637 strings out of 492995
- 107461 string characters out of 6132704
- 199556 words of memory out of 5000000
- 10843 multiletter control sequences out of 15000+600000
+ 7841 strings out of 492995
+ 111221 string characters out of 6132704
+ 202461 words of memory out of 5000000
+ 10974 multiletter control sequences out of 15000+600000
  28100 words of font info for 97 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 34i,12n,33p,1921b,401s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
-></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb>
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb>
-</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><
-/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></
-usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></us
-r/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/
-local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/lo
-cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/loca
-l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/loca
-l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr/
-local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/lo
-cal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loca
-l/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local/
-texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/tex
-live/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texliv
-e/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2
-017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/20
-17/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/201
-7/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/2017
-/texmf-dist/fonts/type1/public/mathabx-type1/matha10.pfb></usr/local/texlive/20
-17/texmf-dist/fonts/type1/public/mathabx-type1/matha12.pfb></usr/local/texlive/
-2017/texmf-dist/fonts/type1/public/mathabx-type1/matha5.pfb></usr/local/texlive
-/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha6.pfb></usr/local/texliv
-e/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha7.pfb></usr/local/texli
-ve/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha8.pfb></usr/local/texl
-ive/2017/texmf-dist/fonts/type1/public/mathabx-type1/mathx10.pfb>
-Output written on AnhLe_dissertation.pdf (45 pages, 342578 bytes).
+ 34i,12n,33p,1921b,535s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
+></usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb>
+</usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb><
+/usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></u
+sr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/l
+ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmmib8.pfb></usr
+/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/l
+ocal/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/loc
+al/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/local
+/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/local/te
+xlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texli
+ve/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/
+2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2
+017/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texlive/20
+17/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive/201
+7/texmf-dist/fonts/type1/public/mathabx-type1/matha10.pfb></usr/local/texlive/2
+017/texmf-dist/fonts/type1/public/mathabx-type1/matha12.pfb></usr/local/texlive
+/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha5.pfb></usr/local/texliv
+e/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha6.pfb></usr/local/texli
+ve/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha7.pfb></usr/local/texl
+ive/2017/texmf-dist/fonts/type1/public/mathabx-type1/matha8.pfb></usr/local/tex
+live/2017/texmf-dist/fonts/type1/public/mathabx-type1/mathx10.pfb>
+Output written on AnhLe_dissertation.pdf (51 pages, 359845 bytes).
 PDF statistics:
- 653 PDF objects out of 1000 (max. 8388607)
- 571 compressed objects within 6 object streams
- 157 named destinations out of 1000 (max. 500000)
- 286 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 959 PDF objects out of 1000 (max. 8388607)
+ 865 compressed objects within 9 object streams
+ 228 named destinations out of 1000 (max. 500000)
+ 302 words of extra memory for PDF output out of 10000 (max. 10000000)
 

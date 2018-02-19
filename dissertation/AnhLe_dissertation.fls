@@ -242,6 +242,8 @@ INPUT /usr/local/texlive/2017/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
 OUTPUT ./Appendix1/MH_ratio.aux
 INPUT ./Appendix1/MH_ratio.tex
 INPUT ./Appendix1/MH_ratio.tex
+INPUT AnhLe_dissertation.bbl
+INPUT AnhLe_dissertation.bbl
 INPUT AnhLe_dissertation.aux
 INPUT ./Abbreviations/listofabbr.aux
 INPUT ./Abbreviations/listofabbr.aux
@@ -257,7 +259,6 @@ INPUT ./Appendix1/MH_ratio.aux
 INPUT ./Appendix1/MH_ratio.aux
 INPUT ./AnhLe_dissertation.out
 INPUT ./AnhLe_dissertation.out
-INPUT /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb
 INPUT /usr/local/texlive/2017/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
