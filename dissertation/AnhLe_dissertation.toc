@@ -15,13 +15,21 @@
 \contentsline {section}{\numberline {2.2}Modeling workers' decision making}{14}{section.2.2}
 \contentsline {section}{\numberline {2.3}Model estimation}{16}{section.2.3}
 \contentsline {subsection}{\numberline {2.3.1}Estimating the model using Metropolis-Hastings}{17}{subsection.2.3.1}
-\contentsline {subsection}{\numberline {2.3.2}Posterior of the opportunity set $p(O|A, \alpha , \beta )$}{19}{subsection.2.3.2}
+\contentsline {subsection}{\numberline {2.3.2}Posterior of the opportunity set $p(O|A, \alpha , \beta )$}{18}{subsection.2.3.2}
 \contentsline {subsection}{\numberline {2.3.3}Posterior of firms' preference $p(\alpha |A, O, \beta )$}{20}{subsection.2.3.3}
 \contentsline {subsection}{\numberline {2.3.4}Posterior of workers' preference $p(\beta |A, O, \alpha )$}{20}{subsection.2.3.4}
 \contentsline {subsection}{\numberline {2.3.5}Posterior of $\beta $'s hyperparameters $\mu _{\beta }, \tau _{\beta }$}{21}{subsection.2.3.5}
-\contentsline {section}{\numberline {2.4}Results for US labor data}{22}{section.2.4}
-\contentsline {chapter}{\numberline {A}Derivation of the Metropolis-Hastings Acceptance Ratio}{23}{appendix.A}
-\contentsline {subsection}{\numberline {A.0.1}Opportunity sets $O$}{23}{subsection.A.0.1}
-\contentsline {subsection}{\numberline {A.0.2}Workers' parameters, $\alpha $}{24}{subsection.A.0.2}
-\contentsline {subsection}{\numberline {A.0.3}Firms' parameters, $\relax \mathversion {bold}\beta $}{25}{subsection.A.0.3}
-\contentsline {chapter}{Bibliography}{27}{equation.A.0.18}
+\contentsline {section}{\numberline {2.4}Results for US labor data}{21}{section.2.4}
+\contentsline {chapter}{\numberline {3}Simulation results}{22}{chapter.3}
+\contentsline {chapter}{\numberline {4}FDI}{23}{chapter.4}
+\contentsline {section}{\numberline {4.1}Introduction}{23}{section.4.1}
+\contentsline {section}{\numberline {4.2}Three Issues in the Literature of FDI's Political Determinants}{25}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Measuring MNCs' Activities}{25}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Estimating Countries' Demand for FDI}{27}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Estimating Countries' Preferences for FDI's Technological Intensity}{29}{subsection.4.2.3}
+\contentsline {section}{\numberline {4.3}Applying the Two-Sided Matching Model to Japanese MNCs}{30}{section.4.3}
+\contentsline {section}{\numberline {4.4}Conclusion}{33}{section.4.4}
+\contentsline {chapter}{\numberline {A}Derivation of the Metropolis-Hastings Acceptance Ratio}{34}{appendix.A}
+\contentsline {subsection}{\numberline {A.0.1}Opportunity sets $O$}{34}{subsection.A.0.1}
+\contentsline {subsection}{\numberline {A.0.2}Workers' parameters, $\alpha $}{35}{subsection.A.0.2}
+\contentsline {subsection}{\numberline {A.0.3}Firms' parameters, $\relax \mathversion {bold}\beta $}{36}{subsection.A.0.3}
