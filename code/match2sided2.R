@@ -140,7 +140,14 @@ match2sided <- function(iter, t0 = iter / 10,
                         C_alpha, C_beta,
                         starting_alpha, starting_beta,
                         frac_opp, prior,
-                        jobs, xx, choice, opp) {
+                        jobs, xx, choice, opp,
+                        to_save = c("alpha", "beta"),
+                        file, write = FALSE) {
+  if (write & (t0 < iter)) {
+    stop("Can't write intermediate result and do adaptive MCMC for now")
+  }
+  
+  
   n_i <- nrow(opp)
   n_j <- ncol(opp)
   p_i <- ncol(xx)
@@ -154,6 +161,15 @@ match2sided <- function(iter, t0 = iter / 10,
                                  Tau = solve(diag(abs(rnorm(p_i))))),
                   Tau_beta = list(nu = p_i + 2,
                                   Sinv = solve(diag(abs(rnorm(p_i))))))
+  }
+  
+  # Now that all the settings are set, write them to disk for record
+  if (write) {
+    sink(paste(file, "settings"), append = TRUE)
+    print(list("iter" = iter, "t0" = t0, 
+               "C_alpha" = C_alpha, "C_beta" = C_beta, "frac_opp" = frac_opp, 
+               "prior" = prior))
+    sink()
   }
   
   # ---- Starting values ----
@@ -193,7 +209,11 @@ match2sided <- function(iter, t0 = iter / 10,
   
   # ---- Initialize storage ----
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
-  oppsave <- array(NA, dim = c(iter, n_i, n_j))
+  if ("opp" %in% to_save) {
+    oppsave <- array(NA, dim = c(iter, n_i, n_j))
+  } else {
+    oppsave <- NA
+  }
   asave <- matrix(NA, iter, p_j)   # saved alphas
   astarsave <- matrix(NA, iter, p_j)
   bsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas
@@ -203,13 +223,31 @@ match2sided <- function(iter, t0 = iter / 10,
   logpost <- matrix(NA, iter, 3) # posterior density, i.e. joint, lp_A, lp_O
   ok <- matrix(NA, iter, 3) # ok_opp, ok_alpha, ok_beta
   
+  # Naming the storage
+  names(ok) <- c("mean(opp)", "alpha", "beta")
+  if (!is.null(dimnames(jobs)[[3]])) {
+    colnames(asave) <- dimnames(jobs)[[3]]
+    colnames(astarsave) <- dimnames(jobs)[[3]]
+  }
+  if (!is.null(colnames(xx))) {
+    dimnames(bsave)[[2]] <- colnames(xx)
+    dimnames(bstarsave)[[2]] <- colnames(xx)
+    colnames(mu_betasave) <- colnames(xx)
+    dimnames(Tau_betasave)[[2]] <- colnames(xx)
+    dimnames(Tau_betasave)[[3]] <- rownames(xx)
+  }
+  if (!is.null(dimnames(jobs)[[2]])) {
+    dimnames(bsave)[[3]] <- dimnames(jobs)[[2]]
+    dimnames(bstarsave)[[3]] <- dimnames(jobs)[[2]]
+  }
+  
   # Store results
   logpost[1, 1] <- joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta,
                               prior, waccepted, xx)
   logpost[1, 2] <- sum(f_logp_A(opp, alpha, jobs, waccepted))
   logpost[1, 3] <- sum(f_logp_O(opp, beta, xx))
   ok[1, ] <- c(0, 0, 0)
-  oppsave[1, , ] <- opp
+  if ("opp" %in% to_save) oppsave[1, , ] <- opp
   asave[1, ] <- alpha
   astarsave[1, ] <- alphastar
   bsave[1, , ] <- beta # vectorize
@@ -219,9 +257,9 @@ match2sided <- function(iter, t0 = iter / 10,
   
   # ---- Loop ----
   start <- Sys.time()
+  num_new_offers <- floor(frac_opp * n_j) # per i
   for (i in 2:iter) {
     # Update opp
-    num_new_offers <- floor(frac_opp * n_j) # per i
     new <- replicate(n_i,
                      sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
     new <- c(new) # Flatten 1-column matrix into a vector
@@ -253,7 +291,7 @@ match2sided <- function(iter, t0 = iter / 10,
         # browser()
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        res <- calculate_C(X_sample = asave[i - 1, , drop = FALSE], t = i, 
+        res <- calculate_C(X_sample = alpha, t = i, 
                            C = C_alpha_est, Xbar = Xbar_alpha_est)
         Xbar_alpha_est <- res$Xbar
         C_alpha_est <- res$C
@@ -282,7 +320,7 @@ match2sided <- function(iter, t0 = iter / 10,
       } else {
         # Calculate Cs and Xbars recursively
         # (notice we're passing in old values of Cs and Xbars)
-        beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
+        beta_sample <- c(beta[ , 2:n_j, drop = FALSE])
         res <- calculate_C(X_sample = beta_sample, t = i, 
                            C = C_beta_est, Xbar = Xbar_beta_est)
         Xbar_beta_est <- res$Xbar
@@ -316,7 +354,7 @@ match2sided <- function(iter, t0 = iter / 10,
     logpost[i, 2] <- sum(f_logp_A(opp, alpha, jobs, waccepted))
     logpost[i, 3] <- sum(f_logp_O(opp, beta, xx))
     ok[i, ] <- c(mean(ok_opp), ok_alpha, ok_beta)
-    oppsave[i, , ] <- opp
+    if ("opp" %in% to_save) oppsave[i, , ] <- opp
     asave[i, ] <- alpha
     astarsave[i, ] <- alphastar
     bsave[i, , ] <- beta # vectorize
@@ -325,34 +363,32 @@ match2sided <- function(iter, t0 = iter / 10,
     Tau_betasave[i, ,] <- Tau_beta
     
     # Increment
-    if (i %% 100 == 0) {
+    interval_length <- 1000
+    if (i %% interval_length == 0) {
       cat("Iteration", i, "done", Sys.time() - start, "\n")
       start <- Sys.time()
+      if (write) {
+        start_i <- i - interval_length + 1
+        write.table(asave[start_i:i, ], paste(file, "alpha"), 
+                    row.names = FALSE, col.names = FALSE, append = TRUE)
+        write.table(astarsave[start_i:i, ], paste(file, "alphastar"), 
+                    row.names = FALSE, col.names = FALSE, append = TRUE)
+        write.table(bsave[start_i:i, , ], paste(file, "beta"), 
+                    row.names = FALSE, col.names = FALSE, append = TRUE)
+        write.table(bstarsave[start_i:i, , ], paste(file, "betastar"), 
+                    row.names = FALSE, col.names = FALSE, append = TRUE)
+        if ("opp" %in% to_save) write.table(oppsave[start_i:i, , ], paste(file, "opp"), 
+                                            row.names = FALSE, col.names = FALSE, append = TRUE)
+      }
     }
   }
   
-  names(ok) <- c("mean(opp)", "alpha", "beta")
-  if (!is.null(dimnames(jobs)[[3]])) {
-    colnames(asave) <- dimnames(jobs)[[3]]
-    colnames(astarsave) <- dimnames(jobs)[[3]]
-  }
-  if (!is.null(colnames(xx))) {
-    dimnames(bsave)[[2]] <- colnames(xx)
-    dimnames(bstarsave)[[2]] <- colnames(xx)
-    colnames(mu_betasave) <- colnames(xx)
-    dimnames(Tau_betasave)[[2]] <- colnames(xx)
-    dimnames(Tau_betasave)[[3]] <- rownames(xx)
-  }
-  if (!is.null(dimnames(jobs)[[2]])) {
-    dimnames(bsave)[[3]] <- dimnames(jobs)[[2]]
-    dimnames(bstarsave)[[3]] <- dimnames(jobs)[[2]]
-  }
   
   return(list(opp = oppsave, alpha = asave, beta = bsave,
               alphastar = astarsave, betastar = bstarsave,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,
               lp = logpost, ok = ok,
               acceptance_rate = acceptance_rate / iter,
-              mcmc_settings = list(iter = iter,
-                                   frac_opp = frac_opp)))
+              mcmc_settings = list(iter = iter, frac_opp = frac_opp,
+                                   C_alpha = C_alpha, C_beta = C_beta)))
 }
