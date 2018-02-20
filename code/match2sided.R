@@ -91,20 +91,6 @@ logmh_alpha <- function(alpha, alphastar, ww, opp, wa, prior) {
   return(logmh_alpha)
 }
 
-#' log_mh alpha for when each job offered is slightly different
-logmh_alpha2 <- function(alpha, alphastar, jobs, opp, wa, prior) {
-  waccepted <- jobs[cbind(1:nrow(jobs), choice)]
-  exp_WA <- exp(jobs * alpha)
-  pA_den <- opp %*% exp_WA
-  exp_WA_star <-  exp(jobs * alphastar)
-  pA_denstar <- opp %*% exp_WA_star
-  
-  logmh_alpha <- sum(waccepted * (alphastar - alpha)) + sum(log(pA_den) - log(pA_denstar)) +
-    mvtnorm::dmvnorm(alphastar, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) -
-    mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE)
-  return(logmh_alpha)
-}
-
 #' log_mh beta
 logmh_beta <- function(beta, betastar, xx, opp, mu_beta, Tau_beta) {
   XB <- xx %*% beta
@@ -281,8 +267,7 @@ match2sided <- function(iter, t0 = iter / 10,
     }
     alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
     
-    # my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
-    my_logmh_alpha <- logmh_alpha2(alpha, alphastar, jobs, opp, wa, prior)
+    my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
     ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
     if (ok_alpha) {
       alpha <- alphastar

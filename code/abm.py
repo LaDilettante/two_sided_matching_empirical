@@ -37,6 +37,7 @@ class Employee:
         # employer values is -inf for the ones that are not offered
         employer_values = np.array([float("-inf")] * len(employer_list))
         wa = np.array([self.alpha.dot(employer.w) + gumbel_r().rvs(random_state=rng) for employer in employer_list])
+        wa = np.squeeze(wa)
         self.wa = wa
         employer_values[offer_list.astype("bool")] = wa[offer_list.astype("bool")]
         return np.argmax(employer_values)
@@ -77,7 +78,8 @@ class Model:
         observed_opp[:, 0] = 1 # Unemployement is always available
         observed_opp[np.arange(self.num_employee), choice] = 1 # Accepted jobs are available
 
-        return (alpha, beta, ww, xx, choice, opportunity_set, observed_opp)
+        return (alpha, beta, ww, xx, choice.astype("float64"),
+                opportunity_set.astype("float64"), observed_opp.astype("float64"))
 
 
 

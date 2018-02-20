@@ -64,7 +64,7 @@ summary(glm(starting_opp[, 4] ~ . - 1, family = binomial(link = "logit"),
 iter <- 1e5
 p_i <- ncol(xx)
 prior <- list(alpha = list(mu = 0, Tau = matrix(0.01)),
-              mu_beta = list(mu = rnorm(p_i),
+              mu_beta = list(mu = rep(0, p_i),
                              Tau = solve(diag(rep(0.01, p_i)))),
               Tau_beta = list(nu = p_i + 2,
                               Sinv = solve(diag(rep(0.01, p_i)))))
