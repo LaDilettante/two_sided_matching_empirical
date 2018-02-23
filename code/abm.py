@@ -8,10 +8,11 @@ class Employer:
     '''
     w : p_j vector of characteristics
     beta : p_i vector of preferences for employee's characteristics
+    p_j : the number of employer characteristics
     '''
-    def __init__(self, w=None, beta=None):
-        self.w = np.random.normal(size=2) if w is None else w
-        self.beta = np.random.normal(size=3) if beta is None else beta
+    def __init__(self, w=None, beta=None, p_j=None, p_i=None):
+        self.w = np.random.normal(size=p_j) if w is None else w
+        self.beta = np.random.normal(size=p_i) if beta is None else beta
 
     def make_offer(self, employee_list):
         '''Make 0 / 1 offer to a list of employee'''
@@ -26,27 +27,31 @@ class Employee:
     alpha : p_j vector of preferences for employer's characteristics
     '''
 
-    def __init__(self, x=None, alpha=None):
-        self.x = np.random.normal(size=3) if x is None else x
-        self.alpha = np.random.normal(size=2) if alpha is None else alpha
+    def __init__(self, x=None, alpha=None, p_i, p_j):
+        self.x = np.random.normal(size=p_i) if x is None else x
+        self.alpha = np.random.normal(size=p_j) if alpha is None else alpha
 
     def pick_best_employer(self, employer_list, offer_list):
         """
         offer_list : a 0/1 mask of which employer made an offer
         """
         # employer values is -inf for the ones that are not offered
-        employer_values = np.array([float("-inf")] * len(employer_list))
+        utilities = np.array([float("-inf")] * len(employer_list))
         wa = np.array([self.alpha.dot(employer.w) + gumbel_r().rvs(random_state=rng) for employer in employer_list])
         wa = np.squeeze(wa)
         self.wa = wa
-        employer_values[offer_list.astype("bool")] = wa[offer_list.astype("bool")]
+        utilities[offer_list.astype("bool")] = wa[offer_list.astype("bool")]
         return np.argmax(employer_values)
 
 class Model:
 
-    def __init__(self, n_employer, n_employee):
-        self.num_employer = n_employer
-        self.num_employee = n_employee
+    def __init__(self, p_j, p_i, employer_list, employee_list):
+        self.employer_list = employer_list
+        self.employee_list = employee_list
+        self.num_employer = len(employer_list)
+        self.num_employee = len(employee_list)
+        self.p_j = p_j
+        self.p_i = p_i
 
     def matching_process(self, employer_list=None, employee_list=None):
         if employer_list is None:
