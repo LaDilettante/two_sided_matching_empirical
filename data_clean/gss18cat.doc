@@ -1,0 +1,43 @@
+File: gss18cat.raw
+
+N = 2149
+Source: General Social Surveys, 1972-80, males (as in AJS 102(1):114).
+
+17 occupational categories, plus category 0 representing unemployment.
+
+
+. summ educ age nonwhite occ17 presmean autmean
+
+Variable |     Obs        Mean   Std. Dev.       Min        Max
+---------+-----------------------------------------------------
+    educ |    2149     13.1033   3.111302          2         20  
+     age |    2149    33.52396   5.716047         25         44  
+nonwhite |    2149    .1126105   .3161897          0          1  
+   occ17 |    2149    6.623081   4.748944          0         17  
+presmean |    2149    39.94518   13.51231         18       63.1  
+ autmean |    2149   -.8314473   2.490683   -12.0039  -.0651896  
+
+
+Variable descriptions:
+
+Variable |    Description
+---------+-----------------------------------------------------
+    educ |    years of education completed
+     age |    years of age (sample restricted to 25-44)
+nonwhite |    1 = nonwhite; 0 = white
+   occ17 |    17-category GSS occupation, plus 0 = unemployment
+presmean |    mean prestige in category (see AJS art. for categ. 0)
+ autmean |    mean autonomy in category (see AJS art. for coding)
+
+
+Sample records (variables in order listed above):
+
+       19         29          0          2       59.3  -.1034483
+       16         29          0          7       35.9  -.0833062
+       18         26          0          3       52.4  -.2640627
+       12         37          0         12       30.1  -.1566042
+       12         30          0          7       35.9  -.0833062
+       16         40          0          2       59.3  -.1034483
+
+
+JAL, 7/2/99.

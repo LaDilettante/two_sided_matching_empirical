@@ -1,0 +1,475 @@
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      CODEBOOK
+
+
+                General Social Survey Cumulative Datafile 1972-2012
+                                          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page i
+
+
+                                      CONTENTS
+
+
+      item                                                                page
+
+      CASEID             CASE IDENTIFICATION NUMBER                          1
+      PRESTIGE           RS OCCUPATIONAL PRESTIGE SCORE  (1970)              1
+      YEAR               GSS YEAR FOR THIS RESPONDENT                        1
+      ID                 RESPONDNT ID NUMBER                                 1
+      AGE                AGE OF RESPONDENT                                   1
+      SEX                RESPONDENTS SEX                                     2
+      RACE               RACE OF RESPONDENT                                  2
+      EDUC               HIGHEST YEAR OF SCHOOL COMPLETED                    2
+      ISCO68             RESPONDENT'S OCCUPATION, 1970 CENSUS                3
+      ISCO681            RESPONDENT'S OCCUPATION, 1980 CENSUS                3
+      ISCO88             RESPONDENT'S OCCUPATION, 1980 CENSUS & 1988 ISCO    3
+      OCC                RS CENSUS OCCUPATION CODE (1970)                    4
+      COMMUTE            TRAVEL TIME TO WORK                                 4
+      INDUSTRY           RS INDUSTRY CODE   (1970)                           4
+      OCC80              RS CENSUS OCCUPATION CODE (1980)                    5
+      PRESTG80           RS OCCUPATIONAL PRESTIGE SCORE  (1980)              5
+      INDUS80            RS INDUSTRY CODE   (1980)                           5
+      OCC10              RS CENSUS OCCUPATION CODE (2010)                    5
+      WKSUB              DOES R OR SPOUSE HAVE SUPERVISOR                    6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 February 23, 2018
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page 1
+
+
+      CASEID             CASE IDENTIFICATION NUMBER
+
+           Data type: numeric
+           Record/columns: 1/1-5
+
+      ________________________________________________________________________
+
+      PRESTIGE           RS OCCUPATIONAL PRESTIGE SCORE  (1970)
+
+           2a. What kind of work do you (did you normally) do? That is,
+           what (is/was)your job called? b. What (do/did) you actually do
+           in that job? Tell me, what (are/were) some of your main duties?
+
+           VALUE  LABEL
+               0  DK,NA,IAP
+
+           Data type: numeric
+           Missing-data code: 0
+           Record/columns: 1/7-8
+
+      ________________________________________________________________________
+
+      YEAR               GSS YEAR FOR THIS RESPONDENT
+
+           Data type: numeric
+           Record/columns: 1/10-13
+
+      ________________________________________________________________________
+
+      ID                 RESPONDNT ID NUMBER
+
+           Data type: numeric
+           Record/columns: 1/15-18
+
+      ________________________________________________________________________
+
+      AGE                AGE OF RESPONDENT
+
+           13. Respondent's age
+
+           VALUE  LABEL
+              89  89 OR OLDER
+              98  DK
+              99  NA
+
+           Data type: numeric
+           Missing-data codes: 0,98,99
+           Record/columns: 1/20-21
+
+
+
+
+
+
+
+                                 February 23, 2018
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page 2
+
+
+      SEX                RESPONDENTS SEX
+
+           23. Code respondent's sex
+
+           VALUE  LABEL
+               1  MALE
+               2  FEMALE
+
+           Data type: numeric
+           Missing-data code: 0
+           Record/column: 1/23
+
+      ________________________________________________________________________
+
+      RACE               RACE OF RESPONDENT
+
+           24. What race do you consider yourself?
+
+           VALUE  LABEL
+               0  IAP
+               1  WHITE
+               2  BLACK
+               3  OTHER
+
+           Data type: numeric
+           Missing-data code: 0
+           Record/column: 1/25
+
+      ________________________________________________________________________
+
+      EDUC               HIGHEST YEAR OF SCHOOL COMPLETED
+
+           15. What is the highest grade in elementary school or high
+           school that you finished and got credit for?
+
+           VALUE  LABEL
+              97  IAP
+              98  DK
+              99  NA
+
+           Data type: numeric
+           Missing-data codes: 97,98,99
+           Record/columns: 1/27-28
+
+
+
+
+
+
+
+
+
+
+                                 February 23, 2018
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page 3
+
+
+      ISCO68             RESPONDENT'S OCCUPATION, 1970 CENSUS
+
+           1635. Respondent's occupation (International Standard
+           Classification Codes-1968)
+
+           VALUE  LABEL
+               0  IAP
+            9998  DK
+
+           Data type: numeric
+           Missing-data codes: 0,9998
+           Record/columns: 1/30-33
+
+      ________________________________________________________________________
+
+      ISCO681            RESPONDENT'S OCCUPATION, 1980 CENSUS
+
+           1638. Respondent's occupation (International Standard
+           Classification Codes-1968)
+
+           VALUE  LABEL
+               0  IAP
+            9998  DK
+
+           Data type: numeric
+           Missing-data codes: 0,9998
+           Record/columns: 1/35-38
+
+      ________________________________________________________________________
+
+      ISCO88             RESPONDENT'S OCCUPATION, 1980 CENSUS & 1988 ISCO CODE
+
+           1642. Respondent's Occupation, 1988 Census
+
+           VALUE  LABEL
+               0  IAP
+            9998  DK
+            9999  NA
+
+           Data type: numeric
+           Missing-data codes: 0,9998,9999
+           Record/columns: 1/40-43
+
+
+
+
+
+
+
+
+
+
+
+                                 February 23, 2018
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page 4
+
+
+      OCC                RS CENSUS OCCUPATION CODE (1970)
+
+           2a. What kind of work do you (did you normally) do? That is,
+           what (is/was)your job called?
+
+           VALUE  LABEL
+               0  DK,NA,IAP
+
+           Data type: numeric
+           Missing-data code: 0
+           Record/columns: 1/45-47
+
+      ________________________________________________________________________
+
+      COMMUTE            TRAVEL TIME TO WORK
+
+           2g. About how much time (does/did) it usually take you to travel
+           to work - about how many minutes?
+
+           VALUE  LABEL
+              -1  IAP
+              97  97+ MINUTES
+              98  DK
+              99  NA
+
+           Data type: numeric
+           Missing-data codes: -1,98,99
+           Record/columns: 1/49-50
+
+      ________________________________________________________________________
+
+      INDUSTRY           RS INDUSTRY CODE   (1970)
+
+           2c. What kind of place (do/did) you work for? d. What (do/did)
+           they (make/do)?
+
+           VALUE  LABEL
+               0  DK,NA,IAP
+
+           Data type: numeric
+           Missing-data code: 0
+           Record/columns: 1/52-54
+
+
+
+
+
+
+
+
+
+
+
+                                 February 23, 2018
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page 5
+
+
+      OCC80              RS CENSUS OCCUPATION CODE (1980)
+
+           3. Respondent's occupation, prestige, and industry
+
+           Data type: numeric
+           Missing-data codes: 0,998,999
+           Record/columns: 1/56-58
+
+      ________________________________________________________________________
+
+      PRESTG80           RS OCCUPATIONAL PRESTIGE SCORE  (1980)
+
+           3. Respondent's occupation, prestige, and industry
+
+           VALUE  LABEL
+               0  DK,NA,IAP
+
+           Data type: numeric
+           Missing-data code: 0
+           Record/columns: 1/60-61
+
+      ________________________________________________________________________
+
+      INDUS80            RS INDUSTRY CODE   (1980)
+
+           3. Respondent's occupation, prestige, and industry
+
+           Data type: numeric
+           Missing-data codes: 0,998,999
+           Record/columns: 1/63-65
+
+      ________________________________________________________________________
+
+      OCC10              RS CENSUS OCCUPATION CODE (2010)
+
+           Occupation and industry questions asked and not directly coded
+           but used to code OCC and IND variables.
+
+           VALUE  LABEL
+               0  IAP
+            9998  DK
+            9999  NA
+
+           Data type: numeric
+           Missing-data codes: 0,9998,9999
+           Record/columns: 1/67-70
+
+
+
+
+
+
+
+
+                                 February 23, 2018
+
+
+
+      General Social Survey Cumulative Datafile 1972-2012               Page 6
+
+
+      WKSUB              DOES R OR SPOUSE HAVE SUPERVISOR
+
+           191. Do you (does your [SPOUSE]) have a supervisor on
+           (your/his/her) job to whom you are (he/she is) directly
+           responsible?
+
+           VALUE  LABEL
+               0  IAP
+               1  YES
+               2  NO
+               8  DK
+               9  NA
+
+           Data type: numeric
+           Missing-data codes: 0,8,9
+           Record/column: 1/72
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 February 23, 2018
