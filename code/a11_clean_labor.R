@@ -35,15 +35,15 @@ df$occ5 <- fct_collapse(df$occ17,
 
 df_employee <- df %>%
   select(educ, age, nonwhite, occ17_num, occ17, occ5)
-saveRDS(df_employee, "../data_clean/labor_employee.RData")
+write_csv(df_employee, "../data_clean/labor_employee.csv")
 
 # ---- Create the reduced dataset as in AJS ----
 
 df_occ17 <- df %>%
   select(occ17, presmean, autmean) %>%
   distinct() %>%
-  mutate(supervisor = (- aut) / (1 - aut))
-saveRDS(df_occ17, "../data_clean/labor_employer_occ17.RData")
+  mutate(supervisor = (- autmean) / (1 - autmean))
+write_csv(df_occ17, "../data_clean/labor_employer_occ17.csv")
 
 df_occ5 <- df %>% 
   select(occ17, occ5, presmean, autmean) %>%
@@ -56,5 +56,4 @@ df_occ5 <- df %>%
             aut = weighted.mean(aut, n),
             supervisor = weighted.mean(supervisor, n)) %>%
   select(-n_obs)
-saveRDS(df_occ5, "../data_clean/labor_employer_occ5.RData")
-
+write_csv(df_occ5, "../data_clean/labor_employer_occ5.csv")

@@ -1,4 +1,6 @@
-ww2 <- matrix(c(18, 40.9, 33.5, 0.256, 0.065, 0.123), nrow = 3) # Covariates, taken from real data
+rm(list = ls())
+ww2 <- matrix(c(18, 40.9, 33.5, 
+                0.256, 0.065, 0.123), nrow = 3) # Covariates, taken from real data
 true_alpha <- c(0.01, 1) # Assuming we know the true preference parameter
 num_obs <- 1000 # Number of observations
 num_choices <- 3 # Number of choices
@@ -6,8 +8,8 @@ S <- 1000 # Number of simulations
 res <- matrix(NA, nrow = S, ncol = length(true_alpha)) # Storage for simulation result
 for (s in 1:S) {
   Uij <- matrix(NA, nrow = num_obs, ncol = num_choices)
-  for (i in 1:num_choices) {
-    Uij[, i] <- sum(true_alpha * ww2[i, ]) + evd::rgumbel(num_obs)
+  for (j in 1:num_choices) {
+    Uij[, j] <- sum(true_alpha * ww2[j, ]) + evd::rgumbel(num_obs)
   }
   y <- max.col(Uij)
   cl_nllik <- function(alpha) {
@@ -22,8 +24,9 @@ apply(res, 2, sd) # Really poor precision!
 
 # ---- 1D preference ----
 
+rm(list = ls())
 ww2 <- matrix(c(18, 40.9, 33.5), nrow = 3) # Covariates, taken from real data
-true_alpha <- c(0.07) # Assuming we know the true preference parameter
+true_alpha <- c(0.01) # Assuming we know the true preference parameter
 num_obs <- 1000 # Number of observations
 num_choices <- 3 # Number of choices
 S <- 1000 # Number of simulations
@@ -47,7 +50,7 @@ apply(res, 2, sd) # Really poor precision!
 # ---- Another 1D preference ----
 
 ww2 <- matrix(c(0.256, 0.065, 0.123), nrow = 3) # Covariates, taken from real data
-true_alpha <- c(0.9) # Assuming we know the true preference parameter
+true_alpha <- c(1) # Assuming we know the true preference parameter
 num_obs <- 1000 # Number of observations
 num_choices <- 3 # Number of choices
 S <- 1000 # Number of simulations

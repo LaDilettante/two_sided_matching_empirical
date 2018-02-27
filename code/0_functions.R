@@ -47,3 +47,40 @@ my.plot.mcmc <- function (x, trace = TRUE, density = TRUE, smooth = FALSE, bwf,
       oldpar <- c(oldpar, par(ask = ask))
   }
 }
+
+index_array <- function(x, dim, value, drop = FALSE) { 
+  # Create list representing arguments supplied to [
+  # bquote() creates an object corresponding to a missing argument
+  indices <- rep(list(bquote()), length(dim(x)))
+  indices[[dim]] <- value
+  
+  # Generate the call to [
+  call <- as.call(c(
+    list(as.name("["), quote(x)),
+    indices,
+    list(drop = drop)))
+  # Print it, just to make it easier to see what's going on
+  print(call)
+  
+  # Finally, evaluate it
+  eval(call)
+}
+
+#' Write the parameters (from the parent.frame()) to disk
+#' @param vars_to_write a named vector, with name being the saved object,
+#' the value being suffix for the filename
+write_to_disk <- function(idx, interval_length, 
+  vars_to_write = c("asave" = "alpha", "astarsave" = "alphastar",
+                    "bsave" = "beta", "bstarsave" = "betastar",
+                    "oppsave" = "opp")) {
+  start_idx <- idx - interval_length + 1
+  
+  for (i in 1:length(vars_to_write)) {
+    mcmcsave <- index_array(get(names(vars_to_write)[i], envir = parent.frame()), 
+                            dim = 1, value = start_idx:idx, 
+                            drop = TRUE)
+    suffix <- vars_to_write[i]
+    write.table(mcmcsave, paste(file, suffix),
+                row.names = FALSE, col.names = FALSE, append = TRUE)
+  }
+}

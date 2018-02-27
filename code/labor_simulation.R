@@ -65,7 +65,7 @@ iter <- 1e4
 start <- iter / 2
 thin <- 1
 p_i <- ncol(xx)
-prior <- list(alpha = list(mu = 0, Tau = matrix(0.01)),
+prior <- list(alpha = list(mu = 0, Tau = solve(matrix(0.01))),
               mu_beta = list(mu = rep(0, p_i),
                              Tau = solve(diag(rep(0.01, p_i)))),
               Tau_beta = list(nu = p_i + 2,

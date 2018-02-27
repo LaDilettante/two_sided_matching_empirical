@@ -1,0 +1,26 @@
+﻿1. Professionals, Self employed  — I
+2. Professionals, Salaried — I
+3. Managers — II
+4. Salesmen, Other — II
+5. Proprietors — II
+6. Clerical — III
+7. Salesmen, Retail — III
+8. Craftsmen, Manufacturing — IV
+9. Craftsmen, Other — V
+10. Craftsmen, Construction — V
+11. Operatives, Manufacturing — IV
+12. Operatives, Other — V
+13. Service — III
+14. Laborers, Manufacturing — IV
+15. Laborers, Other — V
+16. Farmers — II
+17. Farm laborers V
+
+"Occupations are classified into five categories: 
+I) professional; 
+II) managerial (including salaried and self-employed managers, non-retail sales workers, farmers and farm managers); 
+III) sales (retail), clerical, and service;
+IV) manufacturing blue collar (crafts, operatives, and laborers)
+V) other blue collar (including farm laborers)"
+
+

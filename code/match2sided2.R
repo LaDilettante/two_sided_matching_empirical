@@ -1,5 +1,6 @@
 library("mvtnorm")
 library("plyr")
+source("0_functions.R")
 
 #' Two sided matching model (for when each job offers are different)
 #'
@@ -146,7 +147,6 @@ match2sided <- function(iter, t0 = iter / 10,
   if (write & (t0 < iter)) {
     stop("Can't write intermediate result and do adaptive MCMC for now")
   }
-  
   
   n_i <- nrow(opp)
   n_j <- ncol(opp)
@@ -368,22 +368,14 @@ match2sided <- function(iter, t0 = iter / 10,
       cat("Iteration", i, "done", Sys.time() - start, "\n")
       start <- Sys.time()
       if (write) {
-        start_i <- i - interval_length + 1
-        write.table(asave[start_i:i, ], paste(file, "alpha"), 
-                    row.names = FALSE, col.names = FALSE, append = TRUE)
-        write.table(astarsave[start_i:i, ], paste(file, "alphastar"), 
-                    row.names = FALSE, col.names = FALSE, append = TRUE)
-        write.table(bsave[start_i:i, , ], paste(file, "beta"), 
-                    row.names = FALSE, col.names = FALSE, append = TRUE)
-        write.table(bstarsave[start_i:i, , ], paste(file, "betastar"), 
-                    row.names = FALSE, col.names = FALSE, append = TRUE)
-        if ("opp" %in% to_save) write.table(oppsave[start_i:i, , ], paste(file, "opp"), 
-                                            row.names = FALSE, col.names = FALSE, append = TRUE)
+        write_to_disk(idx = i, interval_length = interval_length,
+                      vars_to_write = c("asave" = "alpha", "astarsave" = "alphastar",
+                                        "bsave" = "beta", "bstarsave" = "betastar",
+                                        "oppsave" = "opp"))
       }
     }
   }
-  
-  
+   
   return(list(opp = oppsave, alpha = asave, beta = bsave,
               alphastar = astarsave, betastar = bstarsave,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,

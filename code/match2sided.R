@@ -146,7 +146,13 @@ match2sided <- function(iter, t0 = iter / 10,
                         C_alpha, C_beta,
                         starting_alpha, starting_beta,
                         frac_opp, prior,
-                        ww, xx, choice, opp) {
+                        ww, xx, choice, opp,
+                        to_save = c("alpha", "beta"),
+                        file, write = FALSE) {
+  if (write & (t0 < iter)) {
+    stop("Can't write intermediate result and do adaptive MCMC for now")
+  }
+  
   n_i <- nrow(xx)
   n_j <- nrow(ww)
   p_i <- ncol(xx)
@@ -207,6 +213,22 @@ match2sided <- function(iter, t0 = iter / 10,
   Tau_betasave <- array(NA, dim = c(iter, p_i, p_i))
   logpost <- matrix(NA, iter, 3) # posterior density, i.e. joint, lp_A, lp_O
   ok <- matrix(NA, iter, 3) # ok_opp, ok_alpha, ok_beta
+  
+  # Naming the storage
+  names(ok) <- c("mean(opp)", "alpha", "beta")
+  if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
+  if (!is.null(colnames(ww))) colnames(astarsave) <- colnames(ww)
+  if (!is.null(colnames(xx))) {
+    dimnames(bsave)[[2]] <- colnames(xx)
+    dimnames(bstarsave)[[2]] <- colnames(xx)
+    colnames(mu_betasave) <- colnames(xx)
+    dimnames(Tau_betasave)[[2]] <- colnames(xx)
+    dimnames(Tau_betasave)[[3]] <- rownames(xx)
+  }
+  if (!is.null(rownames(ww))) {
+    dimnames(bsave)[[3]] <- rownames(ww)
+    dimnames(bstarsave)[[3]] <- rownames(ww)
+  }
   
   # Store results
   logpost[1, 1] <- joint_lpdf(opp, choice,
@@ -332,25 +354,17 @@ match2sided <- function(iter, t0 = iter / 10,
     Tau_betasave[i, ,] <- Tau_beta
     
     # Increment
-    if (i %% 100 == 0) {
+    interval_length <- 1000
+    if (i %% interval_length == 0) {
       cat("Iteration", i, "done", Sys.time() - start, "\n")
       start <- Sys.time()
+      if (write) {
+        write_to_disk(idx = i, interval_length = interval_length,
+                      vars_to_write = c("asave" = "alpha", "astarsave" = "alphastar",
+                                        "bsave" = "beta", "bstarsave" = "betastar",
+                                        "oppsave" = "opp"))
+      }
     }
-  }
-  
-  names(ok) <- c("mean(opp)", "alpha", "beta")
-  if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
-  if (!is.null(colnames(ww))) colnames(astarsave) <- colnames(ww)
-  if (!is.null(colnames(xx))) {
-    dimnames(bsave)[[2]] <- colnames(xx)
-    dimnames(bstarsave)[[2]] <- colnames(xx)
-    colnames(mu_betasave) <- colnames(xx)
-    dimnames(Tau_betasave)[[2]] <- colnames(xx)
-    dimnames(Tau_betasave)[[3]] <- rownames(xx)
-  }
-  if (!is.null(rownames(ww))) {
-    dimnames(bsave)[[3]] <- rownames(ww)
-    dimnames(bstarsave)[[3]] <- rownames(ww)
   }
   
   return(list(opp = oppsave, alpha = asave, beta = bsave,
