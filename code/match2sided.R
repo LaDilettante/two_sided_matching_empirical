@@ -123,13 +123,12 @@ cond_Tau_beta <- function(mu_beta, prior, beta) {
 
 #' Calculate the vcov matrix recursively
 #' @param X_sample the latest sample of X
-calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
+calculate_C <- function(X_sample, t, C, Xbar, sd, eps = 0.01) {
   d <- length(X_sample)
-  sd <- (2.4 ** 2) / d
+  X_sample <- c(X_sample) # Turn 1-row matrix into a vector
   
   C_old <- C
   Xbar_old <- Xbar
-  
   Xbar <- 1 / (t - 1) * ((t - 2) * Xbar_old + X_sample)
   C <- (t - 3) / (t - 2) * C_old +
     sd / (t - 2) * ((t - 2) * Xbar_old %*% t(Xbar_old) -
@@ -142,7 +141,7 @@ calculate_C <- function(X_sample, t, C, Xbar, eps = 0.01) {
 
 # ---- MCMC runs ----
 
-match2sided <- function(iter, t0 = iter / 10,
+match2sided <- function(iter, t0 = iter / 10, thin = 10,
                         C_alpha, C_beta,
                         starting_alpha, starting_beta,
                         frac_opp, prior,
@@ -202,9 +201,16 @@ match2sided <- function(iter, t0 = iter / 10,
   tmp <- as.matrix(ww[choice, ])
   wa <- apply(tmp, 2, sum) # sum of characteristics of accepted jobs; used in alpha update
   
+  sd_alpha <- (2.4 ** 2) / p_j / 10 # Scaling factor for alpha proposal
+  sd_beta <- (2.4 ** 2) / (p_i * (n_j - 1) ) / 1000 # Scaling factor for beta proposal, minus 1 for unemployment
+  
   # ---- Initialize storage ----
   acceptance_rate <- rep(0, 3)                  # Metropolis acceptance rates
-  oppsave <- array(NA, dim = c(iter, n_i, n_j))
+  if ("opp" %in% to_save) {
+    oppsave <- array(NA, dim = c(iter, n_i, n_j))
+  } else {
+    oppsave <- NA
+  }
   asave <- matrix(NA, iter, p_j)   # saved alphas
   astarsave <- matrix(NA, iter, p_j)
   bsave <- array(NA, dim = c(iter, p_i, n_j)) # saved betas
@@ -215,7 +221,8 @@ match2sided <- function(iter, t0 = iter / 10,
   ok <- matrix(NA, iter, 3) # ok_opp, ok_alpha, ok_beta
   
   # Naming the storage
-  names(ok) <- c("mean(opp)", "alpha", "beta")
+  colnames(logpost) <- c("lpost", "lp_A", "lp_O")
+  colnames(ok) <- c("mean(opp)", "alpha", "beta")
   if (!is.null(colnames(ww))) colnames(asave) <- colnames(ww)
   if (!is.null(colnames(ww))) colnames(astarsave) <- colnames(ww)
   if (!is.null(colnames(xx))) {
@@ -237,121 +244,147 @@ match2sided <- function(iter, t0 = iter / 10,
   logpost[1, 2] <- f_logp_A(opp, choice, alpha, ww)
   logpost[1, 3] <- f_logp_O(opp, beta, xx)
   ok[1, ] <- c(0, 0, 0)
-  oppsave[1, , ] <- opp
+  if ("opp" %in% to_save) oppsave[1, , ] <- opp
   asave[1, ] <- alpha
   astarsave[1, ] <- alphastar
   bsave[1, , ] <- beta # vectorize
   bstarsave[1, , ] <- betastar
   mu_betasave[1, ] <- mu_beta
   Tau_betasave[1, ,] <- Tau_beta
-  
+
   # ---- Loop ----
   start <- Sys.time()
   for (i in 2:iter) {
-    # Update opp
-    num_new_offers <- floor(frac_opp * n_j) # per i
-    new <- replicate(n_i,
-                     sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
-    new <- c(new) # Flatten 1-column matrix into a vector
-    ind <- cbind(rep(1:n_i, each = num_new_offers), new)
-    
-    my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
-    ok_opp <- log(runif(n_i)) <= my_logmh_opp
-    
-    # Don't change an offer for an accepted job
-    accepted_jobs_sampled <- colSums(matrix(new == rep(choice, each = num_new_offers),
-                                            nrow = num_new_offers)) > 0
-    ok_opp[accepted_jobs_sampled] <- F  # don't change an offer for an accepted job
-    if (any(ok_opp)) {
-      opp[ind][rep(ok_opp, each = num_new_offers)] <- !(opp[ind][rep(ok_opp, each=num_new_offers)]) # Update the opportunity set
-      acceptance_rate[1] <- acceptance_rate[1] + mean(ok_opp)
-    }
-    
-    # Update alpha
-    sd <- (2.4 ** 2) / p_j # Scaling factor for alpha proposal
-    if (i <= t0) {
-      C_alpha_est <- C_alpha
-    } else if (i > t0) {
-      if (i == t0 + 1) {
-        # Calculate Cs and Xbars for the first time
-        alpha_samples <- asave[1:(i - 1), , drop = FALSE]
-        C_alpha_est <- sd * var(alpha_samples) + sd * eps * diag(p_j)
-        Xbar_alpha_est <- colMeans(alpha_samples)
-      } else {
-        # browser()
-        # Calculate Cs and Xbars recursively
-        # (notice we're passing in old values of Cs and Xbars)
-        res <- calculate_C(X_sample = asave[i - 1, , drop = FALSE], t = i, 
-                           C = C_alpha_est, Xbar = Xbar_alpha_est)
-        Xbar_alpha_est <- res$Xbar
-        C_alpha_est <- res$C
+    for (i_thin in 1:thin) {
+      # Update opp
+      num_new_offers <- floor(frac_opp * n_j) # per i
+      new <- replicate(n_i,
+                       sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
+      new <- c(new) # Flatten 1-column matrix into a vector
+      ind <- cbind(rep(1:n_i, each = num_new_offers), new)
+      
+      my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
+      ok_opp <- log(runif(n_i)) <= my_logmh_opp
+      
+      # Don't change an offer for an accepted job
+      accepted_jobs_sampled <- colSums(matrix(new == rep(choice, each = num_new_offers),
+                                              nrow = num_new_offers)) > 0
+      ok_opp[accepted_jobs_sampled] <- F  # don't change an offer for an accepted job
+      if (any(ok_opp)) {
+        opp[ind][rep(ok_opp, each = num_new_offers)] <- !(opp[ind][rep(ok_opp, each=num_new_offers)]) # Update the opportunity set
+        acceptance_rate[1] <- acceptance_rate[1] + mean(ok_opp)
       }
-    }
-    alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
-    
-    my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
-    ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
-    if (ok_alpha) {
-      alpha <- alphastar
-      acceptance_rate[2] <- acceptance_rate[2] + 1
-    }
-    
-    # Update beta (except the beta of unemployment)
-    sd <- (2.4 ** 2) / (p_i * (n_j - 1) ) # Scaling factor for beta proposal, minus 1 for unemployment
-    if (i <= t0) {
-      C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))
-    } else if (i > t0) {
-      if (i == t0 + 1) {
-        # Calculate Cs and Xbars for the first time
-        beta_samples <- bsave[1:(i - 1), , 2:n_j, drop = FALSE]
-        dim(beta_samples) <- c(i - 1, p_i * (n_j - 1))
-        C_beta_est <- sd * var(beta_samples) + sd * eps * diag(p_i * (n_j - 1))
-        Xbar_beta_est <- colMeans(beta_samples)
-      } else {
-        # Calculate Cs and Xbars recursively
-        # (notice we're passing in old values of Cs and Xbars)
-        beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
-        res <- calculate_C(X_sample = beta_sample, t = i, 
-                    C = C_beta_est, Xbar = Xbar_beta_est)
-        Xbar_beta_est <- res$Xbar
-        C_beta_est <- res$C
+      
+      # Update alpha
+      if (i <= t0) {
+        C_alpha_est <- C_alpha
+      } else if (i > t0) {
+        if (i == t0 + 1) {
+          browser()
+          # Calculate Cs and Xbars for the first time
+          idx_first_accept_alpha <- min(which(ok[, "alpha"] == 1))
+          alpha_samples <- asave[idx_first_accept_alpha:(i - 1), , drop = FALSE]
+          C_alpha_est <- sd_alpha * var(alpha_samples) + sd_alpha * eps * diag(p_j)
+          Xbar_alpha_est <- colMeans(alpha_samples)
+        } else {
+          if (i %% 200 == 0) { # Periodically check acceptance rate
+            ok_rate_alpha <- mean(ok[(i - 200):(i - 1), "alpha"])
+            if (ok_rate_alpha < 0.1) {
+              sd_alpha <- sd_alpha * 1 / 2
+              cat("sd_alpha decreases to", sd_alpha, "\n")
+            } else if (ok_rate_alpha > 0.4) {
+              sd_alpha <- sd_alpha * 2
+              cat("sd_alpha increases to", sd_alpha, "\n")
+            }
+          }
+          # Calculate Cs and Xbars recursively
+          # (notice we're passing in old values of Cs and Xbars)
+          res <- calculate_C(X_sample = asave[i - 1, , drop = FALSE], t = i, 
+                             C = C_alpha_est, Xbar = Xbar_alpha_est,
+                             sd = sd_alpha)
+          Xbar_alpha_est <- res$Xbar
+          C_alpha_est <- res$C
+        }
       }
+      alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
+      
+      my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
+      ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
+      if (ok_alpha) {
+        alpha <- alphastar
+        acceptance_rate[2] <- acceptance_rate[2] + 1
+      }
+      
+      # Update beta (except the beta of unemployment)
+      if (i <= t0) {
+        C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))
+      } else if (i > t0) {
+        if (i == t0 + 1) {
+          # Calculate Cs and Xbars for the first time
+          idx_first_accept_beta <- min(which(ok[, "beta"] == 1))
+          beta_samples <- bsave[idx_first_accept_beta:(i - 1), , 2:n_j, drop = FALSE]
+          dim(beta_samples) <- c(i - idx_first_accept_beta, p_i * (n_j - 1))
+          C_beta_est <- sd_beta * var(beta_samples) + sd_beta * eps * diag(p_i * (n_j - 1))
+          Xbar_beta_est <- colMeans(beta_samples)
+        } else {
+          if (i %% 200 == 0) { # Periodically check acceptance rate
+            ok_rate_beta <- mean(ok[(i - 200):(i - 1), "beta"])
+            if (ok_rate_beta < 0.1) {
+              sd_beta <- sd_beta * 1 / 10
+              cat("sd_beta decreases to", sd_beta, "\n")
+            } else if (ok_rate_beta > 0.4) {
+              sd_beta <- sd_beta * 10
+              cat("sd_beta increases to", sd_beta, "\n")
+            }
+          }
+          # Calculate Cs and Xbars recursively
+          # (notice we're passing in old values of Cs and Xbars)
+          beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
+          res <- calculate_C(X_sample = beta_sample, t = i, 
+                             C = C_beta_est, Xbar = Xbar_beta_est,
+                             sd = sd_beta)
+          Xbar_beta_est <- res$Xbar
+          C_beta_est <- res$C
+        }
+      }
+      deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = (n_j - 1))
+      deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemployment, which is 0
+      betastar <- beta + deviation
+      my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
+      ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
+      if (ok_beta) {
+        beta <- betastar
+        acceptance_rate[3] <- acceptance_rate[3] + 1
+      }
+      
+      # Update mu (multivariate normal)
+      mu_beta_posterior <- cond_mu_beta(Tau_beta, prior, beta)
+      mu_beta <- mvtnorm::rmvnorm(1, mu_beta_posterior$m,
+                                  mu_beta_posterior$V)
+      mu_beta <- c(mu_beta) # Flatten into a vector
+      
+      # Update Tau (Wishart)
+      Tau_beta_posterior <- cond_Tau_beta(mu_beta, prior, beta)
+      Tau_beta <- MCMCpack::rwish(Tau_beta_posterior$nu,
+                                  Tau_beta_posterior$Sinv)
+      
     }
-    deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = (n_j - 1))
-    deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemployment, which is 0
-    betastar <- beta + deviation
-    my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
-    ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
-    if (ok_beta) {
-      beta <- betastar
-      acceptance_rate[3] <- acceptance_rate[3] + 1
-    }
-    
-    # Update mu (multivariate normal)
-    mu_beta_posterior <- cond_mu_beta(Tau_beta, prior, beta)
-    mu_beta <- mvtnorm::rmvnorm(1, mu_beta_posterior$m,
-                                mu_beta_posterior$V)
-    mu_beta <- c(mu_beta) # Flatten into a vector
-    
-    # Update Tau (Wishart)
-    Tau_beta_posterior <- cond_Tau_beta(mu_beta, prior, beta)
-    Tau_beta <- MCMCpack::rwish(Tau_beta_posterior$nu,
-                                Tau_beta_posterior$Sinv)
     
     # Store results
+    
     logpost[i, 1] <- joint_lpdf(opp, choice,
-                              alpha, beta, mu_beta, Tau_beta, prior,
-                              ww, xx)
+                                alpha, beta, mu_beta, Tau_beta, prior,
+                                ww, xx)
     logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
     logpost[i, 3] <- f_logp_O(opp, beta, xx)
     ok[i, ] <- c(mean(ok_opp), ok_alpha, ok_beta)
-    oppsave[i, , ] <- opp
+    if ("opp" %in% to_save) oppsave[i, , ] <- opp
     asave[i, ] <- alpha
     astarsave[i, ] <- alphastar
     bsave[i, , ] <- beta # vectorize
     bstarsave[i, , ] <- betastar
     mu_betasave[i, ] <- mu_beta
-    Tau_betasave[i, ,] <- Tau_beta
+    Tau_betasave[i, ,] <- Tau_beta  
     
     # Increment
     interval_length <- 1000
@@ -361,8 +394,7 @@ match2sided <- function(iter, t0 = iter / 10,
       if (write) {
         write_to_disk(idx = i, interval_length = interval_length,
                       vars_to_write = c("asave" = "alpha", "astarsave" = "alphastar",
-                                        "bsave" = "beta", "bstarsave" = "betastar",
-                                        "oppsave" = "opp"))
+                                        "bsave" = "beta", "bstarsave" = "betastar"))
       }
     }
   }
