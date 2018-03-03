@@ -1,3 +1,4 @@
+Rcpp::sourceCpp("0_functions.cpp")
 library("mvtnorm")
 library("plyr")
 
