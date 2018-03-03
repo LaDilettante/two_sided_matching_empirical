@@ -1,8 +1,10 @@
 rm(list = ls())
 
 context("Metropolis-Hasting acceptance ratio Rcpp")
+source("0_functions.R")
 source("match2sided.R")
-Rcpp::sourceCpp("0_functions_match2sided.cpp")
+Rcpp::sourceCpp("match2sided.cpp")
+Rcpp::sourceCpp("0_functions.cpp")
 
 # ---- Test helper functions ----
 
@@ -14,6 +16,17 @@ test_that("dmvnrm_arma calculates the right MVN density", {
   expected <- mvtnorm::dmvnorm(x, mu, Sigma, log = TRUE)
   observed <- dmvnrm_arma(x, mu, Sigma, TRUE)
   expect_equal(observed, expected)
+})
+
+test_that("new_offer generates the right offer", {
+  n_i <- sample(2000:3000, size = 1)
+  n_j <- sample(10:30, size = 1)
+  size <- sample(1:n_j, size = 1)
+  set.seed(1)
+  expected <- c(replicate(n_i, sample(2:n_j, size = size, replace = FALSE)))
+  set.seed(1)
+  observed <- new_offer(n_i, n_j, size)
+  expect_equal(expected, observed)
 })
 
 # ---- Simulate data ----
@@ -64,4 +77,14 @@ microbenchmark::microbenchmark(
   logmh_alpha(alpha, alphastar, ww, opp, wa, prior),
   logmh_alphaC(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
 )
+
+
+n_i <- 2000
+n_j <- 20
+size <- 10
+microbenchmark::microbenchmark(
+  replicate(n_i, sample(2:n_j, size = size, replace = FALSE)),
+  new_offer(n_i, n_j, size)
+)
+
 

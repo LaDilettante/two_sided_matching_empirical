@@ -258,9 +258,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
     for (i_thin in 1:thin) {
       # Update opp
       num_new_offers <- floor(frac_opp * n_j) # per i
-      new <- replicate(n_i,
-                       sample(2:n_j, size=floor(frac_opp * n_j), replace = FALSE))
-      new <- c(new) # Flatten 1-column matrix into a vector
+      new <- new_offer(n_i, n_j, num_new_offers)
       ind <- cbind(rep(1:n_i, each = num_new_offers), new)
       
       my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
@@ -404,6 +402,6 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,
               lp = logpost, ok = ok,
               acceptance_rate = acceptance_rate / iter,
-              mcmc_settings = list(iter = iter,
-                                   frac_opp = frac_opp)))
+              mcmc_settings = list(iter = iter, frac_opp = frac_opp, thin = thin,
+                                   C_alpha = C_alpha, C_beta = C_beta)))
 }
