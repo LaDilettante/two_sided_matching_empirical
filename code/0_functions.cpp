@@ -17,12 +17,11 @@ IntegerVector new_offer(int n_i, int n_j, int size) {
   return out;
 }
 
-
 // You can include R code blocks in C++ files processed with sourceCpp
 // (useful for testing and development). The R code will be automatically 
 // run after the compilation.
 //
 
 /*** R
-new_offer(10, 4, 3)
+# test_fun(matrix(c(11, 21, 31, 41), nrow=2), matrix(rep(1, 4), nrow = 2))
 */

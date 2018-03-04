@@ -1,4 +1,5 @@
 rm(list = ls())
+library(testthat)
 
 context("Metropolis-Hasting acceptance ratio Rcpp")
 source("0_functions.R")
@@ -68,14 +69,56 @@ test_that("logmh_alpha is correct", {
   expect_equal(expected, observed)
 })
 
+test_that("logmh_beta is correct", {
+  c <- ncol(beta)
+  r <- nrow(beta)
+  # Choosing which beta to update
+  frac <- runif(1)
+  whichones <- sample(c(0, 1), size = c * r, replace = TRUE,
+                      prob = c(1 - frac, frac))
+  # Sample betastar from a [-eps_beta, eps_beta] box around beta
+  rmat <- matrix(runif(c * r, min=-1, max=1) * whichones,
+                 nrow = r, ncol = c)
+  
+  eps <- rnorm(1)
+  bmat <- eps * matrix(1, p_i, n_j)
+  deviation <- bmat * rmat
+  betastar <- beta + deviation
+  
+  expected <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
+  observed <- logmh_betaC(beta, betastar, xx, opp, mu_beta, Tau_beta)
+  expect_equal(expected, observed)
+})
+
 # ---- Benchmark ----
 
+# alpha
 eps <- rnorm(1)
 deviation <- eps * runif(length(alpha), min=-1, max=1) # Symmetric proposal
 alphastar <- alpha + deviation
 microbenchmark::microbenchmark(
   logmh_alpha(alpha, alphastar, ww, opp, wa, prior),
   logmh_alphaC(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
+)
+
+# beta
+c <- ncol(beta)
+r <- nrow(beta)
+# Choosing which beta to update
+frac <- runif(1)
+whichones <- sample(c(0, 1), size = c * r, replace = TRUE,
+                    prob = c(1 - frac, frac))
+# Sample betastar from a [-eps_beta, eps_beta] box around beta
+rmat <- matrix(runif(c * r, min=-1, max=1) * whichones,
+               nrow = r, ncol = c)
+
+eps <- rnorm(1)
+bmat <- eps * matrix(1, p_i, n_j)
+deviation <- bmat * rmat
+betastar <- beta + deviation
+microbenchmark::microbenchmark(
+  logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta),
+  logmh_betaC(beta, betastar, xx, opp, mu_beta, Tau_beta)
 )
 
 

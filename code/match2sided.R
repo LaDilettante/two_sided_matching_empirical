@@ -1,6 +1,7 @@
-Rcpp::sourceCpp("0_functions.cpp")
 library("mvtnorm")
 library("plyr")
+Rcpp::sourceCpp("0_functions.cpp")
+Rcpp::sourceCpp("match2sided.cpp")
 
 #' Two sided matching model
 #'
@@ -307,7 +308,8 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       }
       alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
       
-      my_logmh_alpha <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
+      my_logmh_alpha <- logmh_alphaC(alpha, alphastar, ww, opp, wa,
+                                     prior$alpha$mu, prior$alpha$Tau)
       ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
       if (ok_alpha) {
         alpha <- alphastar
@@ -349,7 +351,8 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = (n_j - 1))
       deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemployment, which is 0
       betastar <- beta + deviation
-      my_logmh_beta <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
+      my_logmh_beta <- logmh_betaC(beta, betastar, xx, opp,
+                                   mu_beta, Tau_beta)
       ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
       if (ok_beta) {
         beta <- betastar
