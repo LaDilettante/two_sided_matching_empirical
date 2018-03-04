@@ -1,8 +1,11 @@
 rm(list = ls())
+library(testthat)
 
 context("Metropolis-Hasting acceptance ratio Rcpp")
+source("0_functions.R")
 source("match2sided.R")
-Rcpp::sourceCpp("0_functions_match2sided.cpp")
+Rcpp::sourceCpp("match2sided.cpp")
+Rcpp::sourceCpp("0_functions.cpp")
 
 # ---- Test helper functions ----
 
@@ -14,6 +17,17 @@ test_that("dmvnrm_arma calculates the right MVN density", {
   expected <- mvtnorm::dmvnorm(x, mu, Sigma, log = TRUE)
   observed <- dmvnrm_arma(x, mu, Sigma, TRUE)
   expect_equal(observed, expected)
+})
+
+test_that("new_offer generates the right offer", {
+  n_i <- sample(2000:3000, size = 1)
+  n_j <- sample(10:30, size = 1)
+  size <- sample(1:n_j, size = 1)
+  set.seed(1)
+  expected <- c(replicate(n_i, sample(2:n_j, size = size, replace = FALSE)))
+  set.seed(1)
+  observed <- new_offer(n_i, n_j, size)
+  expect_equal(expected, observed)
 })
 
 # ---- Simulate data ----
@@ -55,8 +69,30 @@ test_that("logmh_alpha is correct", {
   expect_equal(expected, observed)
 })
 
+test_that("logmh_beta is correct", {
+  c <- ncol(beta)
+  r <- nrow(beta)
+  # Choosing which beta to update
+  frac <- runif(1)
+  whichones <- sample(c(0, 1), size = c * r, replace = TRUE,
+                      prob = c(1 - frac, frac))
+  # Sample betastar from a [-eps_beta, eps_beta] box around beta
+  rmat <- matrix(runif(c * r, min=-1, max=1) * whichones,
+                 nrow = r, ncol = c)
+  
+  eps <- rnorm(1)
+  bmat <- eps * matrix(1, p_i, n_j)
+  deviation <- bmat * rmat
+  betastar <- beta + deviation
+  
+  expected <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
+  observed <- logmh_betaC(beta, betastar, xx, opp, mu_beta, Tau_beta)
+  expect_equal(expected, observed)
+})
+
 # ---- Benchmark ----
 
+# alpha
 eps <- rnorm(1)
 deviation <- eps * runif(length(alpha), min=-1, max=1) # Symmetric proposal
 alphastar <- alpha + deviation
@@ -64,4 +100,34 @@ microbenchmark::microbenchmark(
   logmh_alpha(alpha, alphastar, ww, opp, wa, prior),
   logmh_alphaC(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
 )
+
+# beta
+c <- ncol(beta)
+r <- nrow(beta)
+# Choosing which beta to update
+frac <- runif(1)
+whichones <- sample(c(0, 1), size = c * r, replace = TRUE,
+                    prob = c(1 - frac, frac))
+# Sample betastar from a [-eps_beta, eps_beta] box around beta
+rmat <- matrix(runif(c * r, min=-1, max=1) * whichones,
+               nrow = r, ncol = c)
+
+eps <- rnorm(1)
+bmat <- eps * matrix(1, p_i, n_j)
+deviation <- bmat * rmat
+betastar <- beta + deviation
+microbenchmark::microbenchmark(
+  logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta),
+  logmh_betaC(beta, betastar, xx, opp, mu_beta, Tau_beta)
+)
+
+
+n_i <- 2000
+n_j <- 20
+size <- 10
+microbenchmark::microbenchmark(
+  replicate(n_i, sample(2:n_j, size = size, replace = FALSE)),
+  new_offer(n_i, n_j, size)
+)
+
 
