@@ -1,0 +1,72 @@
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}  % set the margins to 1in on all sides
+\usepackage{graphicx}              % to include figures
+\usepackage{pdfpages}
+\usepackage{amsmath}               % great math stuff
+\usepackage{amsfonts}              % for blackboard bold, etc
+\usepackage{amsthm}                % better theorem environments
+\usepackage{bm}					   % bm for bold math
+
+\usepackage{enumitem} % for [noitemsep]
+\usepackage{rotating} % for sideway table
+\usepackage{caption} % for newline in caption
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    linkcolor={red!50!black},
+    citecolor={blue!50!black},
+    urlcolor={blue!80!black}
+}
+\usepackage{cleveref}
+
+\usepackage{placeins}  
+\usepackage{float}
+\restylefloat{table}
+
+% bibliography
+\usepackage{natbib}
+\bibpunct{(}{)}{;}{a}{}{,} % no comma between author and year
+
+\title{Two-Sided Matching Model}
+\author{Anh Le}
+
+\begin{document}
+\maketitle
+
+\section{MCMC chains for employers' preference $\beta$}
+
+The graphs below show the MCMC samples for employers' preference for (years of)
+education. We see that jobs that belong to the Professional, Managerial, or
+Sales / Clerical / Services categories, have a positive preference for education,
+especially Professional and Managerial.
+
+In contrast, jobs that belong to the Manufacturing Blue Collar and Other Blue
+Collar categories have a negative preference for education.
+
+The size of the estimates are similar to earlier findings by
+\citet{Logan1996}, especially in terms of the relative difference between
+employers. For example, like we see here, \citet{Logan1996} finds that Professional employers
+prize education the most, followed by Managerial, Sales / Services, and finally
+Blue Collar.
+
+Our estimate size is slightly smaller, likely because we put a prior
+on parameters being 0. (Admittedly it's a diffuse N(0, 100) prior.)
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth,page=1]{"../figure/labor_occ5_beta_educ_2018-03-04 17:06:20"}
+\caption{Preference for Education across Employers}
+\end{figure}
+
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=0.8\textwidth,page=2]{"../figure/labor_occ5_beta_educ_2018-03-04 17:06:20"}
+\caption{Preference for Education across Employers}
+\end{figure}
+
+\clearpage
+\bibliographystyle{chicago}
+\bibliography{/home/anh/Dropbox/texmf/bibtex/bib/library}
+\end{document}
