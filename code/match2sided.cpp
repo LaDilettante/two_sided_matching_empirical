@@ -1,7 +1,7 @@
 #include <RcppArmadillo.h>
 #include "0_functions.h"
-
 // [[Rcpp::depends("RcppArmadillo")]]
+
 // [[Rcpp::export]]
 double logmh_alphaC(arma::vec alpha, arma::vec alphastar,
                    arma::mat ww, arma::mat opp,
@@ -29,7 +29,7 @@ double logmh_betaC(arma::mat beta, arma::mat betastar,
   arma::mat XB = xx * beta;
   arma::mat XB_star = xx * betastar;
   double lrat = accu((opp % (XB_star - XB)));
-  double logmh_beta = lrat + accu(log(1 + exp(XB)) - log(1 + exp(XB_star))) +
+  double logmh_beta = lrat + sum(Rcpp::log1p(Rcpp::wrap(exp(XB))) - Rcpp::log1p(Rcpp::wrap(exp(XB_star)))) +
     accu(dmvnrm_arma_mat(arma::trans(betastar), mu, inv(Tau), true)) -
     accu(dmvnrm_arma_mat(arma::trans(beta), mu, inv(Tau), true));
   return logmh_beta;
@@ -37,8 +37,20 @@ double logmh_betaC(arma::mat beta, arma::mat betastar,
 
 // logmh_opp (920 ms for 1000 iter)
 
-// joint_logpdf (1780 ms for 1000 iter)
+
+// [[Rcpp::export]]
+double f_logp_AC(arma::mat opp, arma::vec alpha, 
+                 arma::mat ww, arma::mat w_chosen) {
+  return(accu(w_chosen * alpha) - accu(log(opp * exp(ww * alpha))));
+}
 
 // f_logp_0 (660 ms for 1000 iter)
+// [[Rcpp::export]]
+double f_logp_OC(arma::mat opp, arma::mat beta, arma::mat xx) {
+  arma::mat XB = xx * beta;
+  return(accu(opp % XB) - accu(log(1 + exp(XB))));
+}
+
+// joint_logpdf (1780 ms for 1000 iter)
 
 // deviation <- c(rmvnorm(1, sigma = C_ab_est)) (770 ms for 1000 iter)
