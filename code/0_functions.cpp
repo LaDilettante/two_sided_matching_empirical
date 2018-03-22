@@ -44,7 +44,7 @@ double dmvnrm_arma_vec(arma::vec x,
 arma::vec dmvnrm_arma_mat(arma::mat x,  
                       arma::rowvec mean,  
                       arma::mat sigma, 
-                      bool logd = false) { 
+                      bool logd = true) { 
   const double log2pi = std::log(2.0 * M_PI);
   int n = x.n_rows;
   int xdim = x.n_cols;

@@ -17,37 +17,43 @@ NULL
 # ---- MH and conditionals ----
 
 #' Calculate the log joint pdf, useful for testing
-#'
-#' @rdname match2sided
-#' @importFrom mvtnorm mvtnorm::dmvnorm
-f_logp_A <- function(opp, choice, alpha, ww) {
-  w <- as.matrix(ww[choice, ])
-  logp_A <- sum(w %*% alpha) - sum(log(opp %*% exp(ww %*% alpha)))
-  return(logp_A)
+f_logp_A <- function(opp, alpha, ww, w_chosen) {
+  sum(w_chosen %*% alpha) - sum(log(opp %*% exp(ww %*% alpha)))
 }
 f_logp_O <- function(opp, beta, xx) {
   XB <- xx %*% beta
-  logp_O <- sum(opp * XB) - sum(log1p(exp(XB)))
-  return(logp_O)
+  sum(opp * XB) - sum(log1p(exp(XB)))
 }
 
 joint_lpdf <- function(opp, choice, alpha, beta,
                        mu_beta, Tau_beta,
-                       prior, ww, xx) {
+                       prior, ww, w_chosen, xx) {
   n_i <- length(choice)
-  logp_A <- f_logp_A(opp, choice, alpha, ww)
-  # w <- as.matrix(ww[choice, ])
-  # logp_A <- sum(w %*% alpha) - sum(log(opp %*% exp(ww %*% alpha)))
-  
+  logp_A <- f_logp_A(opp, alpha, ww, w_chosen)
   logp_O <- f_logp_O(opp, beta, xx)
-  # XB <- xx %*% beta
-  # logp_O <- sum(opp * XB) - sum(log1p(exp(XB)))
+
   return(logp_A + logp_O +
            mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) +
            sum(mvtnorm::dmvnorm(t(beta), mu_beta, solve(Tau_beta), log = TRUE)) +
            mvtnorm::dmvnorm(mu_beta, prior$mu_beta$mu, solve(prior$mu_beta$Tau), log = TRUE) +
            log(MCMCpack::dwish(Tau_beta, prior$Tau_beta$nu, prior$Tau_beta$S)))
 }
+
+joint_lpdfC <- function(opp, choice, alpha, beta,
+                       mu_beta, Tau_beta,
+                       prior, ww, w_chosen, xx) {
+  n_i <- length(choice)
+  logp_A <- f_logp_A(opp, alpha, ww, w_chosen)
+  logp_O <- f_logp_O(opp, beta, xx)
+  
+  return(logp_A + logp_O +
+           dmvnrm_arma_vec(alpha, prior$alpha$mu, solve(prior$alpha$Tau), logd = TRUE) +
+           sum(dmvnrm_arma_mat(t(beta), mu_beta, solve(Tau_beta), logd = TRUE)) +
+           dmvnrm_arma_vec(mu_beta, prior$mu_beta$mu, solve(prior$mu_beta$Tau), logd = TRUE) +
+           log(MCMCpack::dwish(Tau_beta, prior$Tau_beta$nu, prior$Tau_beta$S)))
+}
+
+
 
 f_pA_den <- function(opp, ww, alpha) {
   exp_WA <- exp(ww %*% alpha)
@@ -200,8 +206,8 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   Tau_beta <- prior$Tau_beta$Sinv
   
   # ---- Pre compute ----
-  tmp <- as.matrix(ww[choice, ])
-  wa <- apply(tmp, 2, sum) # sum of characteristics of accepted jobs; used in alpha update
+  w_chosen <- as.matrix(ww[choice, ])
+  wa <- apply(w_chosen, 2, sum) # sum of characteristics of accepted jobs; used in alpha update
   
   sd_alpha <- (2.4 ** 2) / p_j / 10 # Scaling factor for alpha proposal
   sd_beta <- (2.4 ** 2) / (p_i * (n_j - 1) ) / 1000 # Scaling factor for beta proposal, minus 1 for unemployment
@@ -240,10 +246,10 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   }
   
   # Store results
-  logpost[1, 1] <- joint_lpdf(opp, choice,
+  logpost[1, 1] <- joint_lpdfC(opp, choice,
                               alpha, beta, mu_beta, Tau_beta, prior,
-                              ww, xx)
-  logpost[1, 2] <- f_logp_A(opp, choice, alpha, ww)
+                              ww, w_chosen, xx)
+  logpost[1, 2] <- f_logp_A(opp, alpha, ww, w_chosen)
   logpost[1, 3] <- f_logp_O(opp, beta, xx)
   ok[1, ] <- c(0, 0, 0)
   if ("opp" %in% to_save) oppsave[1, , ] <- opp
@@ -318,7 +324,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       
       # Update beta (except the beta of unemployment)
       if (i <= t0) {
-        C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))
+        C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
       } else if (i > t0) {
         if (i == t0 + 1) {
           # Calculate Cs and Xbars for the first time
@@ -348,8 +354,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
           C_beta_est <- res$C
         }
       }
-      deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = (n_j - 1))
-      deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemployment, which is 0
+      deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
       betastar <- beta + deviation
       my_logmh_beta <- logmh_betaC(beta, betastar, xx, opp,
                                    mu_beta, Tau_beta)
@@ -374,10 +379,10 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
     
     # Store results
     
-    logpost[i, 1] <- joint_lpdf(opp, choice,
+    logpost[i, 1] <- joint_lpdfC(opp,
                                 alpha, beta, mu_beta, Tau_beta, prior,
-                                ww, xx)
-    logpost[i, 2] <- f_logp_A(opp, choice, alpha, ww)
+                                ww, w_chosen, xx)
+    logpost[i, 2] <- f_logp_A(opp, alpha, ww, w_chosen)
     logpost[i, 3] <- f_logp_O(opp, beta, xx)
     ok[i, ] <- c(mean(ok_opp), ok_alpha, ok_beta)
     if ("opp" %in% to_save) oppsave[i, , ] <- opp

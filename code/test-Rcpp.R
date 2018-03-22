@@ -4,18 +4,16 @@ library(testthat)
 context("Metropolis-Hasting acceptance ratio Rcpp")
 source("0_functions.R")
 source("match2sided.R")
-Rcpp::sourceCpp("match2sided.cpp")
-Rcpp::sourceCpp("0_functions.cpp")
 
 # ---- Test helper functions ----
 
-test_that("dmvnrm_arma calculates the right MVN density", {
+test_that("dmvnrm_arma_vec calculates the right MVN density", {
   dim <- sample(2:10, size = 1) # a random dimension
   mu <- rnorm(dim)
   Sigma <- diag(abs(rnorm(dim)))
   x <- rmvnorm(1, mu, Sigma)
   expected <- mvtnorm::dmvnorm(x, mu, Sigma, log = TRUE)
-  observed <- dmvnrm_arma(x, mu, Sigma, TRUE)
+  observed <- dmvnrm_arma_vec(x, mu, Sigma, TRUE)
   expect_equal(observed, expected)
 })
 
@@ -51,8 +49,8 @@ prior <- list(alpha = list(mu = rnorm(p_j), Tau = solve(diag(abs(rnorm(p_j))))),
               Tau_beta = list(nu = p_i + 2, Sinv = solve(diag(abs(rnorm(p_i))))))
 
 ww <- matrix(rnorm(n_j * p_j), n_j, p_j)
-tmp <- as.matrix(ww[choice, ])
-wa <- apply(tmp, 2, sum)
+w_chosen <- as.matrix(ww[choice, ])
+wa <- apply(w_chosen, 2, sum)
 
 xx <- matrix(rnorm(n_i * p_i), n_i, p_i) # Characteristics of the multinomial side
 xx[, 1] <- 1 # The first column is the intercept
@@ -90,9 +88,53 @@ test_that("logmh_beta is correct", {
   expect_equal(expected, observed)
 })
 
+test_that("f_logp_A is correct,", {
+  expected <- f_logp_A(opp, alpha, ww, w_chosen)
+  observed <- f_logp_AC(opp, alpha, ww, w_chosen)
+  expect_equal(expected, observed)
+})
+
+test_that("f_logp_O is correct", {
+  expected <- f_logp_O(opp, beta, xx)
+  observed <- f_logp_OC(opp, beta, xx)
+  expect_equal(expected, observed)
+})
+
+test_that("joint_pdf is correct", {
+  expected <- joint_lpdf(opp, choice, alpha, beta,
+                         mu_beta, Tau_beta,
+                         prior, ww, w_chosen, xx)
+  observed <- joint_lpdfC(opp, choice, alpha, beta,
+                         mu_beta, Tau_beta,
+                         prior, ww, w_chosen, xx)
+  expect_equal(expected, observed)
+})
+
+
 # ---- Benchmark ----
 
-# alpha
+# f_logp_A : the Rcpp version is SlOWER!
+microbenchmark::microbenchmark(
+  f_logp_A(opp, alpha, ww, w_chosen),
+  f_logp_AC(opp, alpha, ww, w_chosen)
+)
+# f_logp_O
+microbenchmark::microbenchmark(
+  f_logp_O(opp, beta, xx),
+  f_logp_OC(opp, beta, xx)
+)
+
+# joint_pdf
+microbenchmark::microbenchmark(
+  joint_lpdf(opp, choice, alpha, beta,
+                         mu_beta, Tau_beta,
+                         prior, ww, w_chosen, xx),
+  joint_lpdfC(opp, choice, alpha, beta,
+             mu_beta, Tau_beta,
+             prior, ww, w_chosen, xx)
+)
+
+# logmh_alpha
 eps <- rnorm(1)
 deviation <- eps * runif(length(alpha), min=-1, max=1) # Symmetric proposal
 alphastar <- alpha + deviation
@@ -101,7 +143,7 @@ microbenchmark::microbenchmark(
   logmh_alphaC(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
 )
 
-# beta
+# logmh_beta
 c <- ncol(beta)
 r <- nrow(beta)
 # Choosing which beta to update
@@ -121,7 +163,7 @@ microbenchmark::microbenchmark(
   logmh_betaC(beta, betastar, xx, opp, mu_beta, Tau_beta)
 )
 
-
+# new_offer
 n_i <- 2000
 n_j <- 20
 size <- 10
