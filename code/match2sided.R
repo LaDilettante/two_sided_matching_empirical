@@ -1,5 +1,4 @@
 library("mvtnorm")
-library("plyr")
 Rcpp::sourceCpp("0_functions.cpp")
 Rcpp::sourceCpp("match2sided.cpp")
 
@@ -171,26 +170,23 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   
   # ---- Starting values ----
   if (missing(starting_alpha)) {
-    alpha <- rep(0, p_j)            # worker preferences  
-  } else {
-    alpha <- starting_alpha
+    starting_alpha <- rep(0, p_j)            # worker preferences  
   }
+  alpha <- starting_alpha
   alphastar <- alpha
   exp_WA <- exp(ww %*% alpha) # linear predictors of
   pA_den <- opp %*% exp_WA # vector of denominators in p(A | O, alpha)
   
   # beta starting values (from 1-sided logit estimates)
   if (missing(starting_beta)) {
-    beta <- matrix(0, p_i, n_j)   # employer preferences
-    for(j in 2:n_j) {
+    starting_beta <- matrix(0, p_i, n_j)   # employer preferences
+    for(j in 1:n_j) {
       y <- as.numeric(opp[, j])
-      mod <- glm(y ~ . - 1, family=binomial,
-                 data=as.data.frame(xx) )
-      beta[, j] <- mod$coef
+      mod <- glm(y ~ . - 1, family=binomial, data=as.data.frame(xx))
+      starting_beta[, j] <- mod$coef
     }  
-  } else {
-    beta <- starting_beta
   }
+  beta <- starting_beta
   betastar <- beta
   
   XB <- xx %*% beta # worker side linear predictors (big matrix), n_i x n_j, same as opp
@@ -311,14 +307,21 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       my_logmh_alpha <- logmh_alphaC(alpha, alphastar, ww, opp, wa,
                                      prior$alpha$mu, prior$alpha$Tau)
       ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
-      if (ok_alpha) {
-        alpha <- alphastar
-        acceptance_rate[2] <- acceptance_rate[2] + 1
-      }
+      tryCatch({
+        if (ok_alpha) {
+            alpha <- alphastar
+            acceptance_rate[2] <- acceptance_rate[2] + 1
+        }
+      }, error = function(cond) {
+        print(cond)
+        print(ok_alpha, my_logmh_alpha)
+        print(alpha, alphastar)
+        browser()
+      })
       
       # Update beta (except the beta of unemployment)
       if (i <= t0) {
-        C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))
+        C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
       } else if (i > t0) {
         if (i == t0 + 1) {
           # Calculate Cs and Xbars for the first time
@@ -348,8 +351,8 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
           C_beta_est <- res$C
         }
       }
-      deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = (n_j - 1))
-      deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemployment, which is 0
+      deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
+      # deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemployment, which is 0
       betastar <- beta + deviation
       my_logmh_beta <- logmh_betaC(beta, betastar, xx, opp,
                                    mu_beta, Tau_beta)
@@ -406,6 +409,9 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
               mu_beta = mu_betasave, Tau_beta = Tau_betasave,
               lp = logpost, ok = ok,
               acceptance_rate = acceptance_rate / iter,
-              mcmc_settings = list(iter = iter, frac_opp = frac_opp, thin = thin,
-                                   C_alpha = C_alpha, C_beta = C_beta)))
+              mcmc_settings = list(iter = iter, t0 = t0, thin = thin,
+                                   frac_opp = frac_opp, num_new_offers = num_new_offers,
+                                   C_alpha = C_alpha, C_beta = C_beta,
+                                   starting_alpha = starting_alpha,
+                                   starting_beta = starting_beta)))
 }
