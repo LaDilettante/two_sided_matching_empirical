@@ -63,3 +63,20 @@ arma::vec dmvnrm_arma_mat(arma::mat x,
   }
   return(out);
 }
+
+// [[Rcpp::export]]
+double logsumexpC(const arma::vec& x) {
+  unsigned int maxi = x.index_max();
+  long double maxv = x(maxi);
+  if (!(maxv > -arma::datum::inf)) {
+    return -arma::datum::inf;
+  }
+  long double cumsum = 0.0;
+  for (unsigned int i = 0; i < x.n_elem; i++) {
+    if ((i != maxi) & (x(i) > -arma::datum::inf)) {
+      cumsum += expl(x(i) - maxv);
+    }
+  }
+  
+  return maxv + log1p(cumsum);
+}

@@ -28,11 +28,20 @@ test_that("new_offer generates the right offer", {
   expect_equal(expected, observed)
 })
 
+test_that("log_sum_exp works like R", {
+  # Overflow
+  x <- rnorm(10, mean = 1000, sd = 100)
+  expect_equal(logsumexp(x), logsumexpC(x))
+  # Underflow
+  x <- rnorm(10, mean = -1000, sd = 100)
+  expect_equal(logsumexp(x), logsumexpC(x))
+})
+
 # ---- Simulate data ----
-n_i <- sample(seq(10, 20), 1) # multinomial logit side
-p_i <- sample(seq(2, 3), 1)
-n_j <- sample(seq(5, 10), 1) # logit side
-p_j <- sample(seq(2, 3), 1)
+n_i <- sample(seq(500, 1000), 1) # multinomial logit side
+p_i <- sample(seq(5, 10), 1)
+n_j <- sample(seq(20, 50), 1) # logit side
+p_j <- sample(seq(5, 10), 1)
 
 choice <- sample(seq(1, n_j), size = n_i, replace = TRUE) # Each i picks a j
 opp <- matrix(FALSE, n_i, n_j)
@@ -62,9 +71,11 @@ test_that("logmh_alpha is correct", {
   deviation <- eps * runif(length(alpha), min=-1, max=1) # Symmetric proposal
   alphastar <- alpha + deviation
   
-  expected <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
-  observed <- logmh_alphaC(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
-  expect_equal(expected, observed)
+  Rfun <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
+  Cppfun_old <- logmh_alphaC_old(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
+  Cppfun <- logmh_alphaC(alpha, alphastar, ww, t(opp), wa, prior$alpha$mu, prior$alpha$Tau)
+  expect_equal(Rfun, Cppfun_old)
+  expect_equal(Cppfun_old, Cppfun)
 })
 
 test_that("logmh_beta is correct", {
@@ -101,10 +112,10 @@ test_that("f_logp_O is correct", {
 })
 
 test_that("joint_pdf is correct", {
-  expected <- joint_lpdf(opp, choice, alpha, beta,
+  expected <- joint_lpdf(opp, alpha, beta,
                          mu_beta, Tau_beta,
                          prior, ww, w_chosen, xx)
-  observed <- joint_lpdfC(opp, choice, alpha, beta,
+  observed <- joint_lpdfC(opp, alpha, beta,
                          mu_beta, Tau_beta,
                          prior, ww, w_chosen, xx)
   expect_equal(expected, observed)
@@ -140,7 +151,8 @@ deviation <- eps * runif(length(alpha), min=-1, max=1) # Symmetric proposal
 alphastar <- alpha + deviation
 microbenchmark::microbenchmark(
   logmh_alpha(alpha, alphastar, ww, opp, wa, prior),
-  logmh_alphaC(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau)
+  logmh_alphaC_old(alpha, alphastar, ww, opp, wa, prior$alpha$mu, prior$alpha$Tau),
+  logmh_alphaC(alpha, alphastar, ww, t(opp), wa, prior$alpha$mu, prior$alpha$Tau)
 )
 
 # logmh_beta

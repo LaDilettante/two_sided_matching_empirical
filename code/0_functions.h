@@ -12,5 +12,7 @@ arma::vec dmvnrm_arma_mat(arma::mat x,
                          arma::rowvec mean,  
                          arma::mat sigma, 
                          bool logd);
-  
+
+double logsumexpC(const arma::vec& x);
+
 #endif

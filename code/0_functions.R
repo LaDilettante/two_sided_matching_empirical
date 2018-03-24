@@ -5,6 +5,16 @@ f_install_and_load <- function(packs) {
   lapply(packs, library, character.only=TRUE)
 }
 
+logsumexp <- function(x) {
+  # Computes log(sum(exp(x))
+  # Uses offset trick to avoid numeric overflow: http://jblevins.org/notes/log-sum-exp
+  if ( max(abs(x)) > max(x) )
+    offset <- min(x)
+  else
+    offset <- max(x)
+  log(sum(exp(x - offset))) + offset
+}
+
 heatmap2 <- function(x) {
   heatmap(x, scale = "none", Rowv = NA, Colv = NA, revC = T)
 }
