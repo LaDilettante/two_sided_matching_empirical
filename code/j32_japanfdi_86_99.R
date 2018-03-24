@@ -1,0 +1,154 @@
+rm(list = ls())
+
+library("tidyverse")
+library("coda")
+source("match2sided.R")
+
+# ---- Load MNC data ----
+
+df_mnc_raw <- readRDS("../data_clean/japanFDI_86_99.RData")
+
+# Cut down the data
+# Only manufacturing, founded in 1996
+C_SIC <- "Manufacturing"
+C_FDTN_YR <- 1996
+df_mnc <- df_mnc_raw %>%
+  filter(sic_brd == C_SIC) %>%
+  filter(fdtn_yr == C_FDTN_YR, year >= C_FDTN_YR) %>%
+  select(sort_key, ltemp, luscptl, int_r_d, int_exp, nation, year) %>% na.omit() %>%
+  # Only keep the data closest to the year 1996
+  group_by(sort_key) %>% arrange(year) %>% filter(row_number() == 1) %>%
+  ungroup() %>%
+  # Only keep countries with at least 2 plants
+  group_by(nation) %>% filter(n() >= 5) %>% ungroup() %>%
+  filter(nation %in% c("China", "Indonesia", "Malaysia", "Philippines", 
+                       "Singapore", "South Korea", "Taiwan", "Thailand",
+                       "Vietnam")) %>% # Only keep countries in East / SE Asia
+  select(ltemp, luscptl, int_r_d, int_exp, nation)
+
+# Assign numeric id to countries
+df_nation_id <- df_mnc %>% select(nation) %>% distinct() %>% 
+  arrange(nation) %>%
+  mutate(nation_id = 1:n(), 
+         iso3c = countrycode::countrycode(nation, "country.name", "iso3c"))
+
+# Merge nation_id back, finalize
+df_mnc <- df_mnc %>%
+  inner_join(df_nation_id, by = 'nation') %>%
+  select(ltemp, luscptl, int_r_d, int_exp, nation_id)
+
+xx <- df_mnc %>%
+  mutate(one = 1) %>%
+  select(one, ltemp, luscptl, int_r_d, int_exp) %>%
+  as.matrix()
+
+# ---- Load country data ----
+df_country_raw <- readRDS("../data_clean/country_86_99.RData")
+df_country <- df_country_raw %>%
+  filter(year == C_FDTN_YR) %>%
+  inner_join(df_nation_id, by = c('iso3c')) %>%
+  select(country, nation, nation_id, lpop, lgdp, lgdppc, 
+         hc) %>%
+  # Make sure that the nations are arranged according to nation_id, buz we'll turn em into matrix
+  arrange(nation_id) %>% select(-nation_id, -country)
+
+ww <- df_country %>%
+  select(lgdp, lgdppc, hc) %>%
+  as.matrix()
+rownames(ww) <- df_country$nation
+
+# ---- Prepare obs_opp ----
+
+n_i <- nrow(xx) ; p_i <- ncol(xx)
+n_j <- nrow(ww) ; p_j <- ncol(ww)
+
+choice <- df_mnc$nation_id
+obs_opp <- matrix(FALSE, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
+obs_opp[cbind(1:n_i, choice)] <- TRUE  # firms are offered the countries they are in!
+
+# ---- MCMC ----
+
+# iter <- 2e5 is often what we run eventually
+iter <- 1e5
+thin <- 10
+prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
+              mu_beta = list(mu = rep(0, p_i),
+                             Tau = solve(diag(rep(100, p_i)))),
+              Tau_beta = list(nu = p_i + 2,
+                              Sinv = solve(diag(rep(100, p_i)))))
+
+start_time <- Sys.time()
+
+starting_alpha <- rep(1, p_j)
+starting_beta <- matrix(0, p_i, n_j)
+res <- match2sided(iter = iter, t0 = iter + 1, thin = thin,
+                   C_alpha = diag(c(0.1, 0.1, 0.1)), 
+                   C_beta = diag(c(0.1, 0.005, 0.005, 0.01, 0.01) ** 2),
+                   starting_alpha = starting_alpha,
+                   starting_beta = starting_beta,
+                   frac_opp = 0.15, prior = prior,
+                   ww = ww, xx = xx,
+                   choice = choice, opp = obs_opp,
+                   to_save = c("alpha", "beta", "opp"),
+                   file = paste("../result/sim_nojobs_", start_time), write = FALSE)
+cat("Japan 86 99 done\n")
+cat("Running time:", as.difftime(Sys.time() - start_time, units = "mins"), "mins")
+cat("Memory used: ", gc()[2, 2])
+colMeans(res$ok)
+ 
+
+saveRDS(res, paste0("../result/japan96_", start_time, ".RData"))
+
+# ---- Result and Diagnostics ----
+
+pdf(paste0("../figure/japan_post_dens_", start_time, ".pdf"), w = 7, h = 7)
+par(mfrow = c(2, 2))
+plot(res$lp[, 1], type='l',
+     xlab = 'iteration', ylab = 'log posterior density')
+plot(res$lp[, 2], type='l', xlab = 'iteration', ylab = 'lp_A')
+plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
+par(mfrow = c(1, 1))
+dev.off()
+
+# alpha
+pdf(paste0("../figure/japan_alpha_", start_time, ".pdf"), w = 7, h = 7)
+par(oma=c(0, 0, 3, 0))
+plot(mcmc(res$alpha))
+mtext("MNCs' preference parameters", side = 3, line = 0, outer = TRUE)
+dev.off()
+
+# beta
+beta_temp <- mcmc(res$beta[, 'ltemp', ])
+pdf(paste0("../figure/japan_beta_educ_", start_time, ".pdf"), w = 7, h = 7)
+plot(beta_temp)
+dev.off()
+
+beta_uscptl <- mcmc(res$beta[, 'luscptl', ])
+pdf(paste0("../figure/japan_beta_age_", start_time, ".pdf"), w = 7, h = 7)
+plot(beta_uscptl)
+dev.off()
+
+beta_rd <- mcmc(res$beta[, 'int_r_d', ])
+plot(beta_rd)
+
+beta_one <- mcmc(res$beta[, 'one', ])
+plot(beta_one)
+
+# ---- Investigating opp ----
+
+# Look at sampled firms in Vietnam / or China
+id <- df_nation_id %>% filter(nation == "Vietnam") %>% .[["nation_id"]]
+mnc_vietnam_obs <- df_mnc %>% 
+  filter(nation_id == id) %>%
+  colMeans()
+
+# Look at the true offered firms in Vietnam / or China
+
+opp_vietnam <- res$opp[, , id]
+mnc_vietnam <- t(apply(opp_vietnam, 1, function(offer) colMeans(xx[which(offer), ])))
+
+plot(mnc_vietnam[, 'ltemp'], type = 'l')
+abline(h = mnc_vietnam_obs['ltemp'], col = 'red')
+
+plot(density(xx[, "ltemp"]))
+abline(v = mnc_vietnam_obs['ltemp'], col = 'red')
