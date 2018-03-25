@@ -1,3 +1,285 @@
 \chapter{Introduction}
 
-Type your introduction here.  This is ``technically'' your first chapter of the dissertation/thesis.
+Much of our social, economic, and political life is governed by two-sided
+matching markets. In these matching markets, actors from two disjoint sets
+evaluate the characteristics of someone on the other side and voluntarily form a
+match if both deem each other satisfactory.\footnote{Throughout the
+  dissertation, I use ``two-sided matching market'' and ``matching market''
+  interchangeably. On the other hand, note that a two-sided market is not
+  necessarily a matching market \citep{Rysman2009}.} Marriage is a prominent
+example of such matching process. Others include the matching between firms and
+workers, federal judges and law clerks, the \textit{formateur} of a coalition
+government and other minority parties, or countries and multinational
+corporations (MNCs) that are looking for a location to invest.
+
+Two-sided matching market is substantively consequential because it often
+involves scarce, indivisible goods, such as life commitment to a marital partner
+or political allegiance in a coalition government. It is also intellectually
+interesting because the market outcome depends on the actions of both sides,
+demanding a different analytical approach from what's used for one-sided
+markets.
+
+This chapter will proceed as follows. First, I discuss the game theory
+literature of two-sided matching models, where much of the terminology and
+insight originate. I will highlight key results that are relevant to our goal of
+estimating actors' preference in matching markets. Second, I examine existing
+empirical studies of matching markets. Where existing studies have not taken
+into account the market's two-sided nature, I discuss how doing so can improve
+our understanding of the subject area. Where existing studies do model the
+two-sided dynamics, I discuss how they may or may not be used to study subjects
+that political scientists are interested in.
+
+\section{Game theory models of matching markets}
+\label{sec:game_theory}
+
+\citet{Gale1962} was the first to study the matching market, using marriage as
+an example. In this market, there are two finite and disjoint sets of actors:
+men and women. Each man has preferences over the women, and vice versa. Each
+man's preference can be represented as an ordered list, ranking each woman based
+on how much he likes her.
+
+The outcome of this market is a set of marriages, with none of some of people
+prefer to remain single. We call such a set of marriages a \textit{matching}
+$\mu$, which is a one-to-one function that matches a man with a woman. We refer
+to $\mu(x)$ as the \textit{mate} of $x$. For convenience, we say that if an
+individual decides to remain single, they are matched with themselves.
+
+We define a matching $\mu$ as \textit{stable} if it cannot be improved by any
+individual or any pair of agents. A matching can be improved in two ways. First,
+an individual may prefer to remain single than to be matched with his or her
+mate $\mu(x)$ under the current matching $\mu$. Second, a man and a woman may
+prefer to be with one another rather than whom they are currently matched with.
+Therefore, if a matching is stable, no one has a better option than their
+current situation.
+
+The first key result from the game theory literature is that for any set of
+preference, there always exists a stable matching \citep{Gale1962}. The proof is
+constructive, describing the ``deferred acceptance'' procedure that is
+guaranteed to produce a stable matching.\footnote{The ``deferred acceptance''
+  procedure works as follows. In the first stage, every man proposes to his
+  preferred mate. Every woman rejects all of her suitors except the one that she
+  most prefers. However, she does not yet accept her (so far) favorite suitor,
+  but keeps him along. In the second stage, every man that was rejected in the
+  previous round proposes to his second choice. Every woman then picks her
+  favorite from the set of new proposers and the man she keeps along from the
+  previous round. The procedure continues until there is no longer any woman
+  that is unmatched, at which point women finally accept their current favorite
+  choices. (This procedure is called \textit{deferred acceptance} to capture the
+  fact that women defer accepting her favorite choice until the last round in
+  case better options become available.) The resulting match is stable because,
+  throughout the procedure, every woman has received all the offers that would
+  have been made to her, and she has chosen her favorite among all of those
+  offers. If there were any other man that she would prefer to her current
+  match, that man would not have been available to her. Therefore, the final
+  match cannot be further improved by any man or woman.} This result provides
+some justifications for us to assume that the matching we observe in real
+matching market is stable, and that the agents' utility cannot be further
+improved. Our empirical model of two-sided matching markets thus needs to
+describe a process that produces a stable matching.
+
+While a central coordinator employing the \textit{deferred acceptance} algorithm
+is guaranteed to come up with a stable matching, it is unclear whether
+decentralized markets, such as the labor market or the FDI market, would be able
+to reach this outcome by themselves.\footnote{The deferred acceptance procedure
+  was used in the market for US medical residency with enthusiastic
+  participation from medical students and hospitals. The high participation rate
+  indicates that the matching produced is stable enough to entice students and
+  hospitals away from arranging their own matches outside of the centralized
+  market.} The second key result from the game theory literature is that stable
+matching in decentralized matching market is indeed possible, even likely. For
+example, \citet{Roth2016} show that, starting from an arbitrary matching, the
+market can converge to a stable matching with probability 1 if we allow random
+blocking pairs, i.e. two individuals that are not matched but prefer each other
+to their current match, to break off and form their own match. In addition,
+\citet{Adachi2003} shows that a random search process, in which pairs of man and
+woman randomly meet and decide whether each other is better than their current
+mates, will converge towards a stable matching if the search cost is
+negligible.\footnote{In this model, searching has a time cost. Thus, negligible
+  search cost is modeled as agents having a time discount close to 1.} These
+results further suggest that the matching we observe in decentralized markets is
+likely stable. Therefore, our empirical model of matching markets to describe a
+process that produces a stable matching.
+
+The third key result is that all conclusions regarding the one-to-one matching
+market (e.g. marriage) generalize to the many-to-one matching market (e.g.
+college admission, labor market), albeit requiring additional assumptions
+\citet{Roth1992}. One important assumption is that firms treat workers as
+substitutes, not complements. In other words, firms never regret hiring a worker
+even if another worker is no longer available. Therefore, when we conduct
+empirical analysis of many-to-one markets, we should focus on markets where
+agents have such ``substitutable preference.'' Otherwise, a stable matching is
+not guaranteed, agents' utility functions are interdependent, and it becomes
+unclear what kind of matching process our empirical model should approximate.
+
+\section{Empirical models of matching markets}
+
+The game theory literature takes the agents' preference as given and proves the
+existence of a stable matching. In contrast, empirical models of matching
+markets takes the observed matching as given and attempt to estimate the agents'
+preference.
+
+Unfortunately, most extant empirical models fail to adequately account for the
+structure of a two-sided matching market. Often, researchers simply analyze the
+market from one side, e.g. estimating a firm's preference by looking at the type
+of workers it hires. This approach does not take into account the fact that a
+match depends not only on the agent's preference but also his opportunity. For
+example, a farm may prefer to hire highly-educated workers but cannot do so
+because highly-educated workers do not want to work on farms. Modeling this
+interaction between preference and opportunity is the key contribution of this
+dissertation.
+
+Alternatively, some researchers measure agents' preferences by surveying them
+directly \citep{Posner2001, Sprecher1994}. While this approach circumvents the
+need to disentangle preference and opportunity, it can only measure agents'
+\textit{stated} preference. In addition, such surveys require a high data
+collection effort while data on final matching (e.g. married couples, workers'
+current job, country location of MNCs) are widely available. This dissertation
+aims to make use of such available data to estimate agents' \textit{revealed}
+preference.
+
+Below I discuss existing empirical models of matching markets. First, I discuss
+two markets of interest to political scientists: the US federal clerkship market
+and the ``market'' for forming a coalition government. Researchers in both
+subject areas have not approached the problem with an empirical model that
+adequately captures its two-sided dynamics.
+
+Second, I examine models from other disciplines that do take into account the
+two-sided dynamics of matching markets. I start with machine learning models
+applied to online marketplaces and dating sites. Then, I discuss the statistical
+models of the labor market \citep{Logan1996} and the marriage market
+\citep{Logan2008}, which are most relevant to our goal of estimating agents'
+preference based on observed match data. These statistical models serve as the
+foundation of my empirical approach.
+
+\subsection{US federal clerkship market}
+
+In the US, graduates at top law schools vie for the best federal clerkships
+every year. These temporary, one-to-two-year positions are the launching pad for
+Supreme Court clerkships, prestigious teaching jobs, or employment at top law
+firms. On the other side, federal judges also compete for the best law
+graduates, who help reduce the judges' workload from copy-editing to drafting
+opinions \citep{Gulati2016, Posner2001}. Because the first clerkship tends to
+have an outsized ideological influence on law graduates, this matching market
+has important implications for the polarization of the judicial branch
+\citep{Ditslear2001, Liptak2007}.
+
+The market for US federal clerkship has been noted as a classic case of a
+two-sided market. Clerks look for positions that provide not only prestige and
+connection but also comfortable quality of life \citep{Posner2001}. Judges
+select law graduates based on not only academic credentials but also, some
+argue, ideology, gender, and race \citep{Slotnick1984}. This market also suffers
+from strategic behavior emblematic of a matching market, such as offers being
+made aggressively early and with a short time to accept \citep{Posner2001,
+  Posner2007}.
+
+One approach to estimating the preference of agents in this market is to survey
+clerks and judges directly \citep{Peppers2008}. However, as discussed, this
+approach only measures stated preference, which is likely to suffer from social
+desirability bias when it comes to dimensions that we care about most such as
+matching based on ideology, gender, or race.
+
+Other approaches estimate revealed preference by using observed hiring outcome.
+However, no existing study has properly taken into account the two-sided nature
+of the market, thus confusing the effects of preference and opportunity. For
+example, \citet{Bonica2017} use political contribution data (DIME dataset) to
+measure political ideology, then correlate the ideology of the hiring judge and
+the ideology of his clerks. This approach does not take into account the pool of
+applicants, leading to conclusions such as conservative judges hire more liberal
+clerks than conservative clerks \citep[31]{Bonica2017}. This curious finding has
+a potentially simple explanation: the pool of top law graduates tend to be
+overwhelmingly liberal, leaving conservative judges with no choice. Despite
+this issue, the authors proceed to measure judges' ideology by taking the
+average of their clerks' ideology. Without taking the pool of applicants into
+account, they may wrongly conclude that conservative judges are more liberal
+than they actually are.
+
+In another approach, \citet{Rozema2016} model the process as a discrete choice
+problem, in which clerks are differentiated products that Supreme Court justices
+select to maximize their utilities. Their model does not consider what clerks
+think about the offer because of their focus on Supreme Court clerkships, whose
+unparalleled prestige ensures that any offer made will be accepted. However, if
+we want to extend the model to the broader market of federal clerkship, such
+assumption is untenable.
+
+\subsection{The market for forming a coalition government}
+
+Besides election, government formation is the most consequential political
+process in determining which government people are subject to. Most extant
+studies of government formation are either game theoretic models or thick,
+``inside-the-Beltway'' narratives. Potential advances can be made if we consider
+government formation as a many-to-one matching market, with the
+\textit{formateur} party on one side and other minority parties on the
+other.\footnote{The \textit{formateur} party could be the one with the
+  procedural power to set up the coalition, e.g. the incumbent party, or the
+  largest party in established coalitions.}
+
+A two-sided matching model of government formation would complement the game
+theory literature that models politicians as policy-seeking (as opposed to
+office-seeking) \citep{Laver1998}. When politicians are policy-seeking, parties
+have policy positions that can be modeled as their characteristics. Then,
+parties choose one another to form a coalition based on their policy positions,
+akin to men and women choosing one another to form a marriage based on their
+height or income.\footnote{In contrast, when politicians are office-seeking, the
+  only coin of the realm is the number of legislative seats that a party
+  controls. It determines both the inclusion of the party in the government and
+  its portfolio allocation. In this framework, concepts like power indices and
+  dominant parties are all about how parties can bring its controlled seats to a
+  coalition to turn it into a winning coalition.} As the game theory literature
+suggests, ideologically compact coalitions are more valuable because they entail
+a smaller cost in terms of policy compromises \citep{DeSwaan1973}. With the empirical
+matching model, we can test if parties do indeed prefer others that are
+ideologically close to themselves.
+
+In addition, an advantage of the two-sided matching approach is its ability to
+consider multidimensional policy spaces. By considering a party's positions on
+various policies as their covariates, we would be able to estimate parties'
+relative preference for ideological proximity across policy dimensions.
+
+\subsection{The FDI market}
+
+To be introduced here, or kept until its own empirical chapter?
+
+\subsection{Recommender system for online two-sided markets}
+
+In recent years, the Internet underwent a proliferation of two-sided matching
+markets such as online marketplaces (e.g. AirBnB), dating sites (e.g. eHarmony),
+or job board (e.g. Elance). To help their users discover a match quicker, these
+sites often build a recommender system that suggests potential
+matches.\footnote{To clarify, the term ``recommender system'' typically refers
+  to systems that recommend items to users based on the reviews of users like
+  them. That is not what we are discussing here. Instead, we focus on matching
+  markets where the recommender system recommends users to one another.} To
+maximize user engagement and profitability, these sites are incentivized to make
+recommendations that resemble a stable matching so that their users get the best
+match possible. And fo find the stable matching, they have to first estimate the
+preferences of their users.
+
+While most of these algorithms are proprietary, some academic publications have
+addressed this problem. An interesting approach is the paper by \citet{Tu2014},
+which uses the Latent Dirichlet allocation (LDA) model to uncover the latent
+types of users based on their activities on an online dating
+platform.\footnote{Besides \citet{Tu2014}, \citet{Hitsch2010, Goswami2014} are
+  two other attempts to estimate users' preference in online matching markets.
+  However, these papers take a simple one-sided approach, ignoring the interplay
+  between preference and opportunity. Therefore, I don't discuss them further
+  here.} In the original application of LDA model in topic modeling, each
+document is a mixture of latent topics, and each topic is a distribution over
+words. In this application, each user is a mixture of latent ``types,'' and each
+type is a distribution signifying relative preference over various mates'
+features. For example, the ``outdoor type'' may have higher preference for
+athleticism or dog ownership over other traits.
+
+While the LDA model works well for the online dating market, it is not
+applicable to most social science problems for two reasons. First, this model
+requires data of users reaching out to multiple partners rather than just the
+final match. Second, while the LDA model uncovers users' latent types, most
+social scientists want to estimate the preference of specific, known types (e.g.
+how different regime types may prefer different characteristics of an MNC).
+
+\subsection{Two-sided models for the labor and marriage markets}
+
+To be introduced here, or in their own chapters?
+
+\section{Conclusion}
+
+Roadmap for the rest of the dissertation

@@ -1,0 +1,87 @@
+\chapter{Derivation of the Metropolis-Hastings Acceptance Ratio}
+\label{chap:MH_ratio}
+
+\subsection{Opportunity sets $O$}
+
+Target distribution for a firm $i$ 
+
+\begin{align}
+p(O_i | A_i, \alpha, \bm{\beta}) &= \frac{p(O_i, A_i, \alpha, \bm{\beta})}{p(A_i, \alpha, \bm{\beta})}
+\end{align}
+
+\begin{align}
+MH_O = \frac{p(O_i^* | A_i, \alpha, \bm{\beta})}{p(O_i | A_i, \alpha, \bm{\beta})} &= \frac{p(O_i^*, A_i, \alpha, \bm{\beta})}{p(A_i, \alpha, \bm{\beta})} \times \frac{p(A_i, \alpha, \bm{\beta})}{p(O_i, A_i, \alpha, \bm{\beta})} \\
+&= \frac{p(O_i^*, A_i, \alpha, \bm{\beta})}{p(O_i, A_i, \alpha, \bm{\beta})} \\
+&= \frac{p(A_i | O_i^*, \alpha)p(O_i^*|\bm{\beta})}{p(A_i | O_i, \alpha)p(O_i|\bm{\beta})} \label{eq:updateO_joint_dist_into_conditional_dist} \\
+\end{align}
+
+where the factorization of the likelihood in \eqref{eq:updateO_joint_dist_into_conditional_dist} is due to the fact that the acceptance of firm $i$ only depends on what is offered to it and what is its preference, $p(A_i | O_i^*, \alpha)$; what is offered to $i$ depends on the preferences of all countries, $p(O_i^* | \bm{\beta})$.
+
+If we plug in \eqref{eq:conditional_probability_of_accept} and \eqref{eq:conditional_probability_of_offer}
+
+\begin{align}
+\frac{p(O_i^* | A_i, \alpha, \bm{\beta})}{p(O_i | A_i, \alpha, \bm{\beta})} &= \frac{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j) + \exp(\alpha' W_{j^*})} \times \exp(\bm{\beta}_{j^*}'X_i)
+\end{align}
+
+where $j^*$ is the index of the newly sampled job. This is the case when the newly proposed job is not already offered, so it's added to the opportunity set.
+
+When the newly proposed job is already offered, so it's removed from the opportunity set, we have
+
+\begin{align}
+\frac{p(O_i^* | A_i, \alpha, \bm{\beta})}{p(O_i | A_i, \alpha, \bm{\beta})} &= \frac{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j) - \exp(\alpha' W_{j^*})} \times \exp(- \bm{\beta}_{j^*}'X_i)
+\end{align}
+
+\subsection{Workers' parameters, $\alpha$}
+
+Target distribution:
+
+\begin{align}
+p(\alpha | A, O, \bm{\beta}) &= \frac{p(O, A, \alpha, \bm{\beta})}{p(A, O, \bm{\beta})}
+\end{align}
+
+Metropolis-Hasting acceptance ratio:
+
+\begin{align}
+MH_\alpha = \frac{p(\alpha^* | A, O, \bm{\beta})}{p(\alpha | A, O, \bm{\beta})} &= \frac{p(A_i | O_i, \alpha^*)p(O_i|\bm{\beta}) p(\alpha^*)}{p(A_i | O_i, \alpha)p(O_i|\bm{\beta}) p(\alpha)} \\
+&= \frac{p(A_i | O_i, \alpha^*)p(\alpha^*)}{p(A_i | O_i, \alpha) p(\alpha)} \label{eq:updatealpha_MHratio_final}
+\end{align}
+
+where \eqref{eq:updatealpha_MHratio_final} is due to the symmetric proposal distribution (so $\frac{p(\alpha^*|\alpha)}{p(\alpha|\alpha^*)} = 1$)
+
+If we plug in \eqref{eq:conditional_probability_of_accept},
+
+\begin{align}
+MH_\alpha &= \prod_i \left[ \frac{\exp(\alpha^{*\prime} W_{a_i})}{\exp(\alpha' W_{a_i})} \times \frac{\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime}W_j)} \right] \times \frac{p(\alpha^*)}{p(\alpha)}\\
+&= \prod_i \left[ \exp(\epsilon_\alpha ' W_{a_i}) \times \frac{\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime}W_j)} \right] \times \frac{p(\alpha^*)}{p(\alpha)}
+\end{align}
+
+Finally, we log transform the MH acceptance ratio for numerical stability.
+
+\begin{align}
+\log MH_\alpha &= \sum_i \left[ \epsilon_\alpha' W_{a_i} + \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) - \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \right] + \log p(\alpha^*) - \log p(\alpha)
+\end{align}
+
+\subsection{Firms' parameters, \texorpdfstring{$\boldmath\beta$}{}}
+
+Target distribution:
+
+\begin{align}
+p(\bm{\beta}|A, O, \alpha) &= \frac{p(O, A, \alpha, \bm{\beta})}{p(A, O, \alpha)}
+\end{align}
+
+Metropolis-Hasting acceptance ratio:
+
+\begin{align}
+MH_\beta = \frac{p(\beta^* | A, O, \alpha)}{p(\beta | A, O, \alpha)} &= \frac{p(A_i | O_i, \alpha)p(O_i|\bm{\beta}^*)p(\bm{\beta}^*|\mu_{\beta}, \tau_{\beta})}{p(A_i | O_i, \alpha)p(O_i|\bm{\beta})p(\bm{\beta}|\mu_{\beta}, \tau_{\beta})} \label{eq:updatebeta_MHratio_simplify} \\
+&= \frac{p(O_i|\bm{\beta}^*)p(\bm{\beta}^*|\mu_{\beta}, \tau_{\beta})}{p(O_i|\bm{\beta})p(\bm{\beta}|\mu_{\beta}, \tau_{\beta})} \label{eq:updatebeta_MHratio_final}
+\end{align}
+
+where \eqref{eq:updatebeta_MHratio_simplify} is due to the symmetric proposal distribution.
+
+We plug in \eqref{eq:conditional_probability_of_offer},
+
+\begin{align}
+MH_\beta &= \prod_i \left[ \prod\limits_{j \in O_i}\frac{ \exp(\beta_j^{*\prime}X_i)}{ \exp(\beta_j^{\prime}X_i)} \times \prod\limits_{j}\frac{1 + \exp(\beta_j^{*\prime}X_i)}{1 + \exp(\beta_j^{\prime}X_i)} \right] \times \frac{MVN(\bm{\beta}^*|\mu_{\beta}, \tau_{\beta})}{MVN(\bm{\beta}|\mu_{\beta}, \tau_{\beta})} \\
+  \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \beta_j^{*\prime}X_i - \beta_j^{\prime}X_i + \sum_{j} \log(1 + {\exp({\beta_j^{*\prime}X_i})) - \log(1 +  \exp(\beta_j^{\prime}X_i})) \right] \\
+ & + \log MVN(\bm{\beta}^*|\mu_{\beta}, \tau_{\beta}) - \log MVN(\bm{\beta}|\mu_{\beta}, \tau_{\beta}) \nonumber
+\end{align}
