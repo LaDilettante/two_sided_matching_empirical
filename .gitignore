@@ -6,6 +6,8 @@ data_raw/*.sav
 result/
 __pycache__
 .ipynb_checkpoints
+*.el
+*.tex.bak
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
