@@ -193,24 +193,27 @@
 %----------------------------------------------------------------------
 \newcommand{\department}[1]{\gdef\@department{#1}}
 %\newcommand{\subject}[1]{\gdef\@subject{#1}}
-\newcommand{\supervisor}[1]{\gdef\@supervisor{#1}}
+\newcommand{\supervisora}[1]{\gdef\@supervisora{#1}}
+\newcommand{\supervisorb}[1]{\gdef\@supervisorb{#1}}
 \newcommand{\copyrighttext}[1]{\gdef\@copyrighttext{#1}}
 % Set default values
 \department{??DEPARTMENT??}
 %\subject{\@department}  
-\supervisor{??ADVISOR??}
+\supervisora{??ADVISOR??}
+\supervisorb{??ADVISOR??}
 \date{\number\year}
 \copyrighttext{All rights reserved}
 % Count the number of members, include supervisor
 \newcounter{@members}           % Number of member macros defined so far.
-\newcommand{\@membera}{\@member{\@supervisor, Supervisor}}
+\newcommand{\@membera}{\@member{\@supervisora, Co-Supervisor}}
 \setcounter{@members}{1}        % Supervisor is always 1st member
+\newcommand{\@memberb}{\@member{\@supervisorb, Co-Supervisor}}
+\addtocounter{@members}{1}        % Supervisor is always 1st member
 % Members must be counted . . . up to seven non-supervisor members
 \newcommand{\member}[1]{
   \addtocounter{@members}{1}    % Inc. num of members to include this new one.
   \ifcase\value{@members}
-	 \or \or  
-    \newcommand{\@memberb}{\@member{#1}} \or
+	 \or \or \or 
     \newcommand{\@memberc}{\@member{#1}} \or
     \newcommand{\@memberd}{\@member{#1}} \or
     \newcommand{\@membere}{\@member{#1}} \or

@@ -69,7 +69,7 @@ closed or very open to FDI. This concern is not hypothetical. Figure \ref{fig:ch
 
 \begin{figure}[!ht]
 \centering
-\includegraphics[width=0.75\textwidth,keepaspectratio]{../figure/china_fdi_restriction}
+\includegraphics[width=0.75\textwidth,keepaspectratio]{china_fdi_restriction}
 \caption{China's FDI Ownership Restriction, as coded in \citet{Pandya2010}. Prior to 1986, FDI in China was limited to few experimental Special Economic Zones, and thus not mentioned in US Investment Reports. The sharp spike in 1988 also does not seem to correspond to any actual change in policy, and likely another artifact of reporting. (See \citet{Zebregs2002} for a historical overview of China's FDI policy.)}
 \label{fig:china_fdi_restriction}
 \end{figure}
@@ -269,10 +269,82 @@ For countries' characteristics that firms consider, I include:
 \item Democracy: Democracy has been a mainstay in the political science literature on FDI. Scholars have argued that MNCs want to invest in democratic regimes for various reasons, including stable policy, credible commitment, and strong property rights \citep{Ahlquist2006, Li2003, Jensen2003}. On the other hand, recent works have also argued that democratic regimes want FDI more than autocratic regimes \citep{Pandya2016}. Thus, it is unclear whether the observed high level of FDI in democracies is due to the push or the pull factors. By controlling for countries' preference in the two-sided matching model, I can better estimate the effect of democracies on firms' utility. I measure democracy using the binary Demoracy \& Dictatorship, developed by \citet{Cheibub2009b}.
 \end{itemize}
 
+\section{Result}
+\label{sec:result}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.75\textwidth,keepaspectratio]{japan96_alpha}
+  \caption{MNCs' preference}
+  \label{fig:japan96_alpha}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_ltemp_luscptl}
+  \caption{Posterior density of the preference parameters for log total
+    employees (left) and log capital, in US dollars (right).}
+  \label{fig:japan96_beta_ltemp_luscptl}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_intrd_intexp}
+  \caption{Posterior density of the preference parameters for R\&D intensity and
+    export intensity.}
+  \label{fig:japan96_beta_intrd_intexp}
+\end{figure}
+
+\section{Model fit}
+\label{sec:model_fit}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_prob_being_chosen_by_MNC_one_sided}
+  \caption{Predicted probability of MNC choice, unconditional on preference of countries}
+  \label{fig:japan96_prob_being_chosen_by_MNC_one_sided}
+\end{figure}
+
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_prob_being_chosen_by_MNC_two_sided}
+  \caption{Predicted probability of MNC location choice, taking into account the
+  two sided nature of the market}
+  \label{fig:japan96_prob_being_chosen_by_MNC_two_sided}
+\end{figure}
+
+Profiles of firms
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_sim_mean_ltemp}
+  \caption{Mean log Employee of MNCs in different countries}
+  \label{fig:japan96_sim_mean_ltemp}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_sim_var_ltemp}
+  \caption{Variance log Employee of MNCs in different countries}
+  \label{fig:japan96_sim_var_ltemp}
+\end{figure}
 
 \section{Conclusion}
 \label{sec:conclusion}
 
 In this paper, I propose the two-sided matching model to estimate firms' and countries' preferences, solving three persistent issues in the literature of FDI's political determinants. The results indicate that, for Japanese MNCs, only a country's level of development matters and not its market size, labor quality, or regime type. This finding suggests that we should take a closer look at the relationship between democracies and MNCs. Since previous works in the literature have not controlled for countries' preferences, they may have mistaken democracies' love for FDI as FDI's fondness for democracies.
 
-On the other hand, the model's estimation of countries' preference remains lacking. Since each country has its own set of parameters, the parameter space seems too large for the current implementation of the Metropolis-Hastings algorithm to fully explore. Several solutions are possible. First, we can collapse countries into categories of interest, e.g. regime types, (categorical) time horizon length. Second, we can build a hierarchical model, modeling countries' preferences as draws from a common distribution. Such model will allow us to pool information across countries and reduce the parameter space.
+On the other hand, the model's estimation of countries' preference remains
+lacking. Since each country has its own set of parameters, the parameter space
+seems too large for the current implementation of the Metropolis-Hastings
+algorithm to fully explore. Several solutions are possible. First, we can
+collapse countries into categories of interest, e.g. regime types, (categorical)
+time horizon length. Second, we can build a hierarchical model, modeling
+countries' preferences as draws from a common distribution. Such model will
+allow us to pool information across countries and reduce the parameter space.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../AnhLe_dissertation.tex"
+%%% End: 

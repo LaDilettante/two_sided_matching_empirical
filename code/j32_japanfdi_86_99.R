@@ -34,8 +34,7 @@ df_nation_id <- df_mnc %>% select(nation) %>% distinct() %>%
 
 # Merge nation_id back, finalize
 df_mnc <- df_mnc %>%
-  inner_join(df_nation_id, by = 'nation') %>%
-  select(ltemp, luscptl, int_r_d, int_exp, nation_id)
+  inner_join(df_nation_id, by = 'nation')
 
 xx <- df_mnc %>%
   mutate(one = 1) %>%

@@ -1,7 +1,7 @@
 \chapter{Derivation of the Metropolis-Hastings Acceptance Ratio}
 \label{chap:MH_ratio}
 
-\subsection{Opportunity sets $O$}
+\subsection{Opportunity sets \texorpdfstring{$O$}{O}}
 
 Target distribution for a firm $i$ 
 
@@ -31,7 +31,7 @@ When the newly proposed job is already offered, so it's removed from the opportu
 \frac{p(O_i^* | A_i, \alpha, \bm{\beta})}{p(O_i | A_i, \alpha, \bm{\beta})} &= \frac{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j) - \exp(\alpha' W_{j^*})} \times \exp(- \bm{\beta}_{j^*}'X_i)
 \end{align}
 
-\subsection{Workers' parameters, $\alpha$}
+\subsection{Workers' parameters, \texorpdfstring{$\alpha$}{alpha}}
 
 Target distribution:
 
@@ -61,7 +61,7 @@ Finally, we log transform the MH acceptance ratio for numerical stability.
 \log MH_\alpha &= \sum_i \left[ \epsilon_\alpha' W_{a_i} + \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) - \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \right] + \log p(\alpha^*) - \log p(\alpha)
 \end{align}
 
-\subsection{Firms' parameters, \texorpdfstring{$\boldmath\beta$}{}}
+\subsection{Firms' parameters, \texorpdfstring{$\boldmath\beta$}{beta}}
 
 Target distribution:
 
