@@ -43,6 +43,54 @@ plot_posterior_dens(result$beta[start:end, 'int_exp', ],
                     xlab = "Coefficient for export intensity", order = TRUE)
 dev.off()
 
+# ---- Predicted effect of a variable on probability of a country offering to a firm ----
+
+f_predicted_effect <- function(varname, varvalues, actorj) {
+  beta_tmp <- beta[sample(1:nrow(beta), 1000, replace = TRUE), , actorj]
+  
+  scenario <- t(replicate(length(varvalues), apply(xx, 2, median)))
+  scenario[ , varname] <- varvalues
+  lin_pred <- beta_tmp %*% t(scenario)
+  prob <- exp(lin_pred) / (1 + exp(lin_pred))
+  molten <- reshape2::melt(prob)
+  molten %>% group_by(Var2) %>% 
+    summarise(mean = mean(value),
+              lower95 = quantile(value, probs = 0.05),
+              upper95 = quantile(value, probs = 0.95)) %>%
+    mutate(actorj = actorj, !!varname := varvalues)
+}
+
+china <- f_predicted_effect(varname = "ltemp", 
+                   varvalues = quantile(xx[ , "ltemp"], probs = seq(0, 1, by = 0.05)),
+                   actorj = "China")
+sk <- f_predicted_effect(varname = "ltemp", 
+                   varvalues = quantile(xx[ , "ltemp"], probs = seq(0, 1, by = 0.05)),
+                   actorj = "South Korea")
+pd <- dplyr::bind_rows(china, sk) %>%
+  mutate(temp = exp(ltemp))
+
+pdf("../figure/japan96_effect_of_temp.pdf", w = 9, h = 5)
+ggplot(pd, aes(x = ltemp)) +
+  geom_line(aes(y = mean, color = actorj)) +
+  geom_ribbon(aes(ymin = lower95, ymax = upper95, fill = actorj), alpha = 0.25) +
+  geom_rug(data = df_mnc) +
+  scale_x_continuous(breaks = log(c(12.5, 50, 200, 800, 3200)),
+                     labels = function(x) exp(x)) +
+  scale_color_discrete("Country") +
+  scale_fill_discrete("Country") + 
+  labs(x = "Number of Employees", y = "Probability")
+dev.off()
+
+ggplot(pd, aes(x = temp)) +
+  geom_line(aes(y = mean, color = actorj)) +
+  geom_ribbon(aes(ymin = lower95, ymax = upper95, fill = actorj), alpha = 0.25) +
+  geom_rug(data = df_mnc, aes(x = exp(ltemp)))
+
+p1 <- ggplot(mpg, aes(displ, hwy)) +
+  geom_point()
+p1
+p1 + scale_y_log10()
+
 # ---- prob of a country being chosen, predicted vs true ----
 
 # but this doesn't take into account the other side though
@@ -55,9 +103,6 @@ plot_multinom_pred(alpha, ww, observed_prop) +
   labs(x = "Country") +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 dev.off()
-
-# ---- simulation result ----
-
 
 # ---- prob a country being chosen, simulate both sides ----
 sim_choice <- t(replicate(1000, f_sim(alpha, beta)))
