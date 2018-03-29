@@ -4,10 +4,8 @@
 
 // [[Rcpp::export]]
 // Generate a vector of new offers, length n_i * number_of_new_offers
-Rcpp::IntegerVector new_offer(int n_i, int n_j, int size) {
+Rcpp::IntegerVector new_offer(int n_i, Rcpp::IntegerVector choice, int size) {
   Rcpp::IntegerVector out(n_i * size);
-  
-  Rcpp::IntegerVector choice = Rcpp::seq(2, n_j);
   
   for (int i = 0; i < n_i; ++i) {
     Rcpp::IntegerVector idx = Rcpp::seq(i * size, (i + 1) * size - 1);

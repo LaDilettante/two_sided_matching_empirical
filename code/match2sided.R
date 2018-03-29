@@ -145,11 +145,13 @@ calculate_C <- function(X_sample, t, C, Xbar, sd, eps = 0.01) {
 
 # ---- MCMC runs ----
 
+#' @param reserve_choice whether exists a reserve choice (e.g. unemployment)
 match2sided <- function(iter, t0 = iter / 10, thin = 10,
                         C_alpha, C_beta, C_beta_est,
                         starting_alpha, starting_beta,
                         frac_opp, prior,
                         ww, xx, choice, starting_opp,
+                        reserve_choice = FALSE,
                         to_save = c("alpha", "beta"),
                         file, write = FALSE) {
   if (write & (t0 < iter)) {
@@ -187,11 +189,14 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   # beta starting values (from 1-sided logit estimates)
   if (missing(starting_beta)) {
     starting_beta <- matrix(0, p_i, n_j)   # employer preferences
-    for(j in 1:n_j) {
+    for (j in 1:n_j) {
       y <- as.numeric(opp[, j])
       mod <- glm(y ~ . - 1, family=binomial, data=as.data.frame(xx))
       starting_beta[, j] <- mod$coef
-    }  
+    }
+    if (reserve_choice) {
+      starting_beta[, 1] <- 0 # Reserve choice doesn't have a preference
+    }
   }
   beta <- starting_beta
   betastar <- beta
@@ -263,7 +268,13 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
     for (i_thin in 1:thin) {
       # Update opp
       num_new_offers <- floor(frac_opp * n_j) # per i
-      new <- new_offer(n_i, n_j, num_new_offers)
+      
+      if (reserve_choice) {
+        new <- new_offer(n_i, 2:n_j, num_new_offers)  
+      } else {
+        new <- new_offer(n_i, 1:n_j, num_new_offers)
+      }
+      
       ind <- cbind(rep(1:n_i, each = num_new_offers), new)
       
       my_logmh_opp <- logmh_opp(opp, new, alpha, beta, ww, xx)
@@ -323,7 +334,12 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       # Update beta (except the beta of unemployment)
       if (missing(C_beta_est)) {
         if (i <= t0) {
-          C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
+          if (reserve_choice) {
+            C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))  
+          } else {
+            C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))  
+          }
+          
         } else if (i > t0) {
           if (i == t0 + 1) {
             # Calculate Cs and Xbars for the first time
@@ -354,7 +370,12 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
           }
         }
       }
-      deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
+      if (reserve_choice) {
+        deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j - 1)
+        deviation <- cbind(rep(0, p_i), deviation) # add the deviation for unemp. which is 0
+      } else {
+        deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
+      }
       betastar <- beta + deviation
       my_logmh_beta <- logmh_beta(beta, betastar, xx, opp,
                                    mu_beta, Tau_beta)

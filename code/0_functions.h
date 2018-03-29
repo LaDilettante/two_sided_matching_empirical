@@ -3,7 +3,7 @@
 
 #include <RcppArmadillo.h>
 
-Rcpp::IntegerVector new_offer(int n_i, int n_j, int size);
+Rcpp::IntegerVector new_offer(int n_i, Rcpp::IntegerVector choice, int size);
 
 double dmvnrm_arma_vec(arma::vec x, arma::vec mean, arma::mat sigma, 
                        bool logd);
