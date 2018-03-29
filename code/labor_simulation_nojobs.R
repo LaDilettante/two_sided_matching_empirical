@@ -63,7 +63,7 @@ summary(glm(starting_opp[, 4] ~ . - 1, family = binomial(link = "logit"),
 
 # ---- MCMC ----
 
-iter <- 1e4
+iter <- 10000
 start <- iter / 2
 thin <- 1
 p_i <- ncol(xx)
@@ -75,42 +75,47 @@ prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(0.01, p_j)))),
                               Sinv = solve(diag(rep(0.01, p_i)))))
 
 start_time <- Sys.time()
-res <- match2sided(iter = iter, t0 = iter + 1,
-                   C_alpha = diag(c(0.01, 0.1)), 
-                   C_beta = diag(c(0.01, rep(0.005, ncol(xx) - 1)) ** 2),
+res <- match2sided(iter = iter, t0 = iter / 2, thin = 5,
+                   C_alpha = diag(c(0.0005, 0.005)), 
+                   C_beta = diag(c(0.025, rep(0.0025, ncol(xx) - 1)) ** 2),
                    starting_alpha = rep(0, p_j),
                    frac_opp = 0.25, prior = prior,
                    ww = ww, xx = xx,
                    choice = choice, opp = obs_opp,
-                   to_save = c("alpha", "beta", "opp"),
+                   to_save = c("alpha", "beta"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
 
+# Acceptance rate
+colMeans(res$ok)
+
+# log posterior
+plot(res$lp[, 1], type = "l")
+plot(res$lp[, 2], type = "l")
+plot(res$lp[, 3], type = "l")
+
+# alpha
 pdf(paste0("../figure/alpha ", start_time, ".pdf"), w = 7.5, h = 5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$alpha), parameters = c(0.1, 1.0))
+my.plot.mcmc(mcmc(res$alpha), parameters = true_alpha)
 mtext("Workers' preference param", side = 3, line = 0, outer = TRUE)
 dev.off()
 
-plot(mcmc(res$alphastar))
+my.plot.mcmc(mcmc(res$alphastar), parameters = true_alpha)
 
-colMeans(res$alpha[start:iter, , drop = FALSE])
-
-mcmcse::mcse.multi(res$alpha)
-
+# beta
 mcmcse::mcse.multi(res$beta[start:iter, , 2]) # beta for the 1st employer
 pdf(paste0("../figure/beta_emp1 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-9.0, 0.2, 0.2))
+my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = true_beta[2, ])
 mtext("Employer 1's preference params",  side = 3, line = 0, outer = TRUE)
 dev.off()
 
-my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-9.0, 0.2, 0.2))
-plot(mcmc(res$betastar[, , 2]))
+my.plot.mcmc(mcmc(res$betastar[, , 2]), parameters = true_beta[2, ])
 
 mcmcse::mcse.multi(res$beta[start:iter, , 3]) # beta for the 2nd employer
 pdf(paste0("../figure/beta_emp2 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 3]), parameters = c(-10.0, 0.1, 0.2))
+my.plot.mcmc(mcmc(res$beta[, , 3]), parameters = true_beta[3, ])
 mtext("Employer 2's preference params", side = 3, line = 0, outer = TRUE)
 dev.off()
 

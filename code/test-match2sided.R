@@ -1,3 +1,4 @@
+library(testthat)
 context("Metropolis-Hasting acceptance ratio")
 source("match2sided.R")
 
@@ -21,8 +22,8 @@ prior <- list(alpha = list(mu = rnorm(p_j), Tau = solve(diag(abs(rnorm(p_j))))),
               Tau_beta = list(nu = p_i + 2, Sinv = solve(diag(abs(rnorm(p_i))))))
 
 ww <- matrix(rnorm(n_j * p_j), n_j, p_j)
-tmp <- as.matrix(ww[choice, ])
-wa <- apply(tmp, 2, sum)
+w_chosen <- as.matrix(ww[choice, ])
+wa <- apply(w_chosen, 2, sum)
 
 xx <- matrix(rnorm(n_i * p_i), n_i, p_i) # Characteristics of the multinomial side
 xx[, 1] <- 1 # The first column is the intercept
@@ -38,8 +39,8 @@ test_that("logmh_opp is correct", {
   oppstar <- opp
   oppstar[indnew] <- !(opp[indnew])
   
-  expected <- joint_lpdf(oppstar, choice, alpha, beta, mu_beta, Tau_beta, prior, ww, xx) -
-    joint_lpdf(opp, choice, alpha, beta, mu_beta, Tau_beta, prior, ww, xx)
+  expected <- joint_lpdf(oppstar, alpha, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx) -
+    joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx)
   # We need to sum because this is across workers
   observed <- sum(logmh_opp(opp, new, alpha, beta, ww, xx))
   expect_equal(expected, observed)
@@ -50,8 +51,8 @@ test_that("logmh_alpha is correct", {
   deviation <- eps * runif(length(alpha), min=-1, max=1) # Symmetric proposal
   alphastar <- alpha + deviation
   
-  expected <- joint_lpdf(opp, choice, alphastar, beta, mu_beta, Tau_beta, prior, ww, xx) -
-    joint_lpdf(opp, choice, alpha, beta, mu_beta, Tau_beta, prior, ww, xx)
+  expected <- joint_lpdf(opp, alphastar, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx) -
+    joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx)
   observed <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
   expect_equal(expected, observed)
 })
@@ -72,8 +73,8 @@ test_that("logmh_beta is correct", {
   deviation <- bmat * rmat
   betastar <- beta + deviation
   
-  expected <- joint_lpdf(opp, choice, alpha, betastar, mu_beta, Tau_beta, prior, ww, xx) -
-    joint_lpdf(opp, choice, alpha, beta, mu_beta, Tau_beta, prior, ww, xx)
+  expected <- joint_lpdf(opp, alpha, betastar, mu_beta, Tau_beta, prior, ww, w_chosen, xx) -
+    joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx)
   observed <- logmh_beta(beta, betastar, xx, opp, mu_beta, Tau_beta)
   expect_equal(expected, observed)
 })
@@ -83,8 +84,8 @@ context("hyperparameters conditional")
 test_that("cond_mu_beta is correct", {
   mu_beta2 <- rnorm(p_i)
   
-  expected <- joint_lpdf(opp, choice, alpha, beta, mu_beta, Tau_beta, prior, ww, xx) -
-    joint_lpdf(opp, choice, alpha, beta, mu_beta2, Tau_beta, prior, ww, xx)
+  expected <- joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx) -
+    joint_lpdf(opp, alpha, beta, mu_beta2, Tau_beta, prior, ww, w_chosen, xx)
   posterior <- cond_mu_beta(Tau_beta, prior, beta)
   observed <- mvtnorm::dmvnorm(mu_beta, posterior$m, posterior$V, log = TRUE) -
     mvtnorm::dmvnorm(mu_beta2, posterior$m, posterior$V, log = TRUE)
@@ -94,8 +95,8 @@ test_that("cond_mu_beta is correct", {
 test_that("cond_Tau_beta is correct", {
   Tau_beta2 <- solve(diag(abs(rnorm(p_i))))
   
-  expected <- joint_lpdf(opp, choice, alpha, beta, mu_beta, Tau_beta, prior, ww, xx) -
-    joint_lpdf(opp, choice, alpha, beta, mu_beta, Tau_beta2, prior, ww, xx)
+  expected <- joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta, prior, ww, w_chosen, xx) -
+    joint_lpdf(opp, alpha, beta, mu_beta, Tau_beta2, prior, ww, w_chosen, xx)
   posterior <- cond_Tau_beta(mu_beta, prior, beta)
   observed <- log(MCMCpack::dwish(Tau_beta, posterior$nu, posterior$Sinv)) -
     log(MCMCpack::dwish(Tau_beta2, posterior$nu, posterior$Sinv))

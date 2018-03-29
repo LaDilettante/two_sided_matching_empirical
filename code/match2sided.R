@@ -24,10 +24,9 @@ f_logp_O <- function(opp, beta, xx) {
   sum(opp * XB) - sum(log1p(exp(XB)))
 }
 
-joint_lpdf <- function(opp, choice, alpha, beta,
+joint_lpdf <- function(opp, alpha, beta,
                        mu_beta, Tau_beta,
                        prior, ww, w_chosen, xx) {
-  n_i <- length(choice)
   logp_A <- f_logp_A(opp, alpha, ww, w_chosen)
   logp_O <- f_logp_O(opp, beta, xx)
 
@@ -38,10 +37,9 @@ joint_lpdf <- function(opp, choice, alpha, beta,
            log(MCMCpack::dwish(Tau_beta, prior$Tau_beta$nu, prior$Tau_beta$S)))
 }
 
-joint_lpdfC <- function(opp, choice, alpha, beta,
+joint_lpdfC <- function(opp, alpha, beta,
                        mu_beta, Tau_beta,
                        prior, ww, w_chosen, xx) {
-  n_i <- length(choice)
   logp_A <- f_logp_A(opp, alpha, ww, w_chosen)
   logp_O <- f_logp_O(opp, beta, xx)
   
@@ -91,7 +89,6 @@ logmh_alpha <- function(alpha, alphastar, ww, opp, wa, prior) {
   pA_den <- opp %*% exp_WA
   exp_WA_star <-  exp(ww %*% alphastar)
   pA_denstar <- opp %*% exp_WA_star
-  
   logmh_alpha <- sum(wa * (alphastar - alpha)) + sum(log(pA_den) - log(pA_denstar)) +
     mvtnorm::dmvnorm(alphastar, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE) -
     mvtnorm::dmvnorm(alpha, prior$alpha$mu, solve(prior$alpha$Tau), log = TRUE)
@@ -149,10 +146,10 @@ calculate_C <- function(X_sample, t, C, Xbar, sd, eps = 0.01) {
 # ---- MCMC runs ----
 
 match2sided <- function(iter, t0 = iter / 10, thin = 10,
-                        C_alpha, C_beta,
+                        C_alpha, C_beta, C_beta_est,
                         starting_alpha, starting_beta,
                         frac_opp, prior,
-                        ww, xx, choice, opp,
+                        ww, xx, choice, starting_opp,
                         to_save = c("alpha", "beta"),
                         file, write = FALSE) {
   if (write & (t0 < iter)) {
@@ -175,6 +172,10 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   }
   
   # ---- Starting values ----
+  # opp
+  opp <- starting_opp
+ 
+  # alpha 
   if (missing(starting_alpha)) {
     starting_alpha <- rep(0, p_j)            # worker preferences  
   }
@@ -242,7 +243,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   }
   
   # Store results
-  logpost[1, 1] <- joint_lpdfC(opp, choice,
+  logpost[1, 1] <- joint_lpdfC(opp,
                               alpha, beta, mu_beta, Tau_beta, prior,
                               ww, w_chosen, xx)
   logpost[1, 2] <- f_logp_A(opp, alpha, ww, w_chosen)
@@ -310,56 +311,52 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       }
       alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
       
-      my_logmh_alpha <- logmh_alphaC(alpha, alphastar, ww, opp, wa,
+      # my_logmh_alphaR <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
+      my_logmh_alpha <- logmh_alphaC(alpha, alphastar, ww, t(opp), wa,
                                      prior$alpha$mu, prior$alpha$Tau)
       ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
-      tryCatch({
-        if (ok_alpha) {
-            alpha <- alphastar
-            acceptance_rate[2] <- acceptance_rate[2] + 1
-        }
-      }, error = function(cond) {
-        print(cond)
-        print(ok_alpha, my_logmh_alpha)
-        print(alpha, alphastar)
-        browser()
-      })
+      if (ok_alpha) {
+          alpha <- alphastar
+          acceptance_rate[2] <- acceptance_rate[2] + 1
+      }
       
       # Update beta (except the beta of unemployment)
-      if (i <= t0) {
-        C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
-      } else if (i > t0) {
-        if (i == t0 + 1) {
-          # Calculate Cs and Xbars for the first time
-          idx_first_accept_beta <- min(which(ok[, "beta"] == 1))
-          beta_samples <- bsave[idx_first_accept_beta:(i - 1), , 2:n_j, drop = FALSE]
-          dim(beta_samples) <- c(i - idx_first_accept_beta, p_i * (n_j - 1))
-          C_beta_est <- sd_beta * var(beta_samples) + sd_beta * eps * diag(p_i * (n_j - 1))
-          Xbar_beta_est <- colMeans(beta_samples)
-        } else {
-          if (i %% 200 == 0) { # Periodically check acceptance rate
-            ok_rate_beta <- mean(ok[(i - 200):(i - 1), "beta"])
-            if (ok_rate_beta < 0.1) {
-              sd_beta <- sd_beta * 1 / 10
-              cat("sd_beta decreases to", sd_beta, "\n")
-            } else if (ok_rate_beta > 0.4) {
-              sd_beta <- sd_beta * 10
-              cat("sd_beta increases to", sd_beta, "\n")
+      if (missing(C_beta_est)) {
+        if (i <= t0) {
+          C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))
+        } else if (i > t0) {
+          if (i == t0 + 1) {
+            # Calculate Cs and Xbars for the first time
+            idx_first_accept_beta <- min(which(ok[, "beta"] == 1))
+            beta_samples <- bsave[idx_first_accept_beta:(i - 1), , 2:n_j, drop = FALSE]
+            dim(beta_samples) <- c(i - idx_first_accept_beta, p_i * (n_j - 1))
+            C_beta_est <- sd_beta * var(beta_samples) + sd_beta * eps * diag(p_i * (n_j - 1))
+            Xbar_beta_est <- colMeans(beta_samples)
+          } else {
+            if (i %% 200 == 0) { # Periodically check acceptance rate
+              ok_rate_beta <- mean(ok[(i - 200):(i - 1), "beta"])
+              if (ok_rate_beta < 0.1) {
+                sd_beta <- sd_beta * 1 / 10
+                cat("sd_beta decreases to", sd_beta, "\n")
+              } else if (ok_rate_beta > 0.4) {
+                sd_beta <- sd_beta * 10
+                cat("sd_beta increases to", sd_beta, "\n")
+              }
             }
+            # Calculate Cs and Xbars recursively
+            # (notice we're passing in old values of Cs and Xbars)
+            beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
+            res <- calculate_C(X_sample = beta_sample, t = i, 
+                               C = C_beta_est, Xbar = Xbar_beta_est,
+                               sd = sd_beta)
+            Xbar_beta_est <- res$Xbar
+            C_beta_est <- res$C
           }
-          # Calculate Cs and Xbars recursively
-          # (notice we're passing in old values of Cs and Xbars)
-          beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
-          res <- calculate_C(X_sample = beta_sample, t = i, 
-                             C = C_beta_est, Xbar = Xbar_beta_est,
-                             sd = sd_beta)
-          Xbar_beta_est <- res$Xbar
-          C_beta_est <- res$C
         }
       }
       deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
       betastar <- beta + deviation
-      my_logmh_beta <- logmh_betaC(beta, betastar, xx, opp,
+      my_logmh_beta <- logmh_beta(beta, betastar, xx, opp,
                                    mu_beta, Tau_beta)
       ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
       if (ok_beta) {
@@ -416,7 +413,9 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
               acceptance_rate = acceptance_rate / iter,
               mcmc_settings = list(iter = iter, t0 = t0, thin = thin,
                                    frac_opp = frac_opp, num_new_offers = num_new_offers,
-                                   C_alpha = C_alpha, C_beta = C_beta,
+                                   C_alpha = C_alpha, C_beta_est = C_beta_est,
                                    starting_alpha = starting_alpha,
-                                   starting_beta = starting_beta)))
+                                   starting_beta = starting_beta,
+                                   starting_opp = starting_opp),
+              data = list(xx = xx, ww = ww, choice = choice, df_mnc = df_mnc)))
 }
