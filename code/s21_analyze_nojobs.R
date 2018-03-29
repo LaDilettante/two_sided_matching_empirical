@@ -1,82 +1,85 @@
 rm(list = ls())
 library("tidyverse")
 library("reticulate")
+source("match2sided.R")
 
-source_python("simulated_labor_data.py")
+use_python("~/anaconda3/bin/python")
+
+py_run_file("s11_labor_nojobs.py")
 
 # ---- Estimating beta from true_opp ----
 
 # one-sided beta
 sapply(c(2, 3, 4, 5, 6), function(j) {
-  m <- glm(true_opp[, j] ~ . - 1, family = binomial(link = "logit"),
-      data = as.data.frame(xx))
+  m <- glm(py$true_opp[, j] ~ . - 1, family = binomial(link = "logit"),
+      data = as.data.frame(py$xx))
   coef(m)
 })
 
 # true beta
-t(true_beta)
+t(py$true_beta)
 
 # ---- Estimating alpha from true_opp ----
 
 # Only look at people who got the opportunity set c(1, 0, 1, 1)
-idx <- which(colSums(t(true_opp) == c(1, 0, 0, 1, 1, 1)) == 6)
-choice_tmp <- choice[idx]
-choice_tmp[choice[idx] == 4] <- 2
-choice_tmp[choice[idx] == 5] <- 3
-choice_tmp[choice[idx] == 6] <- 4
+idx <- which(colSums(t(py$true_opp) == c(1, 0, 0, 1, 1, 1)) == 6)
+choice_tmp <- py$choice[idx]
+choice_tmp[py$choice[idx] == 4] <- 2
+choice_tmp[py$choice[idx] == 5] <- 3
+choice_tmp[py$choice[idx] == 6] <- 4
 
 # Calculate by hand
 cl_nllik <- function(alpha) {
-  ww_tmp <- ww[c(1, 4, 5, 6), ]
+  ww_tmp <- py$ww[c(1, 4, 5, 6), ]
   wa <- ww_tmp %*% alpha
   lse_wa <- log(sum(exp(wa)))
   - sum(wa[choice_tmp] - lse_wa)
 }
-# one-sided alpha
+# one-sided alpha (not very good, cuz of high correlation)
 optim(c(0, 0), cl_nllik)
 
 # true alpha
-true_alpha
+py$true_alpha
 
 # ---- Check the effect of initial starting_opp values ----
 
-starting_opp <- matrix(NA, nrow = dim(jobs)[1], ncol = dim(jobs)[2])
-starting_opp[, 1] <- 1
-for (i in 2:ncol(starting_opp)) {
-  probs <- mean(true_opp[, i])
-  starting_opp[, i] <- sample(c(0, 1), size = nrow(starting_opp),
-                              prob = c(1 - probs, probs), replace = TRUE)
-}
-starting_opp[cbind(1:nrow(starting_opp), choice)] <- 1
-
-summary(glm(starting_opp[, 2] ~ . - 1, family = binomial(link = "logit"),
-            data = as.data.frame(xx)))
-summary(glm(starting_opp[, 3] ~ . - 1, family = binomial(link = "logit"),
-            data = as.data.frame(xx)))
-summary(glm(starting_opp[, 4] ~ . - 1, family = binomial(link = "logit"),
-            data = as.data.frame(xx)))
+# starting_opp <- matrix(NA, nrow = dim(jobs)[1], ncol = dim(jobs)[2])
+# starting_opp[, 1] <- 1
+# for (i in 2:ncol(starting_opp)) {
+#   probs <- mean(true_opp[, i])
+#   starting_opp[, i] <- sample(c(0, 1), size = nrow(starting_opp),
+#                               prob = c(1 - probs, probs), replace = TRUE)
+# }
+# starting_opp[cbind(1:nrow(starting_opp), choice)] <- 1
+# 
+# summary(glm(starting_opp[, 2] ~ . - 1, family = binomial(link = "logit"),
+#             data = as.data.frame(xx)))
+# summary(glm(starting_opp[, 3] ~ . - 1, family = binomial(link = "logit"),
+#             data = as.data.frame(xx)))
+# summary(glm(starting_opp[, 4] ~ . - 1, family = binomial(link = "logit"),
+#             data = as.data.frame(xx)))
 
 
 # ---- MCMC ----
 
 iter <- 1e4
-start <- iter / 2
 thin <- 2
 
-prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
-              mu_beta = list(mu = rep(0, p_i),
-                             Tau = solve(diag(rep(100, p_i)))),
-              Tau_beta = list(nu = p_i + 2,
-                              Sinv = solve(diag(rep(100, p_i))))) # E(\Sigma) = Sinv (Hoff p110)
+prior <- list(alpha = list(mu = rep(0, py$p_j), Tau = solve(diag(rep(100, py$p_j)))),
+              mu_beta = list(mu = rep(0, py$p_i),
+                             Tau = solve(diag(rep(100, py$p_i)))),
+              Tau_beta = list(nu = py$p_i + 2,
+                              Sinv = solve(diag(rep(100, py$p_i))))) # E(\Sigma) = Sinv (Hoff p110)
 
 start_time <- Sys.time()
 res <- match2sided(iter = iter, t0 = iter + 1,
                    C_alpha = diag(c(0.01, 0.1)), 
-                   C_beta = diag(c(0.01, rep(0.005, ncol(xx) - 1)) ** 2),
-                   starting_alpha = rep(0, p_j),
+                   C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
+                   starting_alpha = rep(0, py$p_j),
                    frac_opp = 0.25, prior = prior,
-                   ww = ww, xx = xx,
-                   choice = choice, opp = obs_opp,
+                   ww = py$ww, xx = py$xx,
+                   choice = py$choice, starting_opp = py$obs_opp,
+                   reserve_choice = TRUE,
                    to_save = c("alpha", "beta", "opp"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
 
