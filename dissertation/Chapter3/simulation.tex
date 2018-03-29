@@ -1,0 +1,47 @@
+\chapter{Simulation results}
+\label{chap:simulation}
+
+This chapter shows simulation results to compare the use of the TSL model
+against more naive approaches to the matching problems.
+
+Table for the values underlying the simulation results
+
+Table / Graph showing the result of the TSL vs one sided logit
+
+Discuss how to do interpretation
+
+Simulate a change in one side leading to a wrong estimate of the other side
+- Logan shows the change in the demand (i.e. the demand intercept)
+- Maybe I could show the change in the preference for characteristics?
+- This kind of simulation can be done again for FDI later
+
+Discuss the effect of having offers that are different across respondents
+
+Discuss the correlation of MCMC
+
+Discuss the adaptive procedure that I attempted but failed
+
+The reason for the high degree of correlation is because beta and opp is highly
+correlated
+- We can't change the opp a lot, because conditional on beta, the opp is kinda
+stuck. If we flip opp too much, it will be rejected because it'd be too
+inconceivable given the current state of beta (may be make a graph here of the
+rejection rate for opp)
+- We can't change the beta a lot because conditional on opp, it's also kinda
+stuck. This is especially true for countries with only a few observation of
+firms invested in them.
+Because if a country only has 5 firms in, if we flip the opp so that now the
+country extends the offer to a new firm, and this firm is substantially
+different from the current ones, that will really affect the estimate for beta.
+For countries with a lot of firms invested in them, we can already estimate
+their preference quite well, so flipping a new opp doesn't change the estimate
+too much.
+- Conceptually, we can think of a way to make proposal for beta and opp that
+takes into account this correlation. For example, if we propose a new beta that
+puts a high emphasis on employment, then we also are more likely to flip (to 1)
+the cells that correspond to firms that have a large amount of employees.
+However this is a bit too hard to implement and the computation cost may not be
+worth it.
+
+- The Gibbs sampler approach may work? But it's also unable to make correlated
+move so may not be so much better.

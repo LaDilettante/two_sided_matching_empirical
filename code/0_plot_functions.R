@@ -1,6 +1,6 @@
 #' Density plot for posterior samples
 #' @param data A matrix of n_sim x n_coef. colnames(data) will be used for label
-plot_posterior_dens <- function(data, order = FALSE) {
+plot_posterior_dens <- function(data, coefnames, xlab, order = FALSE) {
   
   dists <- vector("list", length = ncol(data))
   for (i in 1:ncol(data)) {
@@ -10,12 +10,14 @@ plot_posterior_dens <- function(data, order = FALSE) {
   
   quantiles <- vector("list", length = ncol(data))
   for (i in 1:ncol(data)) {
-    hpd <- coda::HPDinterval(mcmc(data[, i]), prob = 0.95)
+    hpd <- coda::HPDinterval(coda::mcmc(data[, i]), prob = 0.95)
     dens <- density(data[, i], from = hpd[1], to = hpd[2])
     quantiles[[i]] <- data.frame(x = dens[['x']], y = dens[['y']] / max(dens[['y']]) * 0.75)
   }
   
-  coefnames <- colnames(data)
+  if (missing(coefnames)) {
+    coefnames <- colnames(data)
+  }
   
   if (order) {
     dists <- dists[order(colMeans(data))]
@@ -24,11 +26,11 @@ plot_posterior_dens <- function(data, order = FALSE) {
   }
   
   # blank canvas
-  par(mar = c(5.1, 11.1, 0.1, 1.1))
+  par(mar = c(5.1, 8.1, 0.1, 1.1))
   plot(0, 0, type="n",
        xlim=c(min(data), max(data)),
        ylim=c(1, ncol(data) + 1),
-       xlab="Coefficient",
+       xlab= ifelse(missing(xlab), "Coefficient", xlab),
        ylab="", yaxt="n")
   for (ii in 1:ncol(data)) {
     between_x <- quantiles[[ii]][ ,1]
@@ -42,6 +44,41 @@ plot_posterior_dens <- function(data, order = FALSE) {
   axis(2, at = 1:ncol(data), coefnames, las=1) # y tick label
 }
 
+#' Simulate the observed choice, one simulation
+#' @param alpha i's preferences
+#' @param beta j's preferences
+#' @return a n_i vector of the choices
+f_sim <- function(alpha, beta) {
+  # countries make offers to firms
+  alpha1 <- alpha[sample(1:nrow(alpha), 1), ]
+  beta1 <- beta[sample(1:nrow(beta), 1), , ]
+  
+  country_utilities <- (xx %*% beta1) + rlogis(n = n_i * n_j) # linear pred + error
+  opp <- country_utilities > 0
+  
+  wa <- alpha1 %*% t(ww) # linear pred
+  mnc_utilties <- t(replicate(n_i, wa + evd::rgumbel(n = n_j), simplify = TRUE))
+  mnc_options <- opp * mnc_utilties
+  mnc_choices <- rownames(ww)[apply(mnc_options, 1, which.max)]
+  return(mnc_choices)
+}
+
+#' Visualize sim result
+#' @param sim_result a matrix of n_sim x n_j, value being the test quantities
+#' @param observed a data frame of the observed quantities for j
+f_plot_sim <- function(sim_result, observed) {
+  molten <- reshape2::melt(sim_result, variable.name = "choices") %>%
+    group_by(choices) %>%
+    summarise(mean = mean(value, na.rm = TRUE), 
+              lower95 = quantile(value, 0.025, na.rm = TRUE),
+              upper95 = quantile(value, 0.975, na.rm = TRUE))
+  pd <- molten %>% inner_join(observed, by = "choices")
+  ggplot(pd, aes(x = choices)) +
+    geom_pointrange(aes(y = mean, ymin = lower95, ymax = upper95,
+                        color = "Predicted")) +
+    geom_point(aes(y = value, color = "Observed"))
+}
+  
 #' Coeficient plot with pointrange, ordering the coef based on posterior mean
 #' @param data n_sim x n_coef matrix
 plot_posterior_coef <- function(data) {
@@ -75,6 +112,6 @@ plot_multinom_pred <- function(alpha, ww, observed) {
   ggplot(pd, aes(x = choices)) +
     geom_pointrange(aes(y = mean, ymin = lower95, ymax = upper95,
                         color = "Predicted")) +
-    geom_point(aes(y = prob, color = "Observed")) +
+    geom_point(aes(y = value, color = "Observed")) +
     labs(y = "Probability")
 }
