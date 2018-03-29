@@ -34,8 +34,7 @@ df_nation_id <- df_mnc %>% select(nation) %>% distinct() %>%
 
 # Merge nation_id back, finalize
 df_mnc <- df_mnc %>%
-  inner_join(df_nation_id, by = 'nation') %>%
-  select(ltemp, luscptl, int_r_d, int_exp, nation_id)
+  inner_join(df_nation_id, by = 'nation')
 
 xx <- df_mnc %>%
   mutate(one = 1) %>%
@@ -66,10 +65,15 @@ choice <- df_mnc$nation_id
 obs_opp <- matrix(FALSE, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
 obs_opp[cbind(1:n_i, choice)] <- TRUE  # firms are offered the countries they are in!
 
+starting_opp <- matrix(FALSE, n_i, n_j)
+# Randomly flip some cells to TRUE
+starting_opp[sample(1:(n_i * n_j), size = (n_i * n_j) * 0.1, replace = FALSE)] <- TRUE
+starting_opp[cbind(1:n_i, choice)] <- TRUE
+
 # ---- MCMC ----
 
-# iter <- 2e5 is often what we run eventually
-iter <- 1e5
+# iter <- 4e5, thin <- 10 is often what we run eventually
+iter <- 4e5
 thin <- 10
 prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
               mu_beta = list(mu = rep(0, p_i),
@@ -79,24 +83,36 @@ prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
 
 start_time <- Sys.time()
 
-starting_alpha <- rep(1, p_j)
-starting_beta <- matrix(0, p_i, n_j)
+C_beta_est <- diag(c(0.1, 0.005 ,0.005, 0.025, 0.02, # China
+                     0.1, 0.005, 0.005, 0.025, 0.02, # Indonesia
+                     0.25, 0.05, 0.02, 0.025, 0.05, # Malaysia
+                     0.25, 0.05, 0.02, 0.025, 0.05, # Phillipines
+                     0.2, 0.05, 0.02, 0.025, 0.05, # Singapore
+                     0.15, 0.05, 0.02, 0.025, 0.05, # South Korea
+                     0.1, 0.01, 0.005, 0.025, 0.025, # Taiwan
+                     0.1, 0.0075, 0.005, 0.025, 0.02, # Thailand
+                     0.15, 0.05, 0.02, 0.025, 0.025)) # Vietnam
+C_beta_est <- C_beta_est ** 2
+
+starting_alpha <- rnorm(p_j, mean = 0, sd = 2)
+starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
 res <- match2sided(iter = iter, t0 = iter + 1, thin = thin,
-                   C_alpha = diag(c(0.1, 0.1, 0.1)), 
-                   C_beta = diag(c(0.1, 0.005, 0.005, 0.01, 0.01) ** 2),
+                   C_alpha = diag(c(0.5, 0.5, 0.5) ** 2), 
+                   C_beta_est = C_beta_est,
                    starting_alpha = starting_alpha,
                    starting_beta = starting_beta,
                    frac_opp = 0.15, prior = prior,
                    ww = ww, xx = xx,
-                   choice = choice, opp = obs_opp,
+                   choice = choice, starting_opp = starting_opp,
                    to_save = c("alpha", "beta", "opp"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
 cat("Japan 86 99 done\n")
 cat("Running time:", as.difftime(Sys.time() - start_time, units = "mins"), "mins")
 cat("Memory used: ", gc()[2, 2])
 colMeans(res$ok)
- 
 
+
+# random starting_opp, 1th run, starting_opp 0.1 set to TRUE
 saveRDS(res, paste0("../result/japan96_", start_time, ".RData"))
 
 # ---- Result and Diagnostics ----
@@ -117,7 +133,9 @@ plot(mcmc(res$alpha))
 mtext("MNCs' preference parameters", side = 3, line = 0, outer = TRUE)
 dev.off()
 
-# beta
+beta_one <- mcmc(res$beta[, 'one', ])
+plot(beta_one)
+
 beta_temp <- mcmc(res$beta[, 'ltemp', ])
 pdf(paste0("../figure/japan_beta_educ_", start_time, ".pdf"), w = 7, h = 7)
 plot(beta_temp)
@@ -131,8 +149,9 @@ dev.off()
 beta_rd <- mcmc(res$beta[, 'int_r_d', ])
 plot(beta_rd)
 
-beta_one <- mcmc(res$beta[, 'one', ])
-plot(beta_one)
+beta_exp <- mcmc(res$beta[, 'int_exp', ])
+plot(beta_exp)
+
 
 # ---- Investigating opp ----
 

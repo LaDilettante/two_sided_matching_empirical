@@ -1,0 +1,29 @@
+"../result/japan96_2018-03-22 20:49:28.RData"
+- 2e5, thin 10
+- alpha start 0, beta start lm
+
+"../result/japan96_2018-03-23 19:28:10.RData"
+- 1e5, thin 10
+- run to check if the alpha still make sense. It didn't before (only around 0,
+very big variance), but after
+changing back to the R version and run for longer it starts to be more precise
+lgdp ~ 0 -> 20
+lgdppc ~ 0 -> -10
+hc ~ -10 -> 10
+
+"../result/japan96_2018-03-24 17:11:50.RData"
+"../result/japan96_2018-03-25 01:41:41.RData"
+"../result/japan96_2018-03-25 12:36:44.RData"
+- 2e5, thin 10
+- Runs with randomized starting alpha and beta to see if they converge
+
+"../result/japan96_2018-03-25 22:01:08.RData"
+"../result/japan96_2018-03-26 10:57:18.RData"
+- 4e5, thin 10
+- Runs with randomized starting alpha beta + beta proposal hand tuned for each country after looking at their traceplots
+
+"../result/japan96_2018-03-26 14:32:49.RData"
+"../result/japan96_2018-03-26 18:32:10.RData"
+"../result/japan96_2018-03-26 23:31:24.RData"
+- 4e5, thin 10
+- Runs with randomized starting alpha beta AND opp + hand tuned proposal
