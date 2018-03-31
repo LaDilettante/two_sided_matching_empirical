@@ -101,7 +101,7 @@ logmh_beta <- function(beta, betastar, xx, opp, mu_beta, Tau_beta) {
   XB_star <- xx %*% betastar
   # Calculate likelihood ratio (using logistic structure)(don't count unemp.
   lrat <- sum((opp * (XB_star - XB)))    # the `canonical' part (unemp. cancels)
-  logmh_beta <- lrat + sum(log(1 + exp(XB)) - log(1 + exp(XB_star))) +
+  logmh_beta <- lrat + sum(log1p(exp(XB)) - log1p(exp(XB_star))) +
     sum(mvtnorm::dmvnorm(t(betastar), mu_beta, solve(Tau_beta), log = TRUE)) -
     sum(mvtnorm::dmvnorm(t(beta), mu_beta, solve(Tau_beta), log = TRUE))
   return(logmh_beta)
@@ -323,7 +323,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
       
       # my_logmh_alphaR <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
-      my_logmh_alpha <- logmh_alphaC(alpha, alphastar, ww, t(opp), wa,
+      my_logmh_alpha <- logmh_alphaC_old(alpha, alphastar, ww, opp, wa,
                                      prior$alpha$mu, prior$alpha$Tau)
       ok_alpha <- ifelse(log(runif(1)) <= my_logmh_alpha, T, F)
       if (ok_alpha) {
@@ -377,8 +377,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
         deviation <- matrix(rmvnorm(1, sigma = C_beta_est), nrow = p_i, ncol = n_j)
       }
       betastar <- beta + deviation
-      my_logmh_beta <- logmh_beta(beta, betastar, xx, opp,
-                                   mu_beta, Tau_beta)
+      my_logmh_beta <- logmh_betaC(beta, betastar, xx, opp, mu_beta, Tau_beta)
       ok_beta <- ifelse(log(runif(1)) <= my_logmh_beta, T, F)
       if (ok_beta) {
         beta <- betastar
@@ -438,5 +437,5 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
                                    starting_alpha = starting_alpha,
                                    starting_beta = starting_beta,
                                    starting_opp = starting_opp),
-              data = list(xx = xx, ww = ww, choice = choice, df_mnc = df_mnc)))
+              data = list(xx = xx, ww = ww, choice = choice)))
 }

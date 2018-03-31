@@ -1,11 +1,18 @@
 rm(list = ls())
 library("tidyverse")
 library("reticulate")
+library("coda")
 source("match2sided.R")
+source("0_plot_functions.R")
 
-use_python("~/anaconda3/bin/python")
+use_python("/Users/anh/miniconda3/bin/python")
 
+set.seed(1)
 py_run_file("s11_labor_nojobs.py")
+py$choice <- py$choice + 1
+py$xx[, 2] <- py$xx[, 2] - mean(py$xx[, 2])
+py$xx[, 3] <- py$xx[, 3] - mean(py$xx[, 3])
+#py$ww <- scale(py$ww, center = TRUE, scale = FALSE)
 
 # ---- Estimating beta from true_opp ----
 
@@ -63,7 +70,7 @@ py$true_alpha
 # ---- MCMC ----
 
 iter <- 1e4
-thin <- 2
+thin <- 5
 
 prior <- list(alpha = list(mu = rep(0, py$p_j), Tau = solve(diag(rep(100, py$p_j)))),
               mu_beta = list(mu = rep(0, py$p_i),
@@ -72,50 +79,56 @@ prior <- list(alpha = list(mu = rep(0, py$p_j), Tau = solve(diag(rep(100, py$p_j
                               Sinv = solve(diag(rep(100, py$p_i))))) # E(\Sigma) = Sinv (Hoff p110)
 
 start_time <- Sys.time()
+starting_alpha <- rnorm(py$p_j, mean = 0, sd = 1)
+starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
 res <- match2sided(iter = iter, t0 = iter + 1,
-                   C_alpha = diag(c(0.01, 0.1)), 
+                   C_alpha = diag(c(0.01, 0.1) ** 2), 
                    C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
                    starting_alpha = rep(0, py$p_j),
+                   starting_beta = matrix(0, nrow = py$p_i, ncol = py$n_j),
                    frac_opp = 0.25, prior = prior,
                    ww = py$ww, xx = py$xx,
                    choice = py$choice, starting_opp = py$obs_opp,
                    reserve_choice = TRUE,
                    to_save = c("alpha", "beta", "opp"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
+cat("Sim labor no jobs done\n")
+cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
+cat("Memory used: ", gc()[2, 2])
+colMeans(res$ok)
+
+start <- iter / 2
 
 pdf(paste0("../figure/alpha ", start_time, ".pdf"), w = 7.5, h = 5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$alpha), parameters = c(0.1, 1.0))
+my.plot.mcmc(mcmc(res$alpha[, ]), parameters = py$true_alpha)
 mtext("Workers' preference param", side = 3, line = 0, outer = TRUE)
 dev.off()
-
-plot(mcmc(res$alphastar))
-
-colMeans(res$alpha[start:iter, , drop = FALSE])
-
-mcmcse::mcse.multi(res$alpha)
 
 mcmcse::mcse.multi(res$beta[start:iter, , 2]) # beta for the 1st employer
 pdf(paste0("../figure/beta_emp1 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-9.0, 0.2, 0.2))
-mtext("Employer 1's preference params",  side = 3, line = 0, outer = TRUE)
+my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-3.613, py$true_beta[2, 2:4]))
+mtext("Employer 1's preference params", side = 3, line = 0, outer = TRUE)
 dev.off()
 
 my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-9.0, 0.2, 0.2))
-plot(mcmc(res$betastar[, , 2]))
+my.plot.mcmc(mcmc(res$betastar[, , 2]), parameters = py$true_beta[2, ])
 
 mcmcse::mcse.multi(res$beta[start:iter, , 3]) # beta for the 2nd employer
 pdf(paste0("../figure/beta_emp2 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 3]), parameters = c(-10.0, 0.1, 0.2))
+my.plot.mcmc(mcmc(res$beta[, , 3]), parameters = py$true_beta[3, ])
 mtext("Employer 2's preference params", side = 3, line = 0, outer = TRUE)
 dev.off()
 
 mcmcse::mcse.multi(res$beta[start:iter, , 4]) # beta for the 3rd employer
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 4]), parameters = c(-5.0, 0.5, -0.05))
+my.plot.mcmc(mcmc(res$beta[, , 4]), parameters = py$true_beta[4, ])
 mtext("Employer 3's preference params", side = 3, line = 0, outer = TRUE)
+
+my.plot.mcmc(mcmc(res$beta[, , 5]), parameters = py$true_beta[5, ])
+my.plot.mcmc(mcmc(res$beta[, , 6]), parameters = py$true_beta[6, ])
 
 beta_2 <- res$beta[, 2, ] # the beta for the second employee's covariate (educ)
 my.plot.mcmc(mcmc(beta_2))

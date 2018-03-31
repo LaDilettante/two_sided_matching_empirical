@@ -58,9 +58,11 @@ double logmh_betaC(arma::mat beta, arma::mat betastar,
   arma::mat XB = xx * beta;
   arma::mat XB_star = xx * betastar;
   double lrat = accu((opp % (XB_star - XB)));
-  double logmh_beta = lrat + sum(Rcpp::log1p(Rcpp::wrap(exp(XB))) - Rcpp::log1p(Rcpp::wrap(exp(XB_star)))) +
-    accu(dmvnrm_arma_mat(arma::trans(betastar), mu, inv(Tau), true)) -
+  double p2 = sum(Rcpp::log1p(Rcpp::wrap(exp(XB))) - Rcpp::log1p(Rcpp::wrap(exp(XB_star))));
+  double p3 = accu(dmvnrm_arma_mat(arma::trans(betastar), mu, inv(Tau), true)) -
     accu(dmvnrm_arma_mat(arma::trans(beta), mu, inv(Tau), true));
+  
+  double logmh_beta = lrat + p2 + p3;
   return logmh_beta;
 }
 

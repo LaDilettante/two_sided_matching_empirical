@@ -5,7 +5,8 @@ import pandas as pd
 from numpy.random import RandomState
 
 from importlib.machinery import SourceFileLoader
-abm = SourceFileLoader("abm", "/home/bunche/projects/two_sided_matching_empirical/code/abm.py").load_module()
+from pathlib import Path
+abm = SourceFileLoader("abm", str(Path.home()) + "/projects/two_sided_matching_empirical/code/abm.py").load_module()
 
 df_employee = pd.read_csv('../data_clean/labor_employee.csv', header=0)
 df_employer = pd.read_csv('../data_clean/labor_employer_occ5.csv', header=0)

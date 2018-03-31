@@ -115,3 +115,32 @@ plot_multinom_pred <- function(alpha, ww, observed) {
     geom_point(aes(y = value, color = "Observed")) +
     labs(y = "Probability")
 }
+
+my.plot.mcmc <- function (x, trace = TRUE, density = TRUE, smooth = FALSE, bwf, 
+                          auto.layout = TRUE, ask = FALSE, parameters, ...) 
+{
+  oldpar <- NULL
+  on.exit(par(oldpar))
+  if (auto.layout) {
+    mfrow <- coda:::set.mfrow(Nchains = nchain(x), Nparms = coda::nvar(x), 
+                              nplots = trace + density)
+    oldpar <- par(mfrow = mfrow)
+  }
+  for (i in 1:coda::nvar(x)) {
+    y <- mcmc(as.matrix(x)[, i, drop = FALSE], start(x), 
+              end(x), thin(x))
+    if (trace) 
+      traceplot(y, smooth = smooth, ...) ; abline(h=parameters[i], col="red")
+    if (density) {
+      if (missing(bwf)) {
+        densplot(y, ...); abline(v=parameters[i], col="red")
+      } else densplot(y, bwf = bwf, ...)
+    }
+    if (i == 1) 
+      oldpar <- c(oldpar, par(ask = ask))
+  }
+}
+
+heatmap2 <- function(x) {
+  heatmap(x, scale = "none", Rowv = NA, Colv = NA, revC = T)
+}

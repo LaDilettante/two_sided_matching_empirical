@@ -24,7 +24,7 @@ test_that("new_offer generates the right offer", {
   set.seed(1)
   expected <- c(replicate(n_i, sample(2:n_j, size = size, replace = FALSE)))
   set.seed(1)
-  observed <- new_offer(n_i, n_j, size)
+  observed <- new_offer(n_i, 2:n_j, size)
   expect_equal(expected, observed)
 })
 
@@ -38,7 +38,7 @@ test_that("log_sum_exp works like R", {
 })
 
 # ---- Simulate data ----
-n_i <- sample(seq(500, 1000), 1) # multinomial logit side
+n_i <- sample(seq(2000, 3000), 1) # multinomial logit side
 p_i <- sample(seq(5, 10), 1)
 n_j <- sample(seq(20, 50), 1) # logit side
 p_j <- sample(seq(5, 10), 1)
@@ -137,10 +137,10 @@ microbenchmark::microbenchmark(
 
 # joint_pdf
 microbenchmark::microbenchmark(
-  joint_lpdf(opp, choice, alpha, beta,
+  joint_lpdf(opp, alpha, beta,
                          mu_beta, Tau_beta,
                          prior, ww, w_chosen, xx),
-  joint_lpdfC(opp, choice, alpha, beta,
+  joint_lpdfC(opp, alpha, beta,
              mu_beta, Tau_beta,
              prior, ww, w_chosen, xx)
 )
@@ -181,7 +181,7 @@ n_j <- 20
 size <- 10
 microbenchmark::microbenchmark(
   replicate(n_i, sample(2:n_j, size = size, replace = FALSE)),
-  new_offer(n_i, n_j, size)
+  new_offer(n_i, 2:n_j, size)
 )
 
 
