@@ -25,5 +25,23 @@ hc ~ -10 -> 10
 "../result/japan96_2018-03-26 14:32:49.RData"
 "../result/japan96_2018-03-26 18:32:10.RData"
 "../result/japan96_2018-03-26 23:31:24.RData"
+"../result/japan96_2018-03-27 23:04:39.RData"
 - 4e5, thin 10
 - Runs with randomized starting alpha beta AND opp + hand tuned proposal
+
+"../result/japan96_2018-03-29 16:54:38.RData"
+"../result/japan96_2018-03-29 20:06:27.RData"
+- 4e5, thin 10
+- Fix bug where new does not propose China
+
+"../result/simlabor_nojobs_2018-03-31 19:02:45.RData"
+- strarting alpha, beta at 0
+
+"../result/simlabor_nojobs_2018-03-31 04:25:46.RData"
+- random starting alpha, beta
+
+"../result/simlabor_nojobs_2018-03-31 05:06:53.RData"
+"../result/simlabor_nojobs_2018-03-31 05:48:06.RData"
+- random starting alpha, beta, opp (0.1)
+
+

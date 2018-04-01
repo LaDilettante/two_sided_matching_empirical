@@ -12,7 +12,12 @@ py_run_file("s11_labor_nojobs.py")
 py$choice <- py$choice + 1
 py$xx[, 2] <- py$xx[, 2] - mean(py$xx[, 2])
 py$xx[, 3] <- py$xx[, 3] - mean(py$xx[, 3])
-#py$ww <- scale(py$ww, center = TRUE, scale = FALSE)
+
+# Re-calculate true beta after standardizing xx
+py$true_beta
+
+py$true_beta_std <- py$true_beta
+py$true_beta_std[, 1] <- py$true_beta[, 1] + py$true_beta[, c(2, 3)] %*% colMeans(py$df_xx[, c(2, 3)])
 
 # ---- Estimating beta from true_opp ----
 
@@ -77,15 +82,15 @@ prior <- list(alpha = list(mu = rep(0, py$p_j), Tau = solve(diag(rep(100, py$p_j
                              Tau = solve(diag(rep(100, py$p_i)))),
               Tau_beta = list(nu = py$p_i + 2,
                               Sinv = solve(diag(rep(100, py$p_i))))) # E(\Sigma) = Sinv (Hoff p110)
-
+# ---- Run ----
 start_time <- Sys.time()
-starting_alpha <- rnorm(py$p_j, mean = 0, sd = 1)
-starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
+starting_alpha <- rep(0, py$p_j)
+starting_beta <- matrix(0, py$p_i, py$n_j)
 res <- match2sided(iter = iter, t0 = iter + 1,
                    C_alpha = diag(c(0.01, 0.1) ** 2), 
-                   C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
-                   starting_alpha = rep(0, py$p_j),
-                   starting_beta = matrix(0, nrow = py$p_i, ncol = py$n_j),
+                   C_beta = diag(c(0.01, 0.005, 0.005, 0.01) ** 2),
+                   starting_alpha = starting_alpha,
+                   starting_beta = starting_beta,
                    frac_opp = 0.25, prior = prior,
                    ww = py$ww, xx = py$xx,
                    choice = py$choice, starting_opp = py$obs_opp,
@@ -96,6 +101,67 @@ cat("Sim labor no jobs done\n")
 cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
 cat("Memory used: ", gc()[2, 2])
 colMeans(res$ok)
+
+# 1st run, hand-tuned C_beta
+saveRDS(res, paste0("../result/simlabor_nojobs_", start_time, ".RData"))
+
+# ---- Run ----
+rm(res)
+start_time <- Sys.time()
+starting_opp <- matrix(FALSE, py$n_i, py$n_j)
+starting_opp[sample(1:(py$n_i * py$n_j), size = (py$n_i * py$n_j) * 0.1, replace = FALSE)] <- TRUE
+starting_opp[cbind(1:py$n_i, py$choice)] <- TRUE
+starting_alpha <- rnorm(py$p_j, mean = 0, sd = 1)
+starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
+starting_beta[, 1] <- 0
+res <- match2sided(iter = iter, t0 = iter + 1,
+                   C_alpha = diag(c(0.01, 0.1) ** 2), 
+                   C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
+                   starting_alpha = starting_alpha,
+                   starting_beta = starting_beta,
+                   frac_opp = 0.25, prior = prior,
+                   ww = py$ww, xx = py$xx,
+                   choice = py$choice, starting_opp = starting_opp,
+                   reserve_choice = TRUE,
+                   to_save = c("alpha", "beta", "opp"),
+                   file = paste("../result/sim_nojobs_", start_time), write = FALSE)
+cat("Sim labor no jobs done\n")
+cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
+cat("Memory used: ", gc()[2, 2])
+colMeans(res$ok)
+
+# 2nd run
+saveRDS(res, paste0("../result/simlabor_nojobs_", start_time, ".RData"))
+
+# ---- Run ----
+rm(res)
+start_time <- Sys.time()
+starting_opp <- matrix(FALSE, py$n_i, py$n_j)
+starting_opp[sample(1:(py$n_i * py$n_j), size = (py$n_i * py$n_j) * 0.1, replace = FALSE)] <- TRUE
+starting_opp[cbind(1:py$n_i, py$choice)] <- TRUE
+starting_alpha <- rnorm(py$p_j, mean = 0, sd = 1)
+starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
+starting_beta[, 1] <- 0
+res <- match2sided(iter = iter, t0 = iter + 1,
+                   C_alpha = diag(c(0.01, 0.1) ** 2), 
+                   C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
+                   starting_alpha = starting_alpha,
+                   starting_beta = starting_beta,
+                   frac_opp = 0.25, prior = prior,
+                   ww = py$ww, xx = py$xx,
+                   choice = py$choice, starting_opp = starting_opp,
+                   reserve_choice = TRUE,
+                   to_save = c("alpha", "beta", "opp"),
+                   file = paste("../result/sim_nojobs_", start_time), write = FALSE)
+cat("Sim labor no jobs done\n")
+cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
+cat("Memory used: ", gc()[2, 2])
+colMeans(res$ok)
+
+# 3rd run
+saveRDS(res, paste0("../result/simlabor_nojobs_", start_time, ".RData"))
+
+# ---- Analysis ----
 
 start <- iter / 2
 
@@ -108,7 +174,7 @@ dev.off()
 mcmcse::mcse.multi(res$beta[start:iter, , 2]) # beta for the 1st employer
 pdf(paste0("../figure/beta_emp1 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
 par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-3.613, py$true_beta[2, 2:4]))
+my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = py$true_beta[2, ])
 mtext("Employer 1's preference params", side = 3, line = 0, outer = TRUE)
 dev.off()
 

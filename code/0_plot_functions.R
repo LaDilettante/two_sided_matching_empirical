@@ -119,14 +119,15 @@ plot_multinom_pred <- function(alpha, ww, observed) {
 my.plot.mcmc <- function (x, trace = TRUE, density = TRUE, smooth = FALSE, bwf, 
                           auto.layout = TRUE, ask = FALSE, parameters, ...) 
 {
+  library("coda")
   oldpar <- NULL
   on.exit(par(oldpar))
   if (auto.layout) {
-    mfrow <- coda:::set.mfrow(Nchains = nchain(x), Nparms = coda::nvar(x), 
+    mfrow <- coda:::set.mfrow(Nchains = nchain(x), Nparms = nvar(x), 
                               nplots = trace + density)
     oldpar <- par(mfrow = mfrow)
   }
-  for (i in 1:coda::nvar(x)) {
+  for (i in 1:nvar(x)) {
     y <- mcmc(as.matrix(x)[, i, drop = FALSE], start(x), 
               end(x), thin(x))
     if (trace) 
@@ -143,4 +144,19 @@ my.plot.mcmc <- function (x, trace = TRUE, density = TRUE, smooth = FALSE, bwf,
 
 heatmap2 <- function(x) {
   heatmap(x, scale = "none", Rowv = NA, Colv = NA, revC = T)
+}
+
+f_predicted_effect <- function(varname, varvalues, actorj) {
+  beta_tmp <- beta[sample(1:nrow(beta), 1000, replace = TRUE), , actorj]
+  
+  scenario <- t(replicate(length(varvalues), apply(xx, 2, median)))
+  scenario[ , varname] <- varvalues
+  lin_pred <- beta_tmp %*% t(scenario)
+  prob <- exp(lin_pred) / (1 + exp(lin_pred))
+  molten <- reshape2::melt(prob)
+  molten %>% group_by(Var2) %>% 
+    summarise(mean = mean(value),
+              lower95 = quantile(value, probs = 0.05),
+              upper95 = quantile(value, probs = 0.95)) %>%
+    mutate(actorj = actorj, !!varname := varvalues)
 }
