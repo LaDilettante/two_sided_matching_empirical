@@ -37,8 +37,11 @@ df_mnc <- df_mnc %>%
   inner_join(df_nation_id, by = 'nation')
 
 xx <- df_mnc %>%
+  select(ltemp, luscptl, int_r_d, int_exp) %>%
+  mutate_at(vars(ltemp, luscptl), scale, center = TRUE, scale = FALSE) %>%
+  mutate_at(vars(int_r_d, int_exp), scale, center = TRUE, scale = TRUE) %>%
   mutate(one = 1) %>%
-  select(one, ltemp, luscptl, int_r_d, int_exp) %>%
+  select(one, everything()) %>%
   as.matrix()
 
 # ---- Load country data ----
@@ -73,7 +76,7 @@ starting_opp[cbind(1:n_i, choice)] <- TRUE
 # ---- MCMC ----
 
 # iter <- 4e5, thin <- 10 is often what we run eventually
-iter <- 4e5
+iter <- 2e5
 thin <- 10
 prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
               mu_beta = list(mu = rep(0, p_i),
@@ -83,36 +86,38 @@ prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
 
 start_time <- Sys.time()
 
-C_beta_est <- diag(c(0.1, 0.005 ,0.005, 0.025, 0.02, # China
-                     0.1, 0.005, 0.005, 0.025, 0.02, # Indonesia
-                     0.25, 0.05, 0.02, 0.025, 0.05, # Malaysia
-                     0.25, 0.05, 0.02, 0.025, 0.05, # Phillipines
-                     0.2, 0.05, 0.02, 0.025, 0.05, # Singapore
-                     0.15, 0.05, 0.02, 0.025, 0.05, # South Korea
-                     0.1, 0.01, 0.005, 0.025, 0.025, # Taiwan
-                     0.1, 0.0075, 0.005, 0.025, 0.02, # Thailand
-                     0.15, 0.05, 0.02, 0.025, 0.025)) # Vietnam
-C_beta_est <- C_beta_est ** 2
-
+# C_beta_est <- diag(c(0.1, 0.05 ,0.05, 0.05, 0.05, # China
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # Indonesia
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # Malaysia
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # Phillipines
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # Singapore
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # South Korea
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # Taiwan
+#                      0.1, 0.05, 0.05, 0.05, 0.05, # Thailand
+#                      0.1, 0.05, 0.05, 0.05, 0.05)) # Vietnam
+# C_beta_est <- C_beta_est ** 2
+  
 starting_alpha <- rnorm(p_j, mean = 0, sd = 2)
 starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
 res <- match2sided(iter = iter, t0 = iter + 1, thin = thin,
-                   C_alpha = diag(c(0.5, 0.5, 0.5) ** 2), 
-                   C_beta_est = C_beta_est,
+                   C_alpha = diag(c(0.25, 0.25, 0.25) ** 2), 
+                   C_beta = diag(c(0.25, 0.1, 0.1, 0.1, 0.1) ** 2),
+                   # C_beta_est = C_beta_est,
                    starting_alpha = starting_alpha,
                    starting_beta = starting_beta,
                    frac_opp = 0.15, prior = prior,
                    ww = ww, xx = xx,
                    choice = choice, starting_opp = starting_opp,
+                   reserve_choice = FALSE,
                    to_save = c("alpha", "beta", "opp"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
 cat("Japan 86 99 done\n")
-cat("Running time:", as.difftime(Sys.time() - start_time, units = "mins"), "mins")
+cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
 cat("Memory used: ", gc()[2, 2])
 colMeans(res$ok)
 
 
-# random starting_opp, 1th run, starting_opp 0.1 set to TRUE
+# standardize xx, 1st run
 saveRDS(res, paste0("../result/japan96_", start_time, ".RData"))
 
 # ---- Result and Diagnostics ----
@@ -141,6 +146,8 @@ pdf(paste0("../figure/japan_beta_educ_", start_time, ".pdf"), w = 7, h = 7)
 plot(beta_temp)
 dev.off()
 
+plot(mcmc(res$betastar[, 'ltemp', ]))
+
 beta_uscptl <- mcmc(res$beta[, 'luscptl', ])
 pdf(paste0("../figure/japan_beta_age_", start_time, ".pdf"), w = 7, h = 7)
 plot(beta_uscptl)
@@ -154,6 +161,14 @@ plot(beta_exp)
 
 
 # ---- Investigating opp ----
+
+tmp <- apply(res$opp, c(1), function(mat) {
+  colMeans(mat)
+})
+par(mfrow = c(5, 2))
+for (i in 1:n_j) {
+  plot(tmp[i, ], type = "l", ylab = i)
+}
 
 # Look at sampled firms in Vietnam / or China
 id <- df_nation_id %>% filter(nation == "Vietnam") %>% .[["nation_id"]]
