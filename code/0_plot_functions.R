@@ -160,3 +160,11 @@ f_predicted_effect <- function(varname, varvalues, actorj) {
               upper95 = quantile(value, probs = 0.95)) %>%
     mutate(actorj = actorj, !!varname := varvalues)
 }
+
+f_plot_opp <- function(opp) {
+  ggplot(opp %>% reshape2::melt(),
+         aes(x = Var2, y = Var1, fill = factor(value))) +
+    geom_tile() + 
+    scale_fill_brewer("offer made / accepted?", type = "qual", palette = "Paired") +
+    theme_minimal()
+}

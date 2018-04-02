@@ -48,3 +48,4 @@ my_alpha, beta, ww, xx, choice, true_opp, obs_opp = \
   my_model.matching_process(employer_list=employer_list, 
                             employee_list=employee_list)
 wa = np.array([ee.wa for ee in employee_list])
+choice = choice + 1 # add 1 to index to match R based-1 index

@@ -102,7 +102,7 @@ the implication of using the Gumbel distribution in further depth in Section~\re
   of firms and workers used in labor market simulation. $x_{i1}, x_{i2}, x_{i3}$ are worker \textit{i}'s education, age, and race (nonwhite is coded as 1). $w_{j1}, w_{j2}$ are firm \textit{j}'s prestige and autonomy, with $j \in \{1, \dots, 5\}$. The $\epsilon$'s are Gumbel-distributed error terms.}
 \label{tab:sim_labor_nojobs_utility_functions}
 \begin{tabular}{lll}
-\\[-1.8ex]\hline 
+\\[-1.8ex]\hline
 \textbf{Firms' utility functions}  &                                                                                     \\
 Professional                         & $U_{j}(i) = -24 + 1.3 x_{i1} + 0.1 x_{i2} + 1 x_{i3} + \epsilon$         \\
 Managerial                           & $U_{j}(i) = -22 + 1 x_{i1} + 0.2 x_{i2} + 1 x_{i3} + \epsilon$     \\
@@ -130,7 +130,7 @@ With these utility functions, I simulate the matching process as follows:
   then chooses a firm (or unemployment) if it offers the highest utility. After this
   stage, we generate a choice vector that is a $2149 \times 1$ vector, in which
   cell $i$ equals $j$ if worker $i$ decides to work at firm $j$. This choice
-  vector is what we observe in real datasets such as the GSS. 
+  vector is what we observe in real datasets such as the GSS.
 \end{itemize}
 
 \section{Simulation results}
@@ -224,69 +224,106 @@ the data generating process is so different from their assumptions, this is a
 worthwhile exercise given that many empirical researches rely on these models.
 For example, using discrete choice models (multinomial logit, conditional
 logit), \citet{Cheng2006} models Japanese MNCs' location
-choice across Chinese provinces, \citet{Aw2008} models Taiwanese firms' decision to
-stay home or to open a factory in China and the US, and so do many others as
-documented in \citet{Arauzo-Carod2010}.\footnote{In the empirical literature,
+choice across Chinese provinces and \citet{Aw2008} models Taiwanese firms' decision to
+stay home or to open a factory in China and the US.\footnote{In the empirical literature,
   researchers often use the term ``multinomial logit'' and ``conditional logit''
 interchangeably to refer to a discrete choice model of unordered choices.
-In this discussion, I follow the terminology in \citet{McFadden1994}'s seminal paper on discrete
+In this discussion, I follow the terminology in \citet{McFadden1974}'s seminal paper on discrete
 choice models, distinguishing ``multinomial logit'' as the model whose
 independent variables are the choosers' characteristics, and ``conditional
 logit'' as the model whose independent variables are the choices' characteristics.} Using count models (Poisson, negative
-binomial), \citet{Wu1999} models MNCs' location choice in Guangzhou, China, and
-so do many others as documented in \citet{Guimaraes2003}. 
+binomial), \citet{Wu1999} models MNCs' location choice in Guangzhou, China.
+\citet{Arauzo-Carod2010} provides a literature review of how these methods are used in
+studying the location choice of firms.
+
+I estimate a conditional logit model in which workers choose the best firm to work
+for as if all firms were available in their opportunity set. This assumption is
+not satisfied by our two-sided data generating process. Figure~\ref{fig:sim_labor_nojobs_alpha_tsl_vs_cl} shows that the one-sided
+conditional logit model is not robust when this assumption is violated,
+producing biased estimates of workers' preference. Worse yet, its estimate has
+little uncertainty and can cause researchers to be overly confident in the wrong
+result.\footnote{This conditional logit model is equivalent to a Poisson model
+  in which the dependent variable is the count of workers at each firm, as shown in
+\citet{Guimaraes2003}. Both models, estimated with MLE, would produce exactly
+the same estimates for the coefficients and their covariance matrix.
+Therefore, the argument against one-sided logit applies fully to Poisson.}
 
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_alpha_tsl_vs_cl}
   \caption[Simulation, comparing the two-sided logit's and the
-  one-sided conditional logit's estimate.]{Preference of workers, estimated by two-sided logit and conditional logit}
-  \label{fig:sim_labor_nojobs_alpha_tsl_vs_col}
+  one-sided conditional logit's estimate.]{Estimates of workers' preference,
+    produced by two-sided logit and conditional logit. The density plots show
+    that the two-sided logit's 95\% credible interval includes the true value,
+    indicated by the black line, while the conditional logit's 95\% confidence
+    interval is far from it.}
+  \label{fig:sim_labor_nojobs_alpha_tsl_vs_cl}
 \end{figure}
 
-\section{Interpreting two-sided logit result}
+Examining the big difference between the two-sided and one-sided estimates for
+\textit{prestige} demonstrates a situation in which the one-sided approach
+confounds one side's preference with the other's. Figure~\ref{fig:sim_labor_nojobs_trueopp_obschoice} (left) shows the binary heat map
+for the true opportunity set---a dark blue cell indicates that an offer is made by firm in
+column $j$ to worker in row $i$. The columns for professional and
+managerial firms are quite similar, reflecting the fact that they make offers to
+the same kind of workers. In contrast, in the observed choice
+(Figure~\ref{fig:sim_labor_nojobs_trueopp_obschoice}, right), the columns for
+professional and managerial firms are very different,
+reflecting the fact that the professional firm is slightly more
+desirable, causing workers that receive offers from both firms to
+overwhelmingly choose to work for the professional firm 
+over the managerial firm. Therefore, there are very few workers at the
+managerial firm. To the one-sided conditional
+logit model, it looks
+as if the managerial firm---a highly prestigious job---were less desirable than
+even the services and blue collar firms. Therefore, it severely underestimate
+workers' preference for \textit{prestige} to such an extent that
+\textit{prestige} is considered a negative trait. This example shows how
+misleading it can be to estimate workers' preference by assuming that all the
+choices are available. Indeed, the managerial firm is rarely chosen not because
+it is undesirable, but because it has to compete with the professional firm for
+the same pool of highly educated and experienced workers.
 
-Discuss how to do interpretation
-
-Simulate a change in one side leading to a wrong estimate of the other side
-- Logan shows the change in the demand (i.e. the demand intercept)
-- Maybe I could show the change in the preference for characteristics?
-- This kind of simulation can be done again for FDI later
-
-Discuss the effect of having offers that are different across respondents
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_trueopp_obschoice}
+  \caption{Binary heat map for the true opportunity set (left) and observed
+    choice (right). A dark blue cell indicates that an offer was made (or accepted)
+    between the firm in the corresponding column and the worker in the corresponding
+    row.}
+  \label{fig:sim_labor_nojobs_trueopp_obschoice}
+\end{figure}
 
 \section{Issues with MCMC convergence}
 \label{sec:simulation_beta_opp_correlation}
-Discuss the correlation of MCMC
 
-Discuss the adaptive procedure that I attempted but failed
+The MCMC chain for firms' preference parameters $\beta$ is poorly mixed because
+it is highly correlated with the opportunity set. Intuitively, at any point
+during the MCMC, we cannot propose a new opportunity set that is very different
+from the current one because it would be too unlikely given the current value of
+$\beta$. Likewise, we cannot propose too different a value for $\beta$ because
+it would be rejected given the current opportunity set.
 
-The reason for the high degree of correlation is because beta and opp is highly
-correlated
-- We can't change the opp a lot, because conditional on beta, the opp is kinda
-stuck. If we flip opp too much, it will be rejected because it'd be too
-inconceivable given the current state of beta (may be make a graph here of the
-rejection rate for opp)
-- We can't change the beta a lot because conditional on opp, it's also kinda
-stuck. This is especially true for countries with only a few observation of
-firms invested in them.
-Because if a country only has 5 firms in, if we flip the opp so that now the
-country extends the offer to a new firm, and this firm is substantially
-different from the current ones, that will really affect the estimate for beta.
-For countries with a lot of firms invested in them, we can already estimate
-their preference quite well, so flipping a new opp doesn't change the estimate
-too much.
-- Conceptually, we can think of a way to make proposal for beta and opp that
-takes into account this correlation. For example, if we propose a new beta that
-puts a high emphasis on employment, then we also are more likely to flip (to 1)
-the cells that correspond to firms that have a large amount of employees.
-However this is a bit too hard to implement and the computation cost may not be
-worth it.
+This problem is especially severe for firms with only a few workers. If we
+propose a new opportunity set in which those firms now extends the offer to a
+new worker, then this new worker will heavily affect the estimate for $\beta$
+especially if it is different from the current workers. In contrast, for firms
+with a large sample size, there is already a lot of information to precisely estimate
+their preference. Making one new offer in these cases will not substantially change the
+estimate.
 
-- The Gibbs sampler approach may work? But it's also unable to make correlated
-move so may not be so much better.
-
-blah
+Currently, I make random-walk proposals for $\beta$ and the opportunity set,
+which insufficiently takes into account this correlation, causing poor mixing. A
+potential solution to this problem is to make a correlated proposal for $\beta$
+and for the opportunity set: if we propose a new $\beta$ that
+puts a high emphasis on workers' education, then we should also perturb the
+opportunity set to make more offers to highly-educated worker. While
+conceptually simple, this approach is not straightforward to implement, and is
+left for future research.\footnote{Alternatively, we may reparameterize the
+  model entirely and eliminate the opportunity set, whose binary nature makes it
+impossible to use more modern MCMC approach such as Hamiltonian Monte Carlo. A
+potential alternative parameterization is \citet{Logan2008}'s, which samples
+directly from the utility space.}
 
 %%% Local Variables:
 %%% mode: latex

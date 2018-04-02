@@ -9,7 +9,6 @@ use_python("/Users/anh/miniconda3/bin/python")
 
 set.seed(1)
 py_run_file("s11_labor_nojobs.py")
-py$choice <- py$choice + 1
 py$xx[, 2] <- py$xx[, 2] - mean(py$xx[, 2])
 py$xx[, 3] <- py$xx[, 3] - mean(py$xx[, 3])
 

@@ -58,6 +58,7 @@ for (j in 1:py$n_j) {
 
 # ---- TSL vs CL ----
 
+# Conditional logit
 log_lik <- function(alpha) {
   wa <- py$ww %*% alpha
   lse_wa <- logsumexpC(wa)
@@ -67,6 +68,14 @@ m_multinom <- optim(c(0, 0), log_lik,
                     control = list("fnscale" = -1), hessian = TRUE)
 alpha_cl <- mvtnorm::rmvnorm(nrow(alpha), mean = m_multinom$par,
                               sigma = solve(-m_multinom$hessian))
+
+# Poisson (identical result as CL)
+df_count <- data.frame(table(py$choice),
+                         py$df_ww)
+m_pois <- summary(glm(Freq ~ pres + aut, family = "poisson", data = df_count))
+
+# Negative binomial
+m_nb <- MASS::glm.nb(Freq ~ pres + aut, data = df_count)
 
 pd <- data.frame(alpha, alpha_cl) %>%
   rename(prestige_tsl = X1, autonomy_tsl = X2, 
@@ -84,3 +93,22 @@ ggplot(pd) + geom_density(aes(x = value, fill = model), alpha = 0.5) +
                                 "cl" = "One-sided\nconditional logit")) +
   labs(x = "Coefficient")
 dev.off()
+
+# True opp vs obs choice
+p_trueopp <- f_plot_opp(py$true_opp) +
+  scale_x_continuous(breaks = 1:ncol(py$true_opp),
+                     labels = py$df_employer$occ5) +
+  theme(axis.text.x = element_text(angle = 15, vjust = 1, hjust=0.5)) +
+  labs(x = "Firm index", y = "Worker index", title = "True opportunity set")
+
+choice_matrix <- matrix(FALSE, nrow = py$n_i, ncol = py$n_j)
+choice_matrix[cbind(1:py$n_i, py$choice)] <- TRUE
+p_obschoice <- f_plot_opp(choice_matrix) +
+  scale_x_continuous(breaks = 1:ncol(py$true_opp),
+                     labels = py$df_employer$occ5) +
+  theme(axis.text.x = element_text(angle = 15, vjust = 1, hjust=0.5)) +
+  labs(x = "Firm index", y = "Worker index", title = "Observed choice")
+
+ggpubr::ggarrange(p_trueopp, p_obschoice, ncol = 2, common.legend = TRUE) 
+ggsave("../figure/sim_labor_nojobs_trueopp_obschoice.pdf", 
+       width = 10.4, height = 6.8)
