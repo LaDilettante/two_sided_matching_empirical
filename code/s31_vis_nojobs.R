@@ -2,8 +2,9 @@ rm(list = ls())
 source("0_plot_functions.R")
 library("tidyverse")
 library("coda")
+library("stargazer")
 
-res <- readRDS("../result/simlabor_nojobs_2018-03-31 19:02:45.RData")
+res <- readRDS("../result/simlabor_nojobs_2018-03-31 19_02_45.RData")
 start <- res$mcmc_settings$iter / 2
 end <- res$mcmc_settings$iter
 xx <- res$data[[1]]
@@ -13,6 +14,21 @@ n_j <- nrow(res$data[[2]])
 
 alpha <- res$alpha[start:end, ]
 beta <- res$beta[start:end, , ]
+
+# ----- Summary statistics -----
+
+stargazer(py$df_employee %>% select(educ, age, nonwhite), 
+          summary = TRUE,
+          covariate.labels = c("Years of education", "Age", "Non-white"),
+          float = FALSE,
+          out = "../table/labor_occ5_summary_employee.tex")
+
+stargazer(py$df_employer %>% select(occ5, pres, supervisor, aut) %>%
+            mutate(occ5 = recode(occ5, 
+                                 "MFG Blue Collar" = "Manufacturing Blue Collar")), 
+          covariate.labels = c("Firm category", "Prestige", "Pr(Supervisor)", "Autonomy"),
+          float = FALSE, summary = FALSE, rownames = FALSE,
+          out = "../table/labor_occ5_summary_employer.tex")
 
 # ---- Trace plot  ----
 
