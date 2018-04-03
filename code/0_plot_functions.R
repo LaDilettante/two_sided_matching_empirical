@@ -1,6 +1,6 @@
 #' Density plot for posterior samples
 #' @param data A matrix of n_sim x n_coef. colnames(data) will be used for label
-plot_posterior_dens <- function(data, coefnames, xlab, order = FALSE) {
+plot_posterior_dens <- function(data, coefnames, xlab, order = FALSE, ...) {
   
   dists <- vector("list", length = ncol(data))
   for (i in 1:ncol(data)) {
@@ -15,23 +15,27 @@ plot_posterior_dens <- function(data, coefnames, xlab, order = FALSE) {
     quantiles[[i]] <- data.frame(x = dens[['x']], y = dens[['y']] / max(dens[['y']]) * 0.75)
   }
   
-  if (missing(coefnames)) {
-    coefnames <- colnames(data)
+  if (!missing(coefnames)) {
+    labels <- names(coefnames)[match(colnames(data), coefnames)]
+    labels[is.na(labels)] <- colnames(data)[is.na(labels)]  
+  } else {
+    labels <- colnames(data)
   }
+  
   
   if (order) {
     dists <- dists[order(colMeans(data))]
     quantiles <- quantiles[order(colMeans(data))]
-    coefnames <- coefnames[order(colMeans(data))]
+    labels <- labels[order(colMeans(data))]
   }
   
   # blank canvas
-  par(mar = c(5.1, 8.1, 0.1, 1.1))
+  par(mar = c(5.1, 8.1, 4.1, 1.1))
   plot(0, 0, type="n",
        xlim=c(min(data), max(data)),
        ylim=c(1, ncol(data) + 1),
        xlab= ifelse(missing(xlab), "Coefficient", xlab),
-       ylab="", yaxt="n")
+       ylab="", yaxt="n", ...)
   for (ii in 1:ncol(data)) {
     between_x <- quantiles[[ii]][ ,1]
     between_y <- c(0, quantiles[[ii]][ , 2], 0)
@@ -41,7 +45,7 @@ plot_posterior_dens <- function(data, coefnames, xlab, order = FALSE) {
     polygon(dists[[ii]][,1], dists[[ii]][,2]+ii) # density plot
   }
   abline(v=0, lty=2)
-  axis(2, at = 1:ncol(data), coefnames, las=1) # y tick label
+  axis(2, at = 1:ncol(data), labels, las=1) # y tick label
 }
 
 #' Simulate the observed choice, one simulation
@@ -146,6 +150,14 @@ heatmap2 <- function(x) {
   heatmap(x, scale = "none", Rowv = NA, Colv = NA, revC = T)
 }
 
+f_plot_opp <- function(opp) {
+  ggplot(opp %>% reshape2::melt(),
+         aes(x = Var2, y = Var1, fill = factor(value))) +
+    geom_tile() + 
+    scale_fill_brewer("offer made / accepted?", type = "qual", palette = "Paired") +
+    theme_minimal()
+}
+
 f_predicted_effect <- function(varname, varvalues, actorj) {
   beta_tmp <- beta[sample(1:nrow(beta), 1000, replace = TRUE), , actorj]
   
@@ -159,12 +171,4 @@ f_predicted_effect <- function(varname, varvalues, actorj) {
               lower95 = quantile(value, probs = 0.05),
               upper95 = quantile(value, probs = 0.95)) %>%
     mutate(actorj = actorj, !!varname := varvalues)
-}
-
-f_plot_opp <- function(opp) {
-  ggplot(opp %>% reshape2::melt(),
-         aes(x = Var2, y = Var1, fill = factor(value))) +
-    geom_tile() + 
-    scale_fill_brewer("offer made / accepted?", type = "qual", palette = "Paired") +
-    theme_minimal()
 }

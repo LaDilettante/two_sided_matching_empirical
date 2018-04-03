@@ -1,5 +1,6 @@
 rm(list = ls())
 
+source("0_functions.R")
 source("match2sided.R")
 library("tidyverse")
 library("coda")
@@ -18,9 +19,9 @@ p_j <- 2  # number of job characteristics per job; in this example, job quality
 choice <- dat$occ17 + 1
 
 # ---- Prepare opp, the opportunity set ----
-opp <- matrix(F, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
-opp[cbind(1:n_i, choice)] <- T  # people are offered jobs they have!
-opp[, 1] <- T                     # Unemployment always offered
+obs_opp <- matrix(F, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
+obs_opp[cbind(1:n_i, choice)] <- T  # people are offered jobs they have!
+obs_opp[, 1] <- T                     # Unemployment always offered
 
 # ---- Prepare ww ----
 ww <- matrix(NA, n_j, p_j)
@@ -49,14 +50,34 @@ xx <- cbind(one, xx)
 
 # ---- Run MCMC ----
 
-# Let starting alpha = 0, starting beta = logit estimates
-res <- match2sided(iter = 5000,
-                   C_alpha = (0.4 ** 2) * diag(ncol(ww)), 
-                   C_beta = (0.05 ** 2) * diag(ncol(xx)),
-                   frac_opp = 0.1,
+iter <- 5e5
+start <- iter / 2
+thin <- 1
+p_i <- ncol(xx)
+p_j <- ncol(ww)
+prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(0.01, p_j)))),
+              mu_beta = list(mu = rep(0, p_i),
+                             Tau = solve(diag(rep(0.01, p_i)))),
+              Tau_beta = list(nu = p_i + 2,
+                              Sinv = solve(diag(rep(0.01, p_i)))))
+
+start_time <- Sys.time()
+res <- match2sided(iter = iter, t0 = iter + 1, thin = 5,
+                   C_alpha = diag(c(0.001, 0.005)), 
+                   C_beta = diag(c(0.05, 0.005, 0.0025, 0.01) ** 2),
+                   starting_alpha = rep(0, p_j),
+                   frac_opp = 0.25, prior = prior,
                    ww = ww, xx = xx,
-                   choice = choice, opp = opp)
-print(res$acceptance_rate)
+                   choice = choice, opp = obs_opp,
+                   to_save = c("alpha", "beta"),
+                   file = paste("../result/sim_nojobs_", start_time), write = FALSE)
+
+
+# ---- MCMC analysis ----
+
+colMeans(res$ok)
+
+# ----- Results -----
 
 pdf("../figure/posterior_density_adaptive.pdf", w = 7, h = 7)
 par(mfrow = c(2, 2))
@@ -67,14 +88,32 @@ plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
 par(mfrow = c(1, 1))
 dev.off()
 
-alpha <- mcmc(res$alpha)
-pdf("../figure/trace_alpha_adaptive.pdf", w = 7, h = 7)
-plot(alpha)
+# alpha
+pdf(paste0("../figure/alpha ", start_time, ".pdf"), w = 7.5, h = 5)
+par(oma=c(0, 0, 3, 0))
+plot(mcmc(res$alpha))
+mtext("Workers' preference param", side = 3, line = 0, outer = TRUE)
 dev.off()
+
+my.plot.mcmc(mcmc(res$alphastar), parameters = true_alpha)
+
+# beta
+pdf(paste0("../figure/beta_emp1 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
+par(oma=c(0, 0, 3, 0))
+plot(mcmc(res$beta[, , 2]))
+mtext("Professional preference",  side = 3, line = 0, outer = TRUE)
+dev.off()
+
+pdf(paste0("../figure/beta_emp2 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
+par(oma=c(0, 0, 3, 0))
+plot(mcmc(res$beta[, , 3]))
+mtext("Managerial preference",  side = 3, line = 0, outer = TRUE)
+dev.off()
+
 
 beta_educ <- mcmc(res$beta[, 'educ', ])
 pdf("../figure/trace_beta_educ_adaptive.pdf", w = 7, h = 7)
-plot(beta_educ[, c('Professionals, Salaried', "Craftsmen, Manufacturing", 'Farm laborers')])
+plot(beta_educ)
 dev.off()
 
 betastar_educ <- mcmc(res$betastar[, 'educ', ])
