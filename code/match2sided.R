@@ -290,36 +290,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       }
       
       # Update alpha
-      if (i <= t0) {
-        C_alpha_est <- C_alpha
-      } else if (i > t0) {
-        if (i == t0 + 1) {
-          browser()
-          # Calculate Cs and Xbars for the first time
-          idx_first_accept_alpha <- min(which(ok[, "alpha"] == 1))
-          alpha_samples <- asave[idx_first_accept_alpha:(i - 1), , drop = FALSE]
-          C_alpha_est <- sd_alpha * var(alpha_samples) + sd_alpha * eps * diag(p_j)
-          Xbar_alpha_est <- colMeans(alpha_samples)
-        } else {
-          if (i %% 200 == 0) { # Periodically check acceptance rate
-            ok_rate_alpha <- mean(ok[(i - 200):(i - 1), "alpha"])
-            if (ok_rate_alpha < 0.1) {
-              sd_alpha <- sd_alpha * 1 / 2
-              cat("sd_alpha decreases to", sd_alpha, "\n")
-            } else if (ok_rate_alpha > 0.4) {
-              sd_alpha <- sd_alpha * 2
-              cat("sd_alpha increases to", sd_alpha, "\n")
-            }
-          }
-          # Calculate Cs and Xbars recursively
-          # (notice we're passing in old values of Cs and Xbars)
-          res <- calculate_C(X_sample = asave[i - 1, , drop = FALSE], t = i, 
-                             C = C_alpha_est, Xbar = Xbar_alpha_est,
-                             sd = sd_alpha)
-          Xbar_alpha_est <- res$Xbar
-          C_alpha_est <- res$C
-        }
-      }
+      C_alpha_est <- C_alpha
       alphastar <- alpha + c(rmvnorm(1, sigma = C_alpha_est))
       
       # my_logmh_alphaR <- logmh_alpha(alpha, alphastar, ww, opp, wa, prior)
@@ -333,41 +304,10 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
       
       # Update beta (except the beta of unemployment)
       if (missing(C_beta_est)) {
-        if (i <= t0) {
-          if (reserve_choice) {
-            C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))  
-          } else {
-            C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))  
-          }
-          
-        } else if (i > t0) {
-          if (i == t0 + 1) {
-            # Calculate Cs and Xbars for the first time
-            idx_first_accept_beta <- min(which(ok[, "beta"] == 1))
-            beta_samples <- bsave[idx_first_accept_beta:(i - 1), , 2:n_j, drop = FALSE]
-            dim(beta_samples) <- c(i - idx_first_accept_beta, p_i * (n_j - 1))
-            C_beta_est <- sd_beta * var(beta_samples) + sd_beta * eps * diag(p_i * (n_j - 1))
-            Xbar_beta_est <- colMeans(beta_samples)
-          } else {
-            if (i %% 200 == 0) { # Periodically check acceptance rate
-              ok_rate_beta <- mean(ok[(i - 200):(i - 1), "beta"])
-              if (ok_rate_beta < 0.1) {
-                sd_beta <- sd_beta * 1 / 10
-                cat("sd_beta decreases to", sd_beta, "\n")
-              } else if (ok_rate_beta > 0.4) {
-                sd_beta <- sd_beta * 10
-                cat("sd_beta increases to", sd_beta, "\n")
-              }
-            }
-            # Calculate Cs and Xbars recursively
-            # (notice we're passing in old values of Cs and Xbars)
-            beta_sample <- c(bsave[i - 1, , 2:n_j, drop = FALSE])
-            res <- calculate_C(X_sample = beta_sample, t = i, 
-                               C = C_beta_est, Xbar = Xbar_beta_est,
-                               sd = sd_beta)
-            Xbar_beta_est <- res$Xbar
-            C_beta_est <- res$C
-          }
+        if (reserve_choice) {
+          C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j - 1)))  
+        } else {
+          C_beta_est <- as.matrix(Matrix::bdiag(rep(list(C_beta), n_j)))  
         }
       }
       if (reserve_choice) {
