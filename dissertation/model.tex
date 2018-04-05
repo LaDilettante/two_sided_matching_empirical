@@ -126,7 +126,8 @@ an offer to worker $i$ as the familiar binomial logit form:
 \begin{align}
   Pr(o_{ij} = 1) &= Pr(U_j(i) > U_j(\neg i)) \\
                  &= Pr(\epsilon_{0ij} - \epsilon_{1ij} <  \bm{\beta}_j ' X_i - b_j) \\
-                 &= \frac{\exp({\bm{\beta}_j'X_i})}{1 + \exp({\bm{\beta}_j'X_i})} \label{eq:prob_offer_ij}
+                 &= \frac{\exp({\bm{\beta}_j'X_i})}{1 + \exp({\bm{\beta}_j'X_i})} \label{eq:prob_offer_ij} \\
+  Pr(o_{ij} = 0) &= 1 - Pr(o_{ij} = 1) = \frac{1}{1 + \exp({\bm{\beta}_j'X_i})}
 \end{align}
 
 The term $b_j$ is absorbed into $\bm{\beta}$ when we add an intercept term to
@@ -422,3 +423,8 @@ utility of the decision maker.
 \section{Results for US labor data}
 
 To be written ...
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "AnhLe_dissertation.tex"
+%%% End:
