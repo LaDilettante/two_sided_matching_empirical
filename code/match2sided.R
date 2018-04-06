@@ -162,16 +162,6 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
   n_j <- nrow(ww)
   p_i <- ncol(xx)
   p_j <- ncol(ww)
-  eps <- 0.01 # Small constant for beta proposal
-  
-  if (missing(prior)) {
-    prior <- list(alpha = list(mu = rnorm(p_j),
-                               Tau = solve(diag(abs(rnorm(p_j))))),
-                  mu_beta = list(mu = rnorm(p_i),
-                                 Tau = solve(diag(abs(rnorm(p_i))))),
-                  Tau_beta = list(nu = p_i + 2,
-                                  Sinv = solve(diag(abs(rnorm(p_i))))))
-  }
   
   # ---- Starting values ----
   # opp
@@ -376,6 +366,7 @@ match2sided <- function(iter, t0 = iter / 10, thin = 10,
                                    C_alpha = C_alpha, C_beta_est = C_beta_est,
                                    starting_alpha = starting_alpha,
                                    starting_beta = starting_beta,
-                                   starting_opp = starting_opp),
+                                   starting_opp = starting_opp,
+                                   prior = prior),
               data = list(xx = xx, ww = ww, choice = choice)))
 }
