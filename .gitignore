@@ -9,6 +9,7 @@ __pycache__
 .ipynb_checkpoints
 *.el
 *.tex.bak
+*.#*
 
 ## C++
 *.o
