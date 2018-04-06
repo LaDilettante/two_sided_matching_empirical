@@ -64,7 +64,7 @@ class Model:
         # Employer making offers
         opportunity_set = np.transpose(np.array([employer.make_offer(employee_list)
                                                 for employer in employer_list]))
-        opportunity_set[:, 0] = 1 # Unemployment is always available
+        # opportunity_set[:, 0] = 1 # Unemployment is always available
         opportunity_set = opportunity_set.astype("float64")
 
         # Employee choosing where to work
@@ -82,7 +82,7 @@ class Model:
 
         # Compute the observed opportunity set for R
         observed_opp = np.zeros((self.num_employee, self.num_employer))
-        observed_opp[:, 0] = 1 # Unemployement is always available
+        # observed_opp[:, 0] = 1 # Unemployement is always available
         observed_opp[np.arange(self.num_employee), choice] = 1 # Accepted jobs are available
 
         return (alpha, beta, ww, xx, choice,

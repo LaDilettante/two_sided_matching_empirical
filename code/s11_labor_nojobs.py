@@ -17,6 +17,7 @@ df_xx.insert(0, "intercept", 1)
 
 # ---- Prepare ww ----
 df_ww = df_employer.loc[:, ['pres', 'aut']]
+df_ww = df_ww.iloc[1:].reset_index(drop = True) # drop unemployment
 
 n_i = df_xx.shape[0]
 p_i = df_xx.shape[1]
@@ -26,8 +27,13 @@ p_j = df_ww.shape[1]
 # Create employers
 rng_beta = RandomState(1)
 rng = RandomState(1)
-true_beta = np.array([[0, 0, 0, 0],
-                      [-24, 1.3, 0.1, 1],
+# true_beta = np.array([[0, 0, 0, 0],
+#                       [-24, 1.3, 0.1, 1],
+#                       [-22, 1, 0.2, 1],
+#                       [-9, 0.75, -0.05, 0],
+#                       [-8, 0.5, 0.02, 0],
+#                       [-6, 0.5, -0.01, 1]])
+true_beta = np.array([[-24, 1.3, 0.1, 1],
                       [-22, 1, 0.2, 1],
                       [-9, 0.75, -0.05, 0],
                       [-8, 0.5, 0.02, 0],

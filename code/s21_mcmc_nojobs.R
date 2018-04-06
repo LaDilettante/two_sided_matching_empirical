@@ -9,6 +9,13 @@ use_python("/Users/anh/miniconda3/bin/python")
 
 set.seed(1)
 py_run_file("s11_labor_nojobs.py")
+
+idx_nooffer <- which(rowSums(py$true_opp) == 0)
+py$true_opp <- py$true_opp[-idx_nooffer, ]
+py$obs_opp <- py$obs_opp[-idx_nooffer, ]
+py$choice <- py$choice[-idx_nooffer]
+py$xx <- py$xx[-idx_nooffer, ]
+py$n_i <- nrow(py$xx)
 py$xx[, 2] <- py$xx[, 2] - mean(py$xx[, 2])
 py$xx[, 3] <- py$xx[, 3] - mean(py$xx[, 3])
 
@@ -16,38 +23,27 @@ py$xx[, 3] <- py$xx[, 3] - mean(py$xx[, 3])
 py$true_beta
 
 py$true_beta_std <- py$true_beta
-py$true_beta_std[, 1] <- py$true_beta[, 1] + py$true_beta[, c(2, 3)] %*% colMeans(py$df_xx[, c(2, 3)])
+py$true_beta_std[, 1] <- py$true_beta[, 1] + py$true_beta[, c(2, 3)] %*% colMeans(py$df_xx[-idx_nooffer, c(2, 3)])
 
 # ---- Estimating beta from true_opp ----
 
 # one-sided beta
-sapply(c(2, 3, 4, 5, 6), function(j) {
+sapply(c(1:py$n_j), function(j) {
   m <- glm(py$true_opp[, j] ~ . - 1, family = binomial(link = "logit"),
       data = as.data.frame(py$xx))
   coef(m)
 })
 
 # true beta
-t(py$true_beta)
+t(py$true_beta_std)
 
 # ---- Estimating alpha from true_opp ----
 
 # Only look at people who got the opportunity set c(1, 0, 1, 1)
-idx <- which(colSums(t(py$true_opp) == c(1, 0, 0, 1, 1, 1)) == 6)
-choice_tmp <- py$choice[idx]
-choice_tmp[py$choice[idx] == 4] <- 2
-choice_tmp[py$choice[idx] == 5] <- 3
-choice_tmp[py$choice[idx] == 6] <- 4
-
-# Calculate by hand
-cl_nllik <- function(alpha) {
-  ww_tmp <- py$ww[c(1, 4, 5, 6), ]
-  wa <- ww_tmp %*% alpha
-  lse_wa <- log(sum(exp(wa)))
-  - sum(wa[choice_tmp] - lse_wa)
-}
-# one-sided alpha (not very good, cuz of high correlation)
-optim(c(0, 0), cl_nllik)
+idx <- which(colSums(t(py$true_opp) == c(1, 1, 1, 1, 1)) == 5)
+df_count <- data.frame(table(py$choice[idx]),
+                       py$df_ww)
+glm(Freq ~ pres + aut, data = df_count, family = "poisson")
 
 # true alpha
 py$true_alpha
@@ -86,14 +82,14 @@ start_time <- Sys.time()
 starting_alpha <- rep(0, py$p_j)
 starting_beta <- matrix(0, py$p_i, py$n_j)
 res <- match2sided(iter = iter, t0 = iter + 1,
-                   C_alpha = diag(c(0.01, 0.1) ** 2), 
+                   C_alpha = diag(c(0.015, 0.15) ** 2), 
                    C_beta = diag(c(0.01, 0.005, 0.005, 0.01) ** 2),
                    starting_alpha = starting_alpha,
                    starting_beta = starting_beta,
                    frac_opp = 0.25, prior = prior,
                    ww = py$ww, xx = py$xx,
                    choice = py$choice, starting_opp = py$obs_opp,
-                   reserve_choice = TRUE,
+                   reserve_choice = FALSE,
                    to_save = c("alpha", "beta", "opp"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
 cat("Sim labor no jobs done\n")
@@ -101,103 +97,30 @@ cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
 cat("Memory used: ", gc()[2, 2])
 colMeans(res$ok)
 
-# 1st run, hand-tuned C_beta
-saveRDS(res, paste0("../result/simlabor_nojobs_", start_time, ".RData"))
-
-# ---- Run ----
-rm(res)
-start_time <- Sys.time()
-starting_opp <- matrix(FALSE, py$n_i, py$n_j)
-starting_opp[sample(1:(py$n_i * py$n_j), size = (py$n_i * py$n_j) * 0.1, replace = FALSE)] <- TRUE
-starting_opp[cbind(1:py$n_i, py$choice)] <- TRUE
-starting_alpha <- rnorm(py$p_j, mean = 0, sd = 1)
-starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
-starting_beta[, 1] <- 0
-res <- match2sided(iter = iter, t0 = iter + 1,
-                   C_alpha = diag(c(0.01, 0.1) ** 2), 
-                   C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
-                   starting_alpha = starting_alpha,
-                   starting_beta = starting_beta,
-                   frac_opp = 0.25, prior = prior,
-                   ww = py$ww, xx = py$xx,
-                   choice = py$choice, starting_opp = starting_opp,
-                   reserve_choice = TRUE,
-                   to_save = c("alpha", "beta", "opp"),
-                   file = paste("../result/sim_nojobs_", start_time), write = FALSE)
-cat("Sim labor no jobs done\n")
-cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
-cat("Memory used: ", gc()[2, 2])
-colMeans(res$ok)
-
-# 2nd run
-saveRDS(res, paste0("../result/simlabor_nojobs_", start_time, ".RData"))
-
-# ---- Run ----
-rm(res)
-start_time <- Sys.time()
-starting_opp <- matrix(FALSE, py$n_i, py$n_j)
-starting_opp[sample(1:(py$n_i * py$n_j), size = (py$n_i * py$n_j) * 0.1, replace = FALSE)] <- TRUE
-starting_opp[cbind(1:py$n_i, py$choice)] <- TRUE
-starting_alpha <- rnorm(py$p_j, mean = 0, sd = 1)
-starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
-starting_beta[, 1] <- 0
-res <- match2sided(iter = iter, t0 = iter + 1,
-                   C_alpha = diag(c(0.01, 0.1) ** 2), 
-                   C_beta = diag(c(0.01, rep(0.005, py$p_i - 1)) ** 2),
-                   starting_alpha = starting_alpha,
-                   starting_beta = starting_beta,
-                   frac_opp = 0.25, prior = prior,
-                   ww = py$ww, xx = py$xx,
-                   choice = py$choice, starting_opp = starting_opp,
-                   reserve_choice = TRUE,
-                   to_save = c("alpha", "beta", "opp"),
-                   file = paste("../result/sim_nojobs_", start_time), write = FALSE)
-cat("Sim labor no jobs done\n")
-cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
-cat("Memory used: ", gc()[2, 2])
-colMeans(res$ok)
-
-# 3rd run
+# no unemployment, informative prior
 saveRDS(res, paste0("../result/simlabor_nojobs_", start_time, ".RData"))
 
 # ---- Analysis ----
 
 start <- iter / 2
 
-pdf(paste0("../figure/alpha ", start_time, ".pdf"), w = 7.5, h = 5)
-par(oma=c(0, 0, 3, 0))
 my.plot.mcmc(mcmc(res$alpha[, ]), parameters = py$true_alpha)
-mtext("Workers' preference param", side = 3, line = 0, outer = TRUE)
-dev.off()
+my.plot.mcmc(mcmc(res$beta[, , 1]), parameters = py$true_beta_std[1, ])
+my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = py$true_beta_std[2, ])
+my.plot.mcmc(mcmc(res$beta[, , 3]), parameters = py$true_beta_std[3, ])
+my.plot.mcmc(mcmc(res$beta[, , 4]), parameters = py$true_beta_std[4, ])
+my.plot.mcmc(mcmc(res$beta[, , 5]), parameters = py$true_beta_std[5, ])
 
-mcmcse::mcse.multi(res$beta[start:iter, , 2]) # beta for the 1st employer
-pdf(paste0("../figure/beta_emp1 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
-par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = py$true_beta[2, ])
-mtext("Employer 1's preference params", side = 3, line = 0, outer = TRUE)
-dev.off()
+my.plot.mcmc(mcmc(res$beta[, 2, 5] / res$beta[, 3, 5]),
+             parameters = py$true_beta_std[5, 2] / py$true_beta_std[5, 3])
 
-my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = c(-9.0, 0.2, 0.2))
-my.plot.mcmc(mcmc(res$betastar[, , 2]), parameters = py$true_beta[2, ])
+j <- 4
+tmp <- res$beta[start:iter, 2, j] / res$beta[start:iter, 3, j]
+true <- py$true_beta_std[j, 2] / py$true_beta_std[j, 3]
+q <- quantile(tmp, c(0.05, 0.95))
+tmp2 <- tmp[tmp >= q[1] & tmp <= q[2]]
+plot(density(tmp2)) ; abline(v = true, col = 'red')
 
-mcmcse::mcse.multi(res$beta[start:iter, , 3]) # beta for the 2nd employer
-pdf(paste0("../figure/beta_emp2 ", start_time, ".pdf"), 2 = 7.5, h = 7.5)
-par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 3]), parameters = py$true_beta[3, ])
-mtext("Employer 2's preference params", side = 3, line = 0, outer = TRUE)
-dev.off()
-
-mcmcse::mcse.multi(res$beta[start:iter, , 4]) # beta for the 3rd employer
-par(oma=c(0, 0, 3, 0))
-my.plot.mcmc(mcmc(res$beta[, , 4]), parameters = py$true_beta[4, ])
-mtext("Employer 3's preference params", side = 3, line = 0, outer = TRUE)
-
-my.plot.mcmc(mcmc(res$beta[, , 5]), parameters = py$true_beta[5, ])
-my.plot.mcmc(mcmc(res$beta[, , 6]), parameters = py$true_beta[6, ])
-
-beta_2 <- res$beta[, 2, ] # the beta for the second employee's covariate (educ)
-my.plot.mcmc(mcmc(beta_2))
-colMeans(beta_2[5000:10000, ])
 
 # Check updating of opp
 for (i in 1:5) {
@@ -205,36 +128,29 @@ for (i in 1:5) {
 }
 
 # See the percentage of offfer for each employers and compare with true_opp
-# This could be an approximation for how stringent the
+# This could be an approximation for how stringent the employer is
 tmp <- t(apply(res$opp, 1, 
-               function(sampled_opp) colMeans(sampled_opp) - colMeans(true_opp)))
-par(mfrow = c(4, 2))
-par(oma=c(0, 0, 3, 0))
-f_plot_mcmc(tmp[seq(1, iter, thin), 2], main = "Employer 2")
-f_plot_mcmc(tmp[seq(1, iter, thin), 3], main = "Employer 3")
-f_plot_mcmc(tmp[seq(1, iter, thin), 4], main = "Employer 4")
-f_plot_mcmc(tmp[seq(1, iter, thin), 5], main = "Employer 5")
-mtext("Difference in Offer Rate b/w Sampled Opp Set and True Opp Set", 
-      side = 3, line = 0, outer = TRUE)
-
-# Average difference between the sampled_opp and true_opp for each employer
-tmp <- t(apply(res$opp, 1, 
-               function(sampled_opp) colMeans(abs(sampled_opp - true_opp))))
-par(mfrow = c(4, 2))
-par(oma=c(0, 0, 3, 0))
-f_plot_mcmc(tmp[seq(1, iter, thin), 2], main = "Employer 2")
-f_plot_mcmc(tmp[seq(1, iter, thin), 3], main = "Employer 3")
-f_plot_mcmc(tmp[seq(1, iter, thin), 4], main = "Employer 4")
-f_plot_mcmc(tmp[seq(1, iter, thin), 5], main = "Employer 5")
-mtext("Avg Difference b/w Sampled Opp Set and True Opp Set", 
-      side = 3, line = 0, outer = TRUE)
+               function(sampled_opp) colMeans(sampled_opp)))
+plot(tmp[, 1], type = 'l') ; abline(h = colMeans(py$true_opp)[1], col = 'red')
+plot(tmp[, 2], type = 'l') ; abline(h = colMeans(py$true_opp)[2], col = 'red')
+plot(tmp[, 3], type = 'l') ; abline(h = colMeans(py$true_opp)[3], col = 'red')
 
 # ---- Correlation between opp and beta ----
 
 offer_rate <- t(apply(res$opp, 1, colMeans))
 intercept <- res$beta[ , 1, ] # intercept
 
+par(mfrow = c(2, 1))
+plot(offer_rate[, 2], type = 'l') ; abline(h = colMeans(py$true_opp)[2], col = 'red')
+plot(intercept[, 2], type = 'l') ; abline(h = py$true_beta_std[2, 1], col = 'red')
+
+par(mfrow = c(2, 1))
+plot(offer_rate[, 1], type = 'l') ; abline(h = colMeans(py$true_opp)[1], col = 'red')
+plot(offer_rate[, 2], type = 'l') ; abline(h = colMeans(py$true_opp)[2], col = 'red')
+
+
 par(mfrow = c(2, 2))
+plot(offer_rate[, 1], intercept[, 1])
 plot(offer_rate[, 2], intercept[, 2])
 plot(offer_rate[, 3], intercept[, 3])
 plot(offer_rate[, 4], intercept[, 4])

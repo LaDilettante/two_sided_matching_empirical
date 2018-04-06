@@ -35,7 +35,7 @@ stargazer(py$df_employer %>% select(occ5, pres, supervisor, aut) %>%
 source("0_plot_functions.R")
 
 # Trace plot alpha
-pdf("../figure/sim_labor_nojobs_alpha.pdf", w = 7, h = 4.5)
+pdf("../figure/sim_labor_nojobs_nounemp_alpha.pdf", w = 7, h = 4.5)
 par(mfrow = c(1, 2))
 traceplot(mcmc(res$alpha)[, 1], xlab = "Workers' preference for job's prestige")
 abline(h = py$true_alpha[1], col = "red")
@@ -112,3 +112,56 @@ p_obschoice <- f_plot_opp(choice_matrix) +
 ggpubr::ggarrange(p_trueopp, p_obschoice, ncol = 2, common.legend = TRUE) 
 ggsave("../figure/sim_labor_nojobs_trueopp_obschoice.pdf", 
        width = 10.4, height = 6.8)
+
+# ---- Visualize the opp ----
+
+offer_rate <- t(apply(res$opp, 1, colMeans))
+intercept <- res$beta[ , 1, ] # intercept
+
+pdf("../figure/sim_labor_nojobs_nounemp_managerial.pdf", w = 8, h = 3.2)
+par(mfrow = c(1, 3))
+j <- 2 # Managerial
+plot(offer_rate[, j], type = 'l', xlab = "Iterations", ylab = "Offer rate")
+abline(h = colMeans(py$true_opp)[j], col = 'red')
+traceplot(mcmc(res$beta[, 1, j]), ylab = "Intercept", ylim = c(-1.5, 4))
+abline(h = py$true_beta_std[j, 1], col = "red")
+traceplot(mcmc(res$beta[, 3, j]), ylab = "Preference for educ")
+abline(h = py$true_beta_std[j, 3], col = "red")
+dev.off()
+
+my.plot.mcmc(mcmc(res$beta[, , 2]), parameters = py$true_beta_std[2, ])
+
+
+pdf("../figure/sim_labor_nojobs_nounemp_offer_rate.pdf", w = 6.8, h = 3.8)
+par(mfrow = c(1, 2))
+plot(offer_rate[, 1], type = 'l', 
+     xlab = "Iterations", ylab = "Offer rate", main = "Professional")
+abline(h = colMeans(py$true_opp)[1], col = 'red')
+plot(offer_rate[, 4], type = 'l', 
+     xlab = "Iterations", ylab = "Offer rate", main = "Other blue collar")
+abline(h = colMeans(py$true_opp)[4], col = 'red')
+dev.off()
+
+# ---- Correlation between beta and the opp ----
+
+offer_rate <- t(apply(res$opp, 1, colMeans))
+intercept <- res$beta[ , 1, ] # intercept
+
+idx_highed <- which(py$xx[, 2] > quantile(py$xx[, 2], probs = c(0.75)))
+offer_rate_higheduc <- t(apply(res$opp[, idx_highed, ], 1, colMeans))
+beta_educ <- res$beta[, 2, ]
+
+# Correlation of opp and beta for professional
+start <- res$mcmc_settings$iter / 2
+end <- res$mcmc_settings$iter
+pdf("../figure/sim_labor_nojobs_opp_beta_correlation_managerial.pdf", 
+    w = 8, h = 4.5)
+par(mfrow = c(1, 2))
+j <- 3 # Managerial
+plot(offer_rate[start:end, j], intercept[start:end, j],
+     cex = 0.5, col=rgb(0, 0, 0, 0.25),
+     xlab = "Offer rate", ylab = "Intercept")
+plot(offer_rate_higheduc[start:end, j], beta_educ[start:end, j],
+     cex = 0.5, col=rgb(0, 0, 0, 0.25),
+     xlab = "Offer rate for educated workers", ylab = "Preference for education")
+dev.off()
