@@ -43,7 +43,14 @@ hc ~ -10 -> 10
 - 4e5, thin 10
 - standardize xx, random alpha, beta. opp stays as obs_opp
 
+"../result/japan96_2018-04-05 00:25:23.RData"
+- informative prior
 
+"../result/japan96_2018-04-05 22:12:13.RData"
+- informative prior 1st run before viz
+"../result/japan96_2018-04-06 08:13:21.RData"
+"../result/japan96_2018-04-06 15:24:11.RData"
+- half informative prior 1st run before viz
 
 "../result/simlabor_nojobs_2018-03-31 19:02:45.RData"
 "../result/japan96_2018-03-31 21:24:03.RData"
@@ -58,3 +65,7 @@ hc ~ -10 -> 10
 
 "../result/labor_occ5_2018-04-03 13:17:02.RData"
 - standardize xx
+
+"../result/simlabor_nojobs_2018-04-05 16:30:12.RData"
+- NO UNEMPLOYMENT, diffuse prior
+

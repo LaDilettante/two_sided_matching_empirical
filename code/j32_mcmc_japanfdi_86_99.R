@@ -68,56 +68,41 @@ choice <- df_mnc$nation_id
 obs_opp <- matrix(FALSE, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
 obs_opp[cbind(1:n_i, choice)] <- TRUE  # firms are offered the countries they are in!
 
-starting_opp <- matrix(FALSE, n_i, n_j)
-# Randomly flip some cells to TRUE
-starting_opp[sample(1:(n_i * n_j), size = (n_i * n_j) * 0.1, replace = FALSE)] <- TRUE
-starting_opp[cbind(1:n_i, choice)] <- TRUE
 
 # ---- MCMC ----
 
 # iter <- 4e5, thin <- 10 is often what we run eventually
-iter <- 2e5
+iter <- 4e5
 thin <- 10
 prior <- list(alpha = list(mu = rep(0, p_j), Tau = solve(diag(rep(100, p_j)))),
-              mu_beta = list(mu = rep(0, p_i),
-                             Tau = solve(diag(rep(100, p_i)))),
-              Tau_beta = list(nu = p_i + 2,
-                              Sinv = solve(diag(rep(100, p_i)))))
+              mu_beta = list(mu = c(0, rep(0, p_i - 1)),
+                             Tau = solve(diag(c(1, rep(10, p_i - 1))))),
+              Tau_beta = list(nu = 25, # p_i + const
+                              Sinv = solve(diag(c(5, rep(10, p_i - 1))))))
 
 start_time <- Sys.time()
 
-# C_beta_est <- diag(c(0.1, 0.05 ,0.05, 0.05, 0.05, # China
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # Indonesia
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # Malaysia
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # Phillipines
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # Singapore
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # South Korea
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # Taiwan
-#                      0.1, 0.05, 0.05, 0.05, 0.05, # Thailand
-#                      0.1, 0.05, 0.05, 0.05, 0.05)) # Vietnam
-# C_beta_est <- C_beta_est ** 2
-  
-starting_alpha <- rnorm(p_j, mean = 0, sd = 2)
-starting_beta <- matrix(rnorm(p_i * n_j, 0, sd = 1), p_i, n_j)
+starting_alpha <- rep(0, p_j)
+starting_beta <- matrix(0, nrow = p_i, ncol = n_j)
 res <- match2sided(iter = iter, t0 = iter + 1, thin = thin,
                    C_alpha = diag(c(0.25, 0.25, 0.25) ** 2), 
-                   C_beta = diag(c(0.25, 0.1, 0.1, 0.1, 0.1) ** 2),
+                   C_beta = diag(c(0.1, 0.1, 0.1, 0.1, 0.1) ** 2),
                    # C_beta_est = C_beta_est,
                    starting_alpha = starting_alpha,
                    starting_beta = starting_beta,
                    frac_opp = 0.15, prior = prior,
                    ww = ww, xx = xx,
-                   choice = choice, starting_opp = starting_opp,
+                   choice = choice, starting_opp = obs_opp,
                    reserve_choice = FALSE,
                    to_save = c("alpha", "beta", "opp"),
                    file = paste("../result/sim_nojobs_", start_time), write = FALSE)
-cat("Japan 86 99 done\n")
+cat("Japan 96 done\n")
 cat("Running time:", difftime(Sys.time(), start_time, units = "mins"), "mins")
 cat("Memory used: ", gc()[2, 2])
 colMeans(res$ok)
 
-
-# standardize xx, 1st run
+# standardize xx, kinda diffuse prior
+paste0("../result/japan96_", start_time, ".RData")
 saveRDS(res, paste0("../result/japan96_", start_time, ".RData"))
 
 # ---- Result and Diagnostics ----
@@ -131,27 +116,19 @@ plot(res$lp[, 3], type='l', xlab = 'iteration', ylab = 'lp_O')
 par(mfrow = c(1, 1))
 dev.off()
 
-# alpha
-pdf(paste0("../figure/japan_alpha_", start_time, ".pdf"), w = 7, h = 7)
-par(oma=c(0, 0, 3, 0))
-plot(mcmc(res$alpha))
-mtext("MNCs' preference parameters", side = 3, line = 0, outer = TRUE)
-dev.off()
 
+
+plot(mcmc(res$alpha))
 beta_one <- mcmc(res$beta[, 'one', ])
 plot(beta_one)
 
 beta_temp <- mcmc(res$beta[, 'ltemp', ])
-pdf(paste0("../figure/japan_beta_educ_", start_time, ".pdf"), w = 7, h = 7)
 plot(beta_temp)
-dev.off()
 
 plot(mcmc(res$betastar[, 'ltemp', ]))
 
 beta_uscptl <- mcmc(res$beta[, 'luscptl', ])
-pdf(paste0("../figure/japan_beta_age_", start_time, ".pdf"), w = 7, h = 7)
 plot(beta_uscptl)
-dev.off()
 
 beta_rd <- mcmc(res$beta[, 'int_r_d', ])
 plot(beta_rd)
@@ -169,6 +146,13 @@ par(mfrow = c(5, 2))
 for (i in 1:n_j) {
   plot(tmp[i, ], type = "l", ylab = i)
 }
+
+par(mfrow = c(4, 1))
+plot(res$lp[, 1], type='l',
+     xlab = 'iteration', ylab = 'log posterior density')
+plot(tmp[3, ], type = "l")
+plot(res$beta[, 'one', 3], type = "l")
+plot(res$beta[, 'ltemp', 3], type = "l")
 
 # Look at sampled firms in Vietnam / or China
 id <- df_nation_id %>% filter(nation == "Vietnam") %>% .[["nation_id"]]

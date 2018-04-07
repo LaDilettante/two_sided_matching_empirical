@@ -48,11 +48,11 @@ plot_posterior_dens <- function(data, coefnames, xlab, order = FALSE, ...) {
   axis(2, at = 1:ncol(data), labels, las=1) # y tick label
 }
 
-#' Simulate the observed choice, one simulation
+#' Simulate the MNCs' final location, one simulation
 #' @param alpha i's preferences
 #' @param beta j's preferences
-#' @return a n_i vector of the choices
-f_sim <- function(alpha, beta) {
+#' @return a n_i vector of the location choices
+f_sim_final_choice <- function(alpha, beta, xx, ww) {
   # countries make offers to firms
   alpha1 <- alpha[sample(1:nrow(alpha), 1), ]
   beta1 <- beta[sample(1:nrow(beta), 1), , ]
@@ -70,17 +70,15 @@ f_sim <- function(alpha, beta) {
 #' Visualize sim result
 #' @param sim_result a matrix of n_sim x n_j, value being the test quantities
 #' @param observed a data frame of the observed quantities for j
-f_plot_sim <- function(sim_result, observed) {
+f_plot_sim <- function(sim_result) {
   molten <- reshape2::melt(sim_result, variable.name = "choices") %>%
     group_by(choices) %>%
     summarise(mean = mean(value, na.rm = TRUE), 
               lower95 = quantile(value, 0.025, na.rm = TRUE),
               upper95 = quantile(value, 0.975, na.rm = TRUE))
-  pd <- molten %>% inner_join(observed, by = "choices")
-  ggplot(pd, aes(x = choices)) +
+  ggplot(molten, aes(x = choices)) +
     geom_pointrange(aes(y = mean, ymin = lower95, ymax = upper95,
-                        color = "Predicted")) +
-    geom_point(aes(y = value, color = "Observed"))
+                        color = "Predicted"))
 }
   
 #' Coeficient plot with pointrange, ordering the coef based on posterior mean
