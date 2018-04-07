@@ -43,7 +43,7 @@ plot_posterior_dens(res$beta[start:end, 2:5, c("Indonesia")],
 dev.off()
 
 pdf("../figure/japan96_beta_ltemp_luscptl.pdf", w = 9, h = 5)
-par(mfrow = c(1, 3))
+par(mfrow = c(1, 2))
 plot_posterior_dens(res$beta[start:end, 'ltemp', ], 
                     xlab = "Coefficient for log Employment", order = TRUE)
 plot_posterior_dens(res$beta[start:end, 'luscptl', ], 
