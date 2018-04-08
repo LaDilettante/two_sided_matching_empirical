@@ -287,7 +287,7 @@ the same pool of highly educated and experienced workers.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_trueopp_obschoice}
-  \caption{Binary heat map for the true opportunity set (left) and observed
+  \caption[True opportunity set vs observed choice.]{Binary heat map for the true opportunity set (left) and observed
     choice (right). A dark blue cell indicates that an offer was made (or accepted)
     between the firm in the corresponding column and the worker in the corresponding
     row.}
@@ -303,6 +303,14 @@ during the MCMC, we cannot propose a new opportunity set that is very different
 from the current one because it would be too unlikely given the current value of
 $\beta$. Likewise, we cannot propose too different a value for $\beta$ because
 it would be rejected given the current opportunity set.
+
+\begin{figure}[tbp]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_opp_beta_correlation_managerial}
+  \caption{Correlation between opp and beta}
+  \label{fig:sim_labor_nojobs_opp_beta_correlation_managerial}
+\end{figure}
+
 
 This problem is especially severe for firms with only a few workers. If we
 propose a new opportunity set in which those firms now extends the offer to a
@@ -325,7 +333,109 @@ impossible to use more modern MCMC approach such as Hamiltonian Monte Carlo. A
 potential alternative parameterization is \citet{Logan2008}'s, which samples
 directly from the utility space.}
 
+\section{Estimation issues when the reservation choice is unobservable}
+\label{sec:reservation_choice}
+
+An important difference when we apply the two-sided matching model from the
+labor market to the FDI market is that in the latter we often will not observe
+the ``reservation choice,'' i.e. the choice that will always be available to the
+worker or the MNC, regardless of what the other side offers. In the labor
+market, this ``reservation choice'' is unemployment. In the FDI market, it is
+staying in the home country and not opening up a subsidiary abroad. Since most
+FDI data is collected by surveying firms that have made an investment abroad, we
+are not observing the firms who consider investing abroad but decide to stay
+put. This section investigates how missing this information affects the
+estimates of our model.
+
+Intuitively, we have a sample selection problem where we only observe firms who
+have made it abroad. This problem has difference consequences depending on
+whether we are estimating firms' preference or countries' preference.
+
+Figure~\ref{fig:sim_labor_nojobs_nounemp_alpha} shows that our estimates of
+workers' preference are unaffected. This makes sense because just looking at the
+decision of employed workers choosing one offer over another, we
+still get information about their preference. Not observing the workers who
+decide to stay unemployed simply reduces our sample size, but otherwise does not
+pose any problem.\footnote{In a sense, we avoid this problem by assuming that
+  all firms have the same preference. Thus, it makes sense that even though we
+  do not observe some firms, there is only one set of preference parameters and
+  it can be estimated from the firms that we do observe.}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_nounemp_alpha}
+  \caption{Workers' preference still being estimated okay when there is no unemp.}
+  \label{fig:sim_labor_nojobs_nounemp_alpha}
+\end{figure}
+
+On the other hand, our estimates for firms' preference can have serious bias.
+Figure~\ref{fig:sim_labor_nojobs_nounemp_managerial} shows the trace plots of
+the preference of the managerial firm, which no longer overlaps with the true
+values, indicated by the red line. The estimate of the rate at which the
+managerial firm makes an offer is too high, as demonstrated both by the high
+offer rate in the first panel and the high intercept term in the second
+panel.\footnote{The firm makes an offer if the utility function is positive.
+  Hence, if the intercept term is too high, we have too high an estimate for how
+often this firm makes an offer.}  
+
+This happens because the sample selection problem means that we are only
+observing the kind of high quality workers who receive good enough offers that
+they decide to stay and work instead of remaining unemployed. Since our sample
+only include only these good workers, our estimate of the firms' preference will
+make the firms look overly generous: it looks as if they extend an offer to
+every worker. Consequently, in our estimates, every firm will make more offers
+than they actually do, resulting in an estimated opportunity set that has more
+offers than the true opportunity set.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_nounemp_managerial}
+  \caption{Bias when there is no unemployment observable}
+  \label{fig:sim_labor_nojobs_nounemp_managerial}
+\end{figure}
+
+Another way to get the intuition around this problem is to examine the
+Metropolis-Hastings formula for how the opportunity set is sampled. Whenever a
+new offer is proposed to be added in the opportunity set, if the worker chooses
+to work at a bad job (or remains unemployed, which offers really low utility),
+then it is unlikely that this good job was really offered (otherwise the worker
+would have taken it). This is how the sampling of the opportunity set avoids
+adding spurious offers.
+
+For this process to work well, the unemployment needs to be an option so that we
+can anchor other jobs against it. Essentially, by observing a lot of people who
+are unemployed, we know that other firms have not extended an offer to these
+people, and thus allowing us to better estimate their preference.
+
+In the current situation where we do not observe the reservation choice, we no
+longer have this information, and thus our estimate tends to overshoot and make
+firms look more generous than they actually are.
+
+\begin{align}
+  MH_O &= \frac{p(O_i^* | A_i, \alpha, \bm{\beta})}{p(O_i | A_i, \alpha, \bm{\beta})} \\
+       &= \frac{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j) \pm \exp(\alpha' W_{j^*})} \times \exp(\pm \bm{\beta}_{j^*}'X_i)
+\end{align}
+
+These findings suggest that we can make the following conclusion when the
+reservation choice is not available. First, the estimate of the workers'
+preference is unaffected. In the FDI application, it means that we can still
+rely on the estimates of MNCs' preference without any change. Second, given that
+we need a ``bad'' choice to anchor the estimate of firms' preference, we can
+still rely on the estimates for the good jobs. For these jobs, even without
+unemployment, there are still other worse jobs to compare to, thus allowing us a
+good estimate. For example, given the estimated workers' preference,
+professional firm is the most highly coveted job, and indeed
+Figure~\ref{fig:sim_labor_nojobs_nounemp_offer_rate} shows the our estimates for
+its parameters are still correct, unlike the estimate for other blue collar.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_nounemp_offer_rate}
+  \caption{The estimate for the best firm is still accurate}
+  \label{fig:sim_labor_nojobs_nounemp_offer_rate}
+\end{figure}
+
 %%% Local Variables:
 %%% mode: latex
-%%% TeX-master: "../AnhLe_dissertation.tex"
+%%% TeX-master: "AnhLe_dissertation.tex"
 %%% End:
