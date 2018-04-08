@@ -27,7 +27,7 @@ non-white.
 
 \begin{table}[!ht]
   \centering
-  \caption{Summary statistics of workers' education, age, and race. The data
+  \caption[Summary statistics of US male workers between 25 and 44 years old, 1982-1990.]{Summary statistics of workers' education, age, and race. The data
     come from the GSS, 1982-1990, for male workers in the US between 25 and 44
     years old.}
   \label{tab:labor_occ5_summary_employee}
@@ -58,9 +58,9 @@ of preferences in the modeling step. In addition, in other applications, such
 as the FDI market where MNCs are matched with countries, we can obtain objective
 data on countries' GDP, growth, and human capital, etc.}
 
-\begin{table}[!ht]
+\begin{table}[tbp]
   \centering
-  \caption{Firms' characteristics}
+  \caption[Characteristics of 5 firm types in the US, 1982-1990.]{Characteristics of 5 firm types in the US, 1982-1990.}
   \label{tab:labor_occ5_summary_employer}
 \input{../table/labor_occ5_summary_employer}
 \end{table}
@@ -151,7 +151,7 @@ convergence within a reasonable time frame.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_alpha}
-  \caption[Simulation result, estimate for workers' preference]{Two-sided logit estimates for workers' preference. The black line
+  \caption[Simulation, estimate for workers' preference]{Two-sided logit estimates for workers' preference. The black line
     plots are the trace plots of the MCMC samplers, and the red line indicates the
     true parameter values. The trace plots show that the MCMC chain is able to
     converge to the true value after 10,000 iterations (2,000 saved iterations $\times 5$ thinning interval).}
@@ -307,7 +307,7 @@ it would be rejected given the current opportunity set.
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_opp_beta_correlation_managerial}
-  \caption{Correlation between opp and beta}
+  \caption{Correlation between the opportunity set and $\beta$}
   \label{fig:sim_labor_nojobs_opp_beta_correlation_managerial}
 \end{figure}
 
@@ -339,7 +339,9 @@ directly from the utility space.}
 An important difference when we apply the two-sided matching model from the
 labor market to the FDI market is that in the latter we often will not observe
 the ``reservation choice,'' i.e. the choice that will always be available to the
-worker or the MNC, regardless of what the other side offers. In the labor
+worker or the MNC, regardless of what the other side offers.\footnote{I call
+  unemployment the ``reservation choice'' in reference to the ``reservation
+  wage'' in game theory and economic models.} In the labor
 market, this ``reservation choice'' is unemployment. In the FDI market, it is
 staying in the home country and not opening up a subsidiary abroad. Since most
 FDI data is collected by surveying firms that have made an investment abroad, we
@@ -361,10 +363,12 @@ pose any problem.\footnote{In a sense, we avoid this problem by assuming that
   do not observe some firms, there is only one set of preference parameters and
   it can be estimated from the firms that we do observe.}
 
-\begin{figure}[!ht]
+\begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_nounemp_alpha}
-  \caption{Workers' preference still being estimated okay when there is no unemp.}
+  \caption[Estimates of workers' preference when the reservation choice is
+  unobserved]{Estimates of workers' preference are unchanged even when we do not
+    observe workers that choose unemployment (i.e., the reservation choice).}
   \label{fig:sim_labor_nojobs_nounemp_alpha}
 \end{figure}
 
@@ -387,10 +391,12 @@ every worker. Consequently, in our estimates, every firm will make more offers
 than they actually do, resulting in an estimated opportunity set that has more
 offers than the true opportunity set.
 
-\begin{figure}[!ht]
+\begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_nounemp_managerial}
-  \caption{Bias when there is no unemployment observable}
+  \caption[Estimates of firms' preference when the reservation choice is
+  unobserved.]{Estimates of firms' preference are biased when we do not observe
+    workers that choose unemployment (i.e. the reservation choice).}
   \label{fig:sim_labor_nojobs_nounemp_managerial}
 \end{figure}
 
