@@ -123,7 +123,7 @@ probs_country <- apply(sim_choice, 1,
   rename(`South Korea` = "South.Korea")
 f_plot_sim(probs_country) +
   theme(axis.text.x = element_text(angle = 25, vjust = 1, hjust=1)) +
-  labs(x = "Country", y = "Probability") +
+  labs(x = "Country", y = "Share") +
   geom_point(data = observed_prop, aes(x = choices, y = value, col = "Observed"))
 ggsave("../figure/japan96_prob_being_chosen_by_MNC_two_sided.pdf", w = 5.5, h = 3)
 
