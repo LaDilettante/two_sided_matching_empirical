@@ -1,259 +1,295 @@
-\chapter{FDI}
+\chapter{Two-sided matching model on Japanese FDI}
 \label{chap:FDI}
 
+In the 1980s and 1990s, Japan FDI began to surge, becoming the second largest
+source of FDI flow behind only the United States. An important factor behind
+this development is the to float the hitherto undervalued yen. As the yen began
+to rise in the 1980s and peak in 1995 against the dollar,
+Japanese companies invested heavily abroad as they could now buy foreign assets
+for cheap \citet{Delios2001}.
 
-\section{The literature on Japanese MNCs investment}
+During this period, Japanese FDI also shifted its focus away from the US and
+Europe, making Asia its top destination. Some scholars
+have argued that this wave of Japanese FDI was instrumental to Asia's
+economic growth by bringing not just capital but also technological know-how and
+the opportunity to become integrated in the global production network. In this
+so-called ``flying geese'' model of economic development, industrial development
+spread from Japan, the leading goose, to the rest of Asia, e.g. the Four Asian
+Tigers (Hong Kong, Singapore, South Korea, Taiwan), ASEAN, China, etc.
+\citep{Bernard1995, Kojima2000}.
 
-Make a graph about the size of Japanese FDI relative to Asia FDI here
+In this section, I apply the two-sided matching model to analyze the
+location pattern of manufacturing Japanese MNCs in Asia, estimating the MNCs'
+and countries' preference for each other.
 
-Calculate the size of Japanese FDI into several countries (nominator from JETRO,
-denominator from IMF)
+\section{Data and sample choice}
 
-Relative exchange rate (Takagi2011). Assume that the capital market is
-imperfect, that external borrowers face a premium. So if a host country currency
-depreciates, inflow FDI will increase because the same amount of source currency
-can buy more input in the host country. The relationship is especially strong
-between exchange rate and inflow of FDI into industries with a lot of
-firm-specific assets. (e.g. Japanese firms buy a US firm with innovation for
-cheap, then use that innovation to improve its production back home in yen)
+The dataset was compiled by Andrew Delios from the \textit{Kaigai Shinshutsu
+  Kigyou Souran} (Japanese Overseas Investments-by Country), 1986-1999 editions,
+a biennial publication that contains operational data on all foreign affiliates
+of Japanese firms.\footnote{I thank Professor Andrew Delios for generously
+  sharing the data.} Tokyo Keizai, Inc. collects this data via a survey of these
+affiliates, which is reputed to include all Japanese firms overseas
+\citep{Yamawaki1991}. Comparing the Japanese Overseas Investment data with other
+data sources on publicly listed firms, \citep{Delios2001} finds that the dataset
+covers 98.5\% of public firms, which in turn control 99.5\% of the foreign
+subsidiaries. This high level of coverage ensures that our data captures the
+entire set of options available to countries and firms, obviating any worry
+about whether the choice set in the data represents the choice set in
+reality.\footnote{The mismatch between the choice set in the sample and in the
+  population is an unexplored theoretical aspect of two-sided matching models.
+  Consider an example where we analyze a sample of 1000 men and women in the US
+  to estimate their mate preferences. How are our estimates affected by our
+  assumption that the potential choice set of each man includes all the women
+  (and vice versa)? Not only does an individual not have that many
+  acquaintances, his social circle is also not a representative sample of the
+  entire dataset \citep[568]{Logan2008}. Fortunately, this is not a problem for
+  our application. Given that there are only 9 Asian investment locations and
+  approximately 200 Japanese subsidiaries being built each year, we can
+  reasonably assume that they are all available to one another as potential
+  options.}
 
-(Originally people don't think exchange rate matter because if you can buy an
-asset for cheap in the host country, when you repatriate the profit back to the
-home country it's a wash)
+From this dataset, I make several choices restricting the sample to better fit
+with the assumption of the two-sided matching model.
 
-FDI is all about the relative factors (because a firm thinks about a country in
-terms of how that country is relative to its host). So the two sided matching
-framework makes sense
+First, I limit the sample to manufacturing subsidiaries in Asia so that it is reasonable
+for our model to assume
+that all subsidiaries have the same set of preference parameters. Indeed,
+\citep{Pak2005} finds that Japanese FDI in the West and in the East are
+fundamentally different---While subsidiaries in the West seek
+to augment their asset via R\&D and marketing, the subsidiaries in the East seek to exploit their
+asset by setting up local production with Japanese management. In addition, manufacturing FDI mainly
+consists of capital in the forms of property, plant, and equipment.
+Therefore, our data on the size of their capital maps more precisely to the
+concept of illiquid capital subjecting to the ``obsolescing bargain'' in
+Political Science theories.
 
-General FDI: Why don't firms export or license, but open their own plant
-overseas? Argument is that they have firm-specific asset that cannot be fully
-exploited otherwise. A licensee won't be able to exploit the entire asset, both
-sides can't agree on a price beforehand (This is the OLI framework,
-ownership-location-internalization, also the internationalization hypothesis).
-Empirically, firm specific asset is unobservable, so people use R\&D intensity
-and advertising intensity instead. R\&D does correlate strongly with
-multinationality.
+Second, I limit the sample to subsidiaries that are founded in the year 1996. The
+reason to limit the sample to subsidiaries founded in a particular year instead
+of including subsidiaries that have already invested is because the MNCs'
+utility function in our model does not capture the fixed cost of relocating.
+Indeed, as a linear combination of only country covariates, the utility function
+does not take into account the fact that, if the moving cost is too high, a
+subsidiary may not relocate to a new country even if the new country is
+available and is a better option. Therefore, the utility function in our model
+is not appropriate for subsidiaries that have already invested.\footnote{Past
+applications of the two-sided matching model ignore this point and do not limit
+their sample to only agents that are participating in the matching market around
+the same time \citep{Logan1996, Logan2008}. However, given that a defining
+characteristic of FDI is its relative immobility compared to other form of
+global capital, the model's assumption of zero switching cost would be too
+unreasonable if we do not limit our sample.}
 
-
-\section{Applying the Two-Sided Matching Model to Japanese MNCs}
-\label{sec:application}
-
-In this section, I apply the two-sided matching model to study the investment
-location of Japanese firms overseas. The data comes from a dataset compiled by
-Andrew Delios from \textit{Kaigai Shinshutsu Kigyou Souran} (Japanese Overseas
-Investments-by Country), between 1986-1999 editions, a publication that contains
-information about the foreign affiliates of listed Japanese firms.\footnote{I
-thank Professor Andrew Delios for generously sharing the data.} Tokyo Keizai,
-Inc. collect these data via annual surveys of the overseas operations of both
-listed and non-listed firms. This database is reputed to include all Japanese
-firms overseas \citep{Yamawaki1991}. \citep{Delios2001} compares the coverage of
-the Japanese Overseas Investment with other sources of publicly listed firms and
-found that 98.5\% of public firms are included, which has 99.5\% of the foreign
-subsidiaries. Since there is no public information on non-public firms, they
-cannot check the coverage of the Japanese Overseas Investment for these firms.
-However, the result for the public firms makes us confident that our data is
-close to the population of Japanese FDI overseas. This dataset has been used to
-study X, Y, and Z \citep{Delios2000}. \footnote{There are similar datasets if
-scholars want to replicate this study in other context. On a global scale, the
-ORBIS dataset claims to have data of FDI firms across countries. (cite the paper
-that I reviewed). However, there are concerns about its data quality, given that
-the data is collected via public governmental or municipal sources. Due to the
-differences of reporting across jurisdiction, the data quality is much less
-consistent than the Japanese Overseas Survey. For the US, there is a census of
-US firms overseas, which should be similarly high quality. However, this dataset
-requires citizenship. Tokyo Keizai, Inc. also continue to publish this data
-series. However, the cost is prohibitive and require understanding Japanese to
-work with.}
-
-
-(I use manufacturing FDI, so most capital in manufacturing is fixed) (because of
-the the ``obsolescing bargaining'' argument. )
-
-
-
-Sample choices:
-
-- I only use the data of subsidiaries that are founded in year 1996 (which is
-different from the list of companies who are in existence in year 1996).
-Reasons: + the utility function is only modeled as a linear combinations of the
-country / firms covariates. It does not take into account the cost of uprooting
-a firm to move to another country once they are already there. This is important
-for FDI because, unlike equity investor, FDI are less foot-loose. Indeed, the
-fact that it is not footloose is an important quality of FDI that's appealing to
-countries (cite). The political economy literature on FDI has also derived its
-insights largely from this ``obsolescing bargain'' problem, so it's important
-that our model takes this into account. In past applications of the two sided
-matching approach, researchers use a random sample in time (i.e. a sample of all
-couples who's married in a certain year), which is fine, because the cost of
-leaving a job or leaving a partner may not be too onerous. However, for FDI,
-this fixed cost is more central. By limiting the sample to the firms who are
-founded in 1996, we examine their decisions as they are all looking for
-potential locations.\footnote{Of course, a subsidiary's foundation year in 1996
-does not preclude the decision process to happen outside of this year. However,
-I consider this a reasonable approximation, given that many country
-characteristics, especially the political and institutional ones, do not change
-drastically within a window of several years.}
-
-+ the data is largest for this year. (some summary statistics here). There may
-be some concerns about this year being a special year, in the year leading up to
-the 1997 Asian Financial Crisis. But 1) we're only looking at manufacturing
-firms, not equity investors or land developers, 2) FDI during the crisis is
-largely the same as before the crisis \citep{UNCTAD1998}. Indeed, this is
-because FDI firms are largely looking at countries' fundamentals, such as labor
-cost, market potential, and thus not affected by the fluctuations in the
-financial markets. Essentially, the types of firms that invest before, during,
-and after crisis are still the same types of firms.\footnote{One potential
-concern is that our data does not capture the firms who thought about making an
-investment but decided not to. This could be a problem if the MNCs in our
-dataset is the most risk-seeking firms, then essentially we've only estimated
-the preference of the very risk-seeking or the very risk-averse firms. AFC too
-high short term interest, too high local currency that is fixed. However, the
-exit rate of Japanese firms in Thailand, the epicenter of the financial crisis,
-is the same, indicating that the types of firms who invest are not so affected
-by the financial crisis. Looking at the exit is the reverse way of looking at
-who would have invested but didn't. \citep{Delios2001}}
-
-+ I only consider Japanese FDI into East Asian and Southeast Asian economies to
-make sure that it's realistic to say that all these companies have the same
-preference parameters. \citep{Pak2005} finds that Japanese FDI in the West seeks
-to augment their global competitiveness, while Japanese FDI in the East focuses
-on exploiting their core competencies. Japanese FDI in the West are ones with
-oligopolistic power in their domestic market (so they are in a strong position
-to compete) and require R\&D and marketing capabilities. They have different
-level of equities. This suggests that the two types of firms are fundamentally
-different.\footnote{Even though the difference in theory could be due to the
-preference of the countries. However, it doesn't make sense why the level of
-Japanese ownership is also different (because countries would not care about
-this).}
+While the decision to limit the sample to subsidiaries founded in a particular
+year is theoretically motivated, the decision to choose the particular year of
+1996 is simply to get the largest sample size. There may be concerns about 1996
+being unique as a boom time leading up to the 1997 Asian Financial Crisis.
+However, our sample only includes manufacturing FDI, which, unlike equity
+investors and land developers, were largely unaffected by the financial crisis.
+In addition, FDI trend remains stable before and after the crisis in terms of
+inflow, exit rate, and profitability \citep{Delios2001, UNCTAD1998}. In
+hindsight, this is not surprising as FDI firms focus on countries' fundamentals
+and were thus unaffected by the fluctuations in the financial markets
+\citep{Ahlquist2006}.
 
 The final sample includes 6474 Japanese foreign affiliates in 2003, spreading
-across 37 countries, with China and the US leading as the two top destinations
+across 37 countries, with China being a top conte
 for Japanese MNCs (Table \ref{tab:list_of_countries}).
 
-For firms' characteristics that countries consider, I include:
+\section{Variables}
+
+For subsidiaries' characteristics that countries consider, I include:
 
 \begin{itemize}
-\item Capital size (in US\$): A main argument for the benefit of FDI is that it
-brings capital to the country, improving labor productivity. MNCs' capital is
-especially important for developing countries, which cannot muster much domestic
-capital from their poor population. The capital size of a firm is included in
-the Japanese Overseas Business dataset.
+\item Capital size (in real US\$): A main argument for the benefit of FDI is
+  that it brings capital to the country, improving labor productivity. MNCs'
+  capital is especially important for developing countries, which often cannot
+  muster much domestic capital from their poor population and underdeveloped
+  financial market.
 
-\item Labor size: Similarly, a reputed benefit of FDI is that it creates jobs,
-generating not just economic growth but also increasing the government's
-popularity among the populace. The total number of employees of a firm is
-included in the Japanese Overseas Business dataset.
+\item Labor size (number of employees): Similarly, a reputed benefit of FDI is
+  that it creates jobs, generating not just economic growth but also increasing
+  the government's popularity among the populace.
 
-\item Technology intensity: I proxy for a firm's technology intensity by the
-industry to which it belongs. \citet{OECD2009} categorizes ISIC industries into
-four levels of technology intensity---low, medium low, medium high, and
-high---according to the level of R\&D expenditure divided by sales. I convert
-the industry classification of firms in my data from SIC 3 to ISIC and
-categorize their technology intensity from 1 to 4, with 1 being low and 4 being
-high. On several occasions, one industry in SIC 3 matches to multiple ISIC (rev
-3) industries or none at all. In the former case, I take the average across
-matched ISIC industries. In the latter case, the data is missing and later
-removed from the analysis.\footnote{\cite{Bergstrand2007} discusses the
-difference between R\&D intensity and advertising intensity, and find that R\&D
-intensity is higher for manufacturing firms compared with consumer product
-firms. Plus R\&D intensity is much more important for firms' performance than
-advertising intensity.}\footnote{Definition of R\&D intensity: the amount spent
-on R\&D as a percentage of sale}
+\item R\&D intensity (amount spent in R\&D as a percentage of revenue): To
+  measure a subsidiary's technological capability, I use the R\&D intensity of
+  the parent firm, calculated as the amount spent on R\&D as a percentage of
+  revenue. Using the parent firm's R\&D intensity is a reasonable proxy because
+  Japanese FDI in Asia is mainly asset exploitation, i.e. implementing the
+  know-how developed at the parent firm to the production at the subsidiary
+  \citep{Pak2005}.\footnote{Another measurement of a firm's intangible asset
+    frequently used in the FDI literature is marketing intensity
+    \citep{Girma2005}. Here I focus on R\&D intensity because it is the more
+    important factor for manufacturing firms.}
 
-\item Export intensity (ratio of export to sale):
+\item Export intensity (amount earned via export as a percentage of revenue):
+  Scholars have argued that economic growth in Asia is fueled by export and FDI
+  as two mutually reinforcing forces \citep{Liu2002}. The subsidiary of an
+  export-focused parent firm may help local suppliers become integrated into
+  the global production network, improving the quality of their goods to match
+  global standards and eventually being able to export themselves. Therefore, it
+  would be interesting to test if countries actively look for investment from
+  Japanese firms with an export focus.
 \end{itemize}
 
-Summary statistics table for these covariates.
-
-
-For countries' characteristics that firms consider, I include:
+For countries' characteristics that MNCs consider, I include the following
+variables from the Penn World Table:
 
 \begin{itemize}
-\item Market size: MNCs are expected to prefer countries with a large market
-size, which present MNCs with many potential customers. Indeed, this has been
-often cited as the allure of China to MNCs \citep{Luo2010}, as well as confirmed
-in larger studies. This is also a major variable in the gravity model, which has
-become a standard model for analyzing FDI flows. \citet{Bergstrand2007} provides
-the theoretical framework for the use of gravity model. I follow the standards
-in the literature and include log GDP (constant 2005 US\$), taken from the Penn
-World Table.\footnote{An advantage of the Penn World Table is that it compiles
-data for Taiwan, an important destination that the World Bank Development
-Indicators does not include.}
+\item Market size (log GDP, constant 2005 USD): MNCs are expected to prefer countries with a large market
+  size, which present MNCs with many potential customers and suppliers. In
+  addition, market size is a key variable in the gravity
+  model, a standard model for analyzing FDI flows \citet{Bergstrand2007}.
 
-\item Level of development: MNCs are expected to prefer countries with a high
-level of development. A developed economy has consumers with high purchasing
-power and better infrastructure. It can also measure capital abundance, in which
-case a higher GDP per capita imply less flow because the simple model of FDI
-frames FDI as the movement of capital from the capital rich countries to the
-capital poor countries. To measure development, I use log GDP per capita
-(constant 2005 US\$) from World Development Indicators.
+\item Level of development (log GDP per capita, constant 2005 USD): As a measure
+  of country income, development should attract more MNCs as MNCs prefer
+  countries  with
+  more disposable income to consume. On the other hand, as a measure of
+  countries' capital
+  abundance, development should reduce FDI inflow as MNCs' capital is no longer
+  a big advantage.
 
-\item GDP growth may be a proxy of potential returns,
+\item Human capital (Penn World Table index): As one primary factor of
+  production, labor matters greatly to firms' productivity and profit. To
+  measure labor quality, the human capital index developed for the Penn World
+  Table, which includes not only years of education but also labor productivity
+  \citep{Feenstra2015}. Because the human capital index does not have a
+  substantively interpretable unit, I standardize the variable so that it has a
+  standard deviation of 1.
+\end{itemize}
 
-\item Labor quality: As one primary factor of production, labor matters greatly
-to firms' productivity and profit. To measure labor quality, I use the average
-years of schooling of adult, taken from the UNDP's Human Development
-Report.\footnote{Since Taiwan is not included in UNDP's and World Bank's data, I
-collected its statistics from the Taiwanese Statistical Website.}
+In sum, the model for the utility functions are:
 
-\item Democracy: Democracy has been a mainstay in the political science
-literature on FDI. Scholars have argued that MNCs want to invest in democratic
-regimes for various reasons, including stable policy, credible commitment, and
-strong property rights \citep{Ahlquist2006, Li2003, Jensen2003}. On the other
-hand, recent works have also argued that democratic regimes want FDI more than
-autocratic regimes \citep{Pandya2016}. Thus, it is unclear whether the observed
-high level of FDI in democracies is due to the push or the pull factors. By
-controlling for countries' preference in the two-sided matching model, I can
-better estimate the effect of democracies on firms' utility. I measure democracy
-using the binary Demoracy \& Dictatorship, developed by \citet{Cheibub2009b}.
+\begin{itemize}
+\item MNC $i$ utility for country $j$: $U_i(j) = \bm{\alpha}' W_j $, where $W_j$ includes log GDP, log GDP per capita, and human capital index.
+\item Country $j$ utility for MNC $i$: $V_j(i) = \beta_{0j} + \bm{\beta_j}'
+  X_i$, where $X_i$ includes log number of employees, log capital size, R\&D intensity, and
+export intensity. 
 \end{itemize}
 
 \section{Result}
 \label{sec:result}
 
-\begin{figure}[!ht] \centering
-\includegraphics[width=0.75\textwidth,keepaspectratio]{japan96_alpha}
+The results below are produced by an MCMC chain with $4e6$ iterations with a
+thinning interval of 10, resulting in $4e5$ saved iterations. The starting
+values for all preference parameters are set at 0. I put a diffuse prior on
+$\alpha$, specifically a Normal distribution with mean 0 and variance 100.
+
+As discussed in Section~\ref{sec:reservation_choice}, since our sample does not include MNCs that choose the reservation choice, i.e. staying home instead of
+investing abroad, the estimate for the $\beta$ intercept will be too high. To
+combat this problem, I use an informative prior so that $\beta_{0j}$
+approximately follows a Normal distribution with mean -1 and variance
+10.\footnote{Specifically, the prior for $\beta_{0j}$'s mean is Normal with mean
+  -1 and variance 1. The prior for $\beta_{0j}$'s variance is
+  Inverse-Wishart with $\nu = 7$ and $S^{-1} = 10$ so that the variance is
+  loosely centered around 10.}
+
+Figure~\ref{fig:japan96_alpha} shows the posterior distribution and the 95\%
+credible interval for MNCs' preference parameters. We can interpret the
+parameters as the relative weight MNCs attach to countries' characteristics when
+they decide where to invest. For example, the posterior mean for log GDP and for
+log GDP per capita is 0.72 and 0.66---this means that to MNCs, a 1\% increase
+in GDP is equivalent to 0.72 / 0.66 = 1.09\% increase in log GDP per capita.
+
+The coefficients for log GDP and log GDP per capita are both positive and
+significant, suggesting that Japanese MNCs are looking for large markets with a
+lot of disposable income. On the other hand, the coefficient for human capital
+is negative, corroborating earlier findings in the literature that Japanese MNCs
+in Asia do not aim to be innovative and thus have no need for strong human
+capital. On the contrary, since the human capital index includes not only years of
+education but also labor productivity, a high human capital index may signify
+high labor cost, explaining why Japanese manufacturing MNEs weigh it negatively. 
+
+\begin{figure}[tbp] \centering
+  \includegraphics[width=0.75\textwidth,keepaspectratio]{japan96_alpha}
   \caption{Preference of MNCs for countries' characteristics. The density plot
-and the shaded region show the posterior distribution and the 95\% credible
-interval.}
+    and the shaded region show the posterior distribution and the 95\% credible
+    interval.}
   \label{fig:japan96_alpha}
 \end{figure}
 
-\begin{figure}[!ht] \centering
-\includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_ltemp_luscptl}
+In addition to interpreting the coefficients as weights in the MNCs' utility
+function, we can also simulate and visualize their impact on MNCs' location
+choice. For example, we may ask if country A's GDP increases by 20\%, what will
+be the new share of MNCs that invest in country A? Like in the one-sided
+conditional logit model, the share of MNCs investing in a country depends not
+only on country A's characteristics but also on others'. In addition, in this
+two-sided model, the share of MNCs investing in a country also depends on the
+preference of countries. For example, even if country A becomes highly
+desirable, we may not see much change in the share of MNCs located there if
+country A's preference is also highly demanding. The interaction can be much
+more complicated. For example, consider a scenario in which country A and
+country B have similar preferences and compete for the same set of MNCs---even
+if country A becomes more desirable than the rest of the countries, as long as
+country A is less attractive than country B, the share of MNCs investing in
+country A will still remain unchanged.
+
+Fortunately, we can easily simulate these effects in the Bayesian framework. To
+see how the share of MNCs investing in Thailand changes along with hypothetical
+values of Thailand's GDP, we can take the following steps:
+
+\begin{enumerate}
+  \item Construct a scenario in which Thailand has a new GDP, while all other
+    characteristics remain for Thailand and other countries
+  \item Make one draw for each parameter in the model from its posterior
+    distribution
+  \item Simulate the matching process in which countries first make offers to
+    MNCs, and MNCs then choose the best option
+  \item Record the share of MNCs investing in Thailand after the matching process
+  \item Repeat step (2)-(4) to get a distribution for the share of MNCs in
+    Thailand\footnote{Essentially we are constructing the posterior predictive
+      distribution for the share of MNCs in Thailand, integrating out the
+      preference parameters via simulation.}
+\end{enumerate}
+
+Following this process, I calculate the share of Japanese MNCs in Thailand at
+different hypothetical values of Thailand's GDP.
+Figure~\ref{fig:japan96_effect_GDP_on_share_of_MNCs} shows that as Thailand's
+GDP changes between 50\% to 150\% of its true value, the share of MNCs in
+Thailand changes between 8\% to 15\%. In addition, 
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/japan96_effect_GDP_on_share_of_MNCs}
+  \caption{Thailand hypothetical GDP}
+  \label{fig:japan96_effect_GDP_on_share_of_MNCs}
+\end{figure}
+
+\begin{figure}[tbp] \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_ltemp_luscptl}
   \caption{Preference of countries for firms' size, measured by their labor
-force (left) and capital (right). The density plot and the shaded region show
-the posterior distribution and the 95\% credible interval.}
+    force (left) and capital (right). The density plot and the shaded region
+    show the posterior distribution and the 95\% credible interval.}
   \label{fig:japan96_beta_ltemp_luscptl}
 \end{figure}
 
 \begin{figure}[!ht] \centering
-\includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_intrd_intexp}
+  \includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_intrd_intexp}
   \caption{Preference of countries for firms' intangible assets, i.e R\&D
-intensity (left) and export intensity (right). The density plot and the shaded
-region show the posterior distribution and the 95\% credible interval.}
+    intensity (left) and export intensity (right). The density plot and the
+    shaded region show the posterior distribution and the 95\% credible
+    interval.}
   \label{fig:japan96_beta_intrd_intexp}
 \end{figure}
 
 \begin{figure}[!ht]
   \centering
-  \includegraphics[width=\textwidth,keepaspectratio]{../figure/japan96_effect_of_temp}
-  \caption{The effect of employee size on the probability to be offered by China
-    and South Korea}
-  \label{fig:japan96_effect_of_temp}
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/japan96_beta_Taiwan_Indonesia}
+  \caption{Preference of Taiwan and Indonesia}
+  \label{fig:japan96_beta_Taiwan_Indonesia}
+\end{figure}
+
+
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/japan96_sim_china_more_demanding}
+  \caption{China more demanding}
+  \label{fig:japan96_sim_china_more_demanding}
 \end{figure}
 
 \section{Model fit}
 \label{sec:model_fit}
-
-\begin{figure}[!ht] \centering
-\includegraphics[width=\textwidth,keepaspectratio]{japan96_prob_being_chosen_by_MNC_one_sided}
-  \caption{Predicted and observed probabilities that an MNC chooses to locate in
-a country, unconditional on the preference of countries. The point and the error
-bar show the posterior mean and the 95\% credible interval.}
-  \label{fig:japan96_prob_being_chosen_by_MNC_one_sided}
-\end{figure}
-
 
 \begin{figure}[!ht] \centering
 \includegraphics[width=\textwidth,keepaspectratio]{japan96_prob_being_chosen_by_MNC_two_sided}
@@ -278,32 +314,6 @@ bar show the posterior mean and the 95\% credible interval.}
 error bar show the posterior mean and the 95\% credible interval.}
   \label{fig:japan96_sim_var_ltemp}
 \end{figure}
-
-\section{Political determinants of FDI}
-
-\citep{Nunnenkamp2002} finds that for developing countries market based factors
-are still the most important
-
-\section{Conclusion}
-\label{sec:conclusion}
-
-In this paper, I propose the two-sided matching model to estimate firms' and
-countries' preferences, solving three persistent issues in the literature of
-FDI's political determinants. The results indicate that, for Japanese MNCs, only
-a country's level of development matters and not its market size, labor quality,
-or regime type. This finding suggests that we should take a closer look at the
-relationship between democracies and MNCs. Since previous works in the
-literature have not controlled for countries' preferences, they may have
-mistaken democracies' love for FDI as FDI's fondness for democracies.
-
-On the other hand, the model's estimation of countries' preference remains
-lacking. Since each country has its own set of parameters, the parameter space
-seems too large for the current implementation of the Metropolis-Hastings
-algorithm to fully explore. Several solutions are possible. First, we can
-collapse countries into categories of interest, e.g. regime types, (categorical)
-time horizon length. Second, we can build a hierarchical model, modeling
-countries' preferences as draws from a common distribution. Such model will
-allow us to pool information across countries and reduce the parameter space.
 
 %%% Local Variables:
 %%% mode: latex

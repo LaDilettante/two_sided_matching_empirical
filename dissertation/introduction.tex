@@ -144,7 +144,7 @@ appropriate rate to approximate their true distribution. Since the two-sided
 matching model is derived explicitly from actors' utility functions, the
 estimated parameters also have a convenient interpretation as the effect of different
 variables on MNCs' and countries' utility. This allows us to make statements
-such as ``in evaluating MNCs, China values a 2\% increase in the firm's capital as much as
+such as: ``In evaluating MNCs, China values a 2\% increase in the firm's capital as much as
 a 1\% increase in labor demand.''
 
 \section{Roadmap}
@@ -167,16 +167,175 @@ the two-sided matching model in other areas of Political Science.
 \section{Three Issues in the Literature of FDI's Political Determinants}
 \label{sec:literature_issues}
 
+\subsection{Estimating countries' demand for FDI}
+
+Despite earlier pessimism about countries engaging in
+a race to the bottom to attract footloose global capital, empirical evidence shows
+that the nation-state still maintains significant autonomy. The effect of
+globalization seems to be mediated by both domestic politics and ideational
+force, allowing for variation in labor standards, environmental regulation, and
+tax policies \citep{Drezner2001}.
+
+While the broader IPE literature has recognized the variation of
+countries' policies in the face of globalization, we have surprisingly much less
+work to explain variation in countries' FDI policies. Recognizing this gap in the literature, \citet{Pinto2013} and \citet{Pandya2016} recently
+broke ground in this area. Similar to the rich IPE literature in international trade, these studies argue that countries' demand for FDI varies
+according to FDI's distributive effect on their domestic constituencies
+\citep{Broz2001, Milner2005a}. In this theoretical framework, labor supports FDI
+because foreign firms bring capital that increases the demand for labor and
+raises productivity, both of which lead to higher wage. On the other hand,
+domestic firms oppose FDI because foreign firms compete for local labor, inputs,
+and markets. Both \citet{Pinto2013} and \citet{Pandya2016} formulate their
+theories as a variant of this labor-vs-business tension, which surfaces in the
+former work as left-vs-right governments, and in the latter as
+democratic-vs-authoritarian regimes.
+
+While these pioneering works have enriched our understanding of the relationship
+between politics and FDI, their empirical approaches do not satisfactorily
+measure countries' demand for FDI, leaving their theoretical arguments untested.
+
+Consider \citet{Pinto2013}'s approach, which controls for economic and
+institutional factors that affect FDI flow into a country. The author then
+claims that the country's openness towards FDI is what's left in the
+residual.\footnote{Specifically, the estimation of FDI openness involves two
+steps. First, the author runs a gravity model explaining bilateral FDI flows,
+estimating the intercept as the host country-year fixed effect. Second, this
+fixed effect is then regressed on several economic and endowment factors of that
+country-year (i.e. GDP, GDP per capita, average school years, arable land). The
+residual in the second stage is considered the country's ``FDI openness'' in
+that year.} For this approach to be valid, every economic, institutional, and
+endowment factors that affect FDI flow have to be controlled for, leaving only
+the country's demand in the error term. This claim is much stronger than the
+regular assumption of exogenous and normally distributed error, which is valid
+as long as the omitted factors are uncorrelated with the independent variable of
+interest. Framed substantively, since the residual is likely to contain more
+than just the country's demand for FDI, if we observe an abnormally high level
+of FDI, we do not know whether it is because the country welcomes FDI or because
+MNCs find something attractive in the country.\footnote{In addition, the data
+requirement of bilateral FDI flows, ideally disaggregated by sectors, is very
+demanding. Therefore, this approach is limited to OECD countries only
+\citep{Pinto2008}. During the period the authors study, 1980-2000, OECD
+countries accounted for 95\% of global FDI outflow and 90\% of inflow. However,
+since then the role of the developed world in global FDI has declined sharply,
+reduced to 60.8\% of outflow and 40.6\% of inflow in 2014 \citep{UNCTAD2015}.}
+
+In contrast to \citet{Pinto2013}'s statistical approach, \citet{Pandya2014,
+Pandya2016} substantively measures countries' demand for FDI, using the annual
+US Investment Climate Reports to code the number of industries that have foreign
+ownership restrictions or face investment screening. The advantages of this
+measurement are its ease of interpretation and its availability for many
+countries. However, two problems remain. First, adding up the raw count of
+restricted industries is not appropriate because industries are not all the
+same. For example, given the reach of the banking sector into all corners of the
+economy, a country's opening up its financial industry indicates much more
+FDI-friendliness than, say, allowing foreign furniture makers to set up shops.
+Since the theoretical argument is driven by FDI's distributive effect, it is
+suspect to ignore the varying impact of FDI across sectoral constituencies.
+
+Second, according to the coding rules, an industry is coded as free if there is
+no mention of restriction. If an industry receives little FDI, it may not be
+worth mentioning as being restrictive and yet still coded as open. Therefore,
+``zero restriction'' in the dataset can either mean that a country is very
+closed or very open to FDI. This concern is not hypothetical. Figure
+\ref{fig:china_fdi_restriction} shows that, following the coding of the US
+Investment Climate Reports, China seemed 100\% open to FDI up until 1986 when it
+started imposing restrictions. The reality is the opposite. Prior to 1986, only
+limited FDI was allowed as joint-venture in Special Economic Zones (SEZ). The
+year of 1986 was, in fact, the first time China allowed any wholly owned FDI
+outside of SEZs.
+
+\begin{figure}[!ht] \centering
+\includegraphics[width=0.75\textwidth,keepaspectratio]{china_fdi_restriction}
+\caption[China's FDI ownership restriction.]{China's FDI ownership restriction, as coded in \citet{Pandya2010}.
+Prior to 1986, FDI in China was limited to few experimental Special Economic
+Zones, and thus not mentioned in US Investment Reports. The sharp spike in 1988
+also does not seem to correspond to any actual change in policy, and likely
+another artifact of reporting. (See \citet{Zebregs2002} for a historical
+overview of China's FDI policy.)}
+\label{fig:china_fdi_restriction}
+\end{figure}
+
+The two-sided matching model circumvents these thorny measurement issues by
+incorporating countries' utility function directly into the model. Intuitively, if we observe
+that country $j$ welcomes firms $i_1, i_2, \dots, i_n$ to invest but not others,
+we can compare the characteristics of firms $i_1, i_2, \dots i_n$ with the
+others to infer country $j$'s preference.
+
+\subsection{Estimating countries' preferences for FDI quality}
+
+Laura Alfaro: is all FDI equal? - Use human capital from German firms as a proxy
+for all sectors (this works for the OECD sample of that paper, but not more
+generally) - Use IPA policy, but this could just be image building by the
+country (everyone says that they want advanced manufacturing (cite the picture))
+
+
+While the Political Science literature has focused almost exclusively on the
+quantity of FDI, treating all FDI as one homogeneous flow of capital, policy
+makers seem to pay much more attention to distinguishing types of FDI.
+Commenting on the role of International Investment Agreements,
+\citet{UNCTAD2015} says, ``Today, increasing the quantity of investment is not
+enough. What matters is its quality, i.e. the extent to which investment
+delivers concrete sustainable development benefits.'' Governments in developing
+countries, from Ghana to China, all offer various forms of tax incentives and
+fee waivers to attract FDI that invests in a remote region, brings new
+technology, or focuses on exporting \citep{Ricupero2000}. Since 2006, China's
+official FDI policy has been ``quality over quantity,'' promoting FDI with
+intense R\&D in high-productivity sectors \citep{Guangzhou2011}. Indeed, for
+developing countries, the hope is that MNCs will transfer their technologies to
+the domestic economy by training workers or partnering with local suppliers.
+
+Despite the importance of disaggregating FDI by its quality, two data
+limitations prevents researchers from doing so. First, FDI flow data typically
+does not disaggregate into types of FDI. Limiting the sample to the OECD allows
+\citet{Alfaro2003} to use FDI data broken into sectors---yet it remains
+problematic to say that FDI from an entire sector is high quality or not.
+\citet{Alfaro2007} attempt to get around this problem by using German's
+skill intensity by sector as a proxy for the FDI quality of that sector. To do
+so is to assume that 1) Germany's sectoral variation is the same as everyone
+else's in the OECD, and 2) there is little variation within a sector. Both
+assumptions are untenable.
+
+Second, even if we can differentiate different types of FDI, it remains an open
+question how to estimate countries' preference for them. \citet{Alfaro2007} use
+information from IPAs' website and survey response as a proxy for their
+countries' preference---if an IPA lists an industry as a ``target industry,'' it is
+considered that they want to attract that type of FDI. While this approach seems
+reasonable at first blush, Figure~\ref{fig:IPA_target_industries} shows that
+there is little variation in what IPAs' claim to be their target industries: because investment promotion is mainly a marketing exercise, almost everyone
+claims that they target high-tech manufacturing. In addition, if we use IPAs as
+a proxy for countries' preferences, we should also model the selection process in
+which the countries that decide to establish an IPA may not be the same as those who
+do not. Both of these issues are not addressed by \citep{Alfaro2007}, and we are
+still in need of a good way to estimate countries' preference for different
+types of FDI. 
+
+\begin{figure}[tbp] \centering
+\includegraphics[width=\textwidth,keepaspectratio]{../figure/IPA_target_industries}
+  \caption[Target industries by IPA around the world.]{Target industries by IPAs
+    around the world. Because of the image building aspect of investment
+    promotion, almost all IPAs say that they want to attract ``manufacturing,'' ``advanced
+    manufacturing,'' and ``infrastructure.'' Therefore, using what is listed as investment priorities
+    may not be a reliable way to measure countries' preference for FDI. Source: \citet{UNCTAD2001}}
+  \label{fig:IPA_target_industries}
+\end{figure}
+
+We can address this challenge using firm-level data, giving us information on
+not only a firm's sector but also its Research and Development (R\&D)
+expenditure or export intensity. These measures are firm-specific and get closer
+to what countries are looking for in FDI projects. Using R\&D expenditure or
+export intensity as firms' characteristics in the two-sided matching model, I
+will be able to estimate countries' preferences for these traits.
+
 \subsection{Measuring MNCs' Activities}
 
-As \citet{Kerner2014} argues, the political economy literature on FDI is a bit
+As \citet{Kerner2014} argues, the IPE literature on FDI is a bit
 of a misnomer. Political scientists are rarely interested in FDI \textit{per
 se}---rather, they are interested in the activities of MNCs, which in turn,
 affect other important issues such as nation-state autonomy \citep{Mosley2005},
 economic development \citep{Moran1998}, labor standards \citep{Mosley2007}, and
-environmental policies \citep{Prakash2007}. However, while the theories involve
-MNCs as the central actor in the causal mechanism, the empirics often use FDI
-flow as the independent variable of interest. These two concepts---the level of
+environmental policies \citep{Prakash2007}. However, while the theory involves
+MNCs as the central actor in the causal mechanism, the empirics often uses FDI
+flow as the variable of interest. These two concepts---the level of
 MNCs' affiliate activities in a country and FDI inflow into a country---are not
 the same.
 
@@ -340,7 +499,7 @@ precisely test the relationship between democratic institutions and
 is no relationship between democratic institutions and FDI flow and stock, but
 there is a positive relationship between democracy and MNCs' fixed capital
 expenditures, confirming the theoretical argument \footnote{Another alternative
-is to use other variable, for example when \citet{Jensen2008} re-examines
+is to use other variable, for example when \citet{Jensen2008a} re-examines
 whether MNCs favor democratic regimes because they pose less political risk, the
 author avoids using FDI flow and use price data of political risk insurance
 agencies instead. In other areas of IPE, scholars are also paying more attention
@@ -364,7 +523,12 @@ In sum, while the need to use better data is clear, and while firm-level data ha
 years,\footnote{Examples of firm-level data include the US Bureau of Economic
 Analysis (BEA)'s survey of all US firms abroad, Tokyo Keizai's Overseas Japanese
 companies database (\textit{Kaigai Sinshutsu Kigyou Souran}), World Bank's
-Enterprise Survey, and Orbis database of companies worldwide.} political
+Enterprise Survey, and Orbis database of companies worldwide. However, there are concerns about its data quality, given that
+the data is collected via public governmental or municipal sources. Due to the
+differences of reporting across jurisdiction, the data quality is much less
+consistent than the Japanese Overseas Survey. For the US, there is a census of
+US firms overseas, which should be similarly high quality. However, this dataset
+requires citizenship.} political
 scientists have not developed a model to estimate this data appropriately. Given the data structure of a
 set of firms interacting with a set of countries, one may consider a
 dyadic-based analysis, frequently used in the International Relations
@@ -387,146 +551,6 @@ utility to firms. Continuing the previous example, if country $j^*$ has more
 veto players than average, we can infer that MNCs indeed prefer countries with
 more veto players.
 
-\subsection{Estimating Countries' Demand for FDI}
-
-Policy convergence / globalization and domestic politics / two level game. Race
-to the bottom doesn't happen, and is mediated by both domestics politics
-(partisan force) and ideational force. Convergence regulatory standards
-(Drezner), capital mobility does not mean state cannot be picky (tax capital),
-domestic institutions can still have a lot of effects on policy (perhaps because
-globzliation increases exposure, causing constituencies to demand more protection.)
-
-Recognizing that our model of investment location has not taken into account
-countries' demand for FDI, \citet{Pinto2013} and \citet{Pandya2016} recently
-broke ground in this area. Similar to the rich IPE literature in trade and
-exchange rate, these studies argue that countries' demand for FDI varies
-according to FDI's distributive effect on their domestic constituencies
-\citep{Broz2001, Milner2005a}. In this theoretical framework, labor supports FDI
-because foreign firms bring capital that increases the demand for labor and
-raises productivity, both of which lead to higher wage. On the other hand,
-domestic firms oppose FDI because foreign firms compete for local labor, inputs,
-and markets. Both \citet{Pinto2013} and \citet{Pandya2016} formulate their
-theories as a variant of this labor-vs-business tension, which surfaces in the
-former work as left-vs-right governments, and in the latter as
-democratic-vs-authoritarian regimes.
-
-While these pioneering works have enriched our understanding of the relationship
-between politics and FDI, their empirical approaches do not satisfactorily
-measure countries' demand for FDI, leaving their theoretical arguments untested.
-
-Consider \citet{Pinto2013}'s approach, which controls for economic and
-institutional factors that affect FDI flow into a country. The author then
-claims that the country's openness towards FDI is what's left in the
-residual.\footnote{Specifically, the estimation of FDI openness involves two
-steps. First, the author runs a gravity model explaining bilateral FDI flows,
-estimating the intercept as the host country-year fixed effect. Second, this
-fixed effect is then regressed on several economic and endowment factors of that
-country-year (i.e. GDP, GDP per capita, average school years, arable land). The
-residual in the second stage is considered the country's ``FDI openness'' in
-that year.} For this approach to be valid, every economic, institutional, and
-endowment factors that affect FDI flow have to be controlled for, leaving only
-the country's demand in the error term. This claim is much stronger than the
-regular assumption of exogenous and normally distributed error, which is valid
-as long as the omitted factors are uncorrelated with the independent variable of
-interest. Framed substantively, since the residual is likely to contain more
-than just the country's demand for FDI, if we observe an abnormally high level
-of FDI, we do not know whether it is because the country welcomes FDI or because
-MNCs find something attractive in the country.\footnote{In addition, the data
-requirement of bilateral FDI flows, ideally disaggregated by sectors, is very
-demanding. Therefore, this approach is limited to OECD countries only
-\citep{Pinto2008}. During the period the authors study, 1980-2000, OECD
-countries accounted for 95\% of global FDI outflow and 90\% of inflow. However,
-since then the role of the developed world in global FDI has declined sharply,
-reduced to 60.8\% of outflow and 40.6\% of inflow in 2014 \citep{UNCTAD2015}.}
-
-In contrast to \citet{Pinto2013}'s statistical approach, \citet{Pandya2014,
-Pandya2016} substantively measures countries' demand for FDI, using the annual
-US Investment Climate Reports to code the number of industries that have foreign
-ownership restrictions or face investment screening. The advantages of this
-measurement are its ease of interpretation and its availability for many
-countries. However, two problems remain. First, adding up the raw count of
-restricted industries is not appropriate because industries are not all the
-same. For example, given the reach of the banking sector into all corners of the
-economy, a country's opening up its financial industry indicates much more
-FDI-friendliness than, say, allowing foreign furniture makers to set up shops.
-Since the theoretical argument is driven by FDI's distributive effect, it is
-suspect to ignore the varying impact of FDI across sectoral constituencies.
-
-Second, according to the coding rules, an industry is coded as free if there is
-no mention of restriction. If an industry receives little FDI, it may not be
-worth mentioning as being restrictive and yet still coded as open. Therefore,
-``zero restriction'' in the dataset can either mean that a country is very
-closed or very open to FDI. This concern is not hypothetical. Figure
-\ref{fig:china_fdi_restriction} shows that, following the coding of the US
-Investment Climate Reports, China seemed 100\% open to FDI up until 1986 when it
-started imposing restrictions. The reality is the opposite. Prior to 1986, only
-limited FDI was allowed as joint-venture in Special Economic Zones (SEZ). The
-year of 1986 was, in fact, the first time China allowed any wholly owned FDI
-outside of SEZs.
-
-\begin{figure}[!ht] \centering
-\includegraphics[width=0.75\textwidth,keepaspectratio]{china_fdi_restriction}
-\caption{China's FDI Ownership Restriction, as coded in \citet{Pandya2010}.
-Prior to 1986, FDI in China was limited to few experimental Special Economic
-Zones, and thus not mentioned in US Investment Reports. The sharp spike in 1988
-also does not seem to correspond to any actual change in policy, and likely
-another artifact of reporting. (See \citet{Zebregs2002} for a historical
-overview of China's FDI policy.)}
-\label{fig:china_fdi_restriction}
-\end{figure}
-
-The two-sided matching model circumvents these thorny measurement issues by
-incorporating countries' utility function directly into the model. If we observe
-that country $j$ welcomes firms $i_1, i_2, \dots, i_n$ to invest but not others,
-we can compare the characteristics of firms $i_1, i_2, \dots i_n$ with the
-others to infer country $j$'s preference.
-
-
-\subsection{Estimating Countries' Preferences for FDI's Technological Intensity}
-
-Laura Alfaro: is all FDI equal? - Use human capital from German firms as a proxy
-for all sectors (this works for the OECD sample of that paper, but not more
-generally) - Use IPA policy, but this could just be image building by the
-country (everyone says that they want advanced manufacturing (cite the picture))
-
-\begin{figure}[!ht] \centering
-\includegraphics[width=\textwidth,keepaspectratio]{../figure/IPA_target_industries}
-  \caption[Target industries by IPA around the world.]{Target industries by IPA around the world. Because of the image
-building aspect of investment promotion, almost all IPAs say that they want to
-attract ``advanced manufacturing.'' Therefore, using what is listed as
-investment priorities may not be a reliable way to measure countries' preference
-for FDI. Source: \citet{UNCTAD2001}}
-  \label{fig:IPA_target_industries}
-\end{figure}
-
-While the political science literature has focused almost exclusively on the
-quantity of FDI, treating all FDI as one homogeneous flow of capital, policy
-makers seem to pay much more attention to distinguishing types of FDI.
-Commenting on the role of International Investment Agreements (IIAs),
-\citet{UNCTAD2015} says, ``Today, increasing the quantity of investment is not
-enough. What matters is its quality, i.e. the extent to which investment
-delivers concrete sustainable development benefits.'' Governments in developing
-countries, from Ghana to China, all offer various forms of tax incentives and
-fee waivers to attract FDI that invests in a remote region, brings new
-technology, or focuses on exporting \citep{Ricupero2000}. Since 2006, China's
-official FDI policy has been ``quality over quantity,'' promoting FDI with
-intense R\&D in high-productivity sectors \citep{Guangzhou2011}. Indeed, for
-developing countries, the hope is that MNCs will transfer their technologies to
-the domestic economy by training workers or partnering with local suppliers.
-
-Despite the importance of disaggregating FDI by its quality, data unavailability
-remains the bottleneck. The few existing attempts use detailed data from only
-one country or limit the sample to OECD countries \citep{Alfaro2003, Alfaro2007,
-Javorcik2004}. With cross-country firm level data now available, we often have
-information on the firms' industry or even research and development (R\&D)
-expenditure. With the two-sided matching model, I will be able to estimate
-countries' preferences for firms' technological intensity. I hypothesize that,
-since MNCs' technologies takes time to diffuse to local businesses, a country'
-preference of high-tech FDI is shaped by its time horizon.
-
-Indeed, we see examples of various kind targeting and FDI policies.
-
-For example, Ireland provides foreign investors with lower tax rate, lower land price, and cash grants for R\&D that do not need to be repaid. China also offers a tax holiday (two years of no tax and three years of half the normal tax rate) in special economic zones to attract more foreign firms \citep{Telford2001}. We see the same widespread use of investment incentives in Southeast Asia \citep{Fletcher2002}. In Vietnam, provincial governments even defy the central government's directive and offer extra-legal incentives to FDI firms \citep{Vu2007}. Not only do these measures not work in attracting more FDI, they also deprive countries of revenues that could be spent on improving the local labor quality and investment climate---factors that are much more conducive to spillover effect and growth.
 
 %%% Local Variables:
 %%% mode: latex
