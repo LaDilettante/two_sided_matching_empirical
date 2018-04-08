@@ -68,6 +68,13 @@ choice <- df_mnc$nation_id
 obs_opp <- matrix(FALSE, n_i, n_j)  # The opportunity matrix T=offer,F=no offer
 obs_opp[cbind(1:n_i, choice)] <- TRUE  # firms are offered the countries they are in!
 
+# ---- Summary statistics ----
+
+df_table <- df_mnc %>% count(nation) %>% 
+  mutate(percent = n / sum(n) * 100)
+print(xtable::xtable(df_table),
+      floating = FALSE,
+      include.rownames = FALSE, file = "../table/japan96_num_obs.tex")
 
 # ---- MCMC ----
 

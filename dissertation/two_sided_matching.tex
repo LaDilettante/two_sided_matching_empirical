@@ -35,7 +35,7 @@ men and women. Each man has preferences over the women, and vice versa. Each
 man's preference can be represented as an ordered list, ranking each woman based
 on how much he likes her.
 
-The outcome of this market is a set of marriages, with none of some of people
+The outcome of this market is a set of marriages, with none or some of people
 prefer to remain single. We call such a set of marriages a \textit{matching}
 $\mu$, which is a one-to-one function that matches a man with a woman. We refer
 to $\mu(x)$ as the \textit{mate} of $x$. For convenience, we say that if an
@@ -69,9 +69,9 @@ guaranteed to produce a stable matching.\footnote{The ``deferred acceptance''
   offers. If there were any other man that she would prefer to her current
   match, that man would not have been available to her. Therefore, the final
   match cannot be further improved by any man or woman.} This result provides
-some justifications for us to assume that the matching we observe in real
-matching market is stable, and that the agents' utility cannot be further
-improved. Our empirical model of two-sided matching markets thus needs to
+some justifications for the assumption that the observed matching in real
+matching market is stable, and that the agents' utility has already been
+maximized. Our empirical model of two-sided matching markets thus needs to
 describe a process that produces a stable matching.
 
 While a central coordinator employing the \textit{deferred acceptance} algorithm
@@ -94,13 +94,13 @@ mates, will converge towards a stable matching if the search cost is
 negligible.\footnote{In this model, searching has a time cost. Thus, negligible
   search cost is modeled as agents having a time discount close to 1.} These
 results further suggest that the matching we observe in decentralized markets is
-likely stable. Therefore, our empirical model of matching markets to describe a
+likely stable and that our empirical model ought to describe a
 process that produces a stable matching.
 
 The third key result is that all conclusions regarding the one-to-one matching
-market (e.g. marriage) generalize to the many-to-one matching market (e.g.
-college admission, labor market), albeit requiring additional assumptions
-\citet{Roth1992}. One important assumption is that firms treat workers as
+market (e.g. marriage) generalize to the many-to-one matching market (e.g. labor
+market, FDI market) with some additional assumptions
+\citep{Roth1992}. One important assumption is that firms treat workers as
 substitutes, not complements. In other words, firms never regret hiring a worker
 even if another worker is no longer available. Therefore, when we conduct
 empirical analysis of many-to-one markets, we should focus on markets where
@@ -110,72 +110,74 @@ unclear what kind of matching process our empirical model should approximate.
 
 \section{Empirical models of matching markets}
 
-The game theory literature takes the agents' preference as given and proves the
+The game theory literature takes agents' preference as given and proves the
 existence of a stable matching. In contrast, empirical models of matching
-markets takes the observed matching as given and attempt to estimate the agents'
+markets takes the observed matching as given and attempt to estimate agents'
 preference.
 
 Unfortunately, most extant empirical models fail to adequately account for the
 structure of a two-sided matching market. Often, researchers simply analyze the
 market from one side, e.g. estimating a firm's preference by looking at the type
 of workers it hires. This approach does not take into account the fact that a
-match depends not only on the agent's preference but also his opportunity. For
-example, a farm may prefer to hire highly-educated workers but cannot do so
+match depends not only on an agent's preference but also his opportunity. For
+example, a farm may want to hire highly-educated workers but cannot do so
 because highly-educated workers do not want to work on farms. Modeling this
-interaction between preference and opportunity is the key contribution of this
+interaction between preference and opportunity is a key contribution of this
 dissertation.
 
 Alternatively, some researchers measure agents' preferences by surveying them
 directly \citep{Posner2001, Sprecher1994}. While this approach circumvents the
-need to disentangle preference and opportunity, it can only measure agents'
+need to disentangle preference and opportunity, surveys can only measure agents'
 \textit{stated} preference. In addition, such surveys require a high data
 collection effort while data on final matching (e.g. married couples, workers'
 current job, country location of MNCs) are widely available. This dissertation
-aims to make use of such available data to estimate agents' \textit{revealed}
+aims to make use of such matching data to estimate agents' \textit{revealed}
 preference.
 
-In addition to academic research in two-sided markets, recently there has also
-been substantial commercial interest in studying them as the Internet witnesses a proliferation of two-sided matching
-markets such as online marketplaces (e.g. AirBnB), dating sites (e.g. eHarmony),
-or job board (e.g. Elance). To help their users discover a match quicker, these
-sites often build a recommender system that suggests potential
-matches.\footnote{To clarify, the term ``recommender system'' typically refers
-  to systems that recommend items to users based on the reviews of users like
-  them. That is not what we are discussing here. Instead, we focus on matching
-  markets where the recommender system recommends users to one another.} To
-maximize user engagement and profitability, these sites are incentivized to make
-recommendations that resemble a stable matching so that their users get the best
-match possible. And fo find the stable matching, they have to first estimate the
-preferences of their users.
+In addition to academic research in two-sided markets, companies have also
+developed a commercial interest in studying them as the Internet witnesses a
+proliferation of two-sided matching markets, e.g. online marketplaces (AirBnB),
+dating sites (eHarmony), or job board (e.g. Elance). To help their users
+discover a match quicker, these sites often build a recommender system that
+suggests potential matches.\footnote{To clarify, the term ``recommender system''
+  typically refers to systems that recommend items to users based on the reviews
+  of users like them. That is not what we are discussing here. Instead, we focus
+  on matching markets where the recommender system recommends users to one
+  another.} To maximize user engagement and profitability, these sites are
+incentivized to make recommendations that resemble a stable matching so that
+their users get the best match possible. And to find the stable matching, they
+are also interested in estimating the preferences of their users.
 
-While most of these algorithms are proprietary, some academic publications have
-addressed this problem. An interesting approach is the paper by \citet{Tu2014},
-which uses the Latent Dirichlet allocation (LDA) model to uncover the latent
-types of users based on their activities on an online dating
-platform.\footnote{Besides \citet{Tu2014}, \citet{Hitsch2010, Goswami2014} are
-  two other attempts to estimate users' preference in online matching markets.
-  However, these papers take a simple one-sided approach, ignoring the interplay
-  between preference and opportunity. Therefore, I don't discuss them further
-  here.} In the original application of LDA model in topic modeling, each
-document is a mixture of latent topics, and each topic is a distribution over
-words. In this application, each user is a mixture of latent ``types,'' and each
-type is a distribution signifying relative preference over various mates'
-features. For example, the ``outdoor type'' may have higher preference for
-athleticism or dog ownership over other traits.
+While most of these algorithms are proprietary, some works in this area are
+published. An interesting approach is the paper by \citet{Tu2014}, which uses
+the latent Dirichlet allocation (LDA) model to uncover the latent types of users
+based on their activities on an online dating platform.\footnote{Besides
+  \citet{Tu2014}, \citet{Hitsch2010, Goswami2014} are two other attempts to
+  estimate users' preference in online matching markets. However, these papers
+  take a simple one-sided approach, ignoring the interplay between preference
+  and opportunity.} In the original application of LDA model in topic modeling,
+each document is a mixture of latent topics, and each topic is a distribution
+over words. In this application of online dating, each user is a mixture of
+latent ``types,'' and each type is a distribution signifying relative preference
+over various mates' features. For example, the ``outdoor type'' may have higher
+preference for athleticism or dog ownership over other traits.
 
 While the LDA model works well for the online dating market, it is not
 applicable to most social science problems for two reasons. First, this model
 requires data of users reaching out to multiple partners rather than just the
-final match. Second, while the LDA model uncovers users' latent types, most
-social scientists want to estimate the preference of specific, known types (e.g.
-how different regime types may prefer different characteristics of an MNC).
+final match. Second, the LDA model only uncovers users' latent types and then
+requires the analyst to interpret what these latent types mean. In contrast,
+social scientists likely want to estimate the preference of specific, known
+types (e.g. how different regime types may prefer different characteristics of
+an MNC).
 
 \section{Two-sided logit model}
 
-Here I present a behavioral model of the two-sided matching market, focusing on
-the case of many-to-one matching, proposed by \cite{Logan1996}. For easier
-exposition, throughout the chapter I will use the example of the labor market,
-where many workers can be matched to one firm.
+In this section, I present a statistical model of the two-sided matching market,
+focusing on the case of many-to-one matching, first proposed by
+\cite{Logan1996}. For easier exposition, throughout the chapter I will use the
+familiar example of the labor market, where many workers can be matched to one
+firm.
 
 We assume that the matching process in the labor market happens in two stages.
 In the first stage, each firm evaluates each worker in the sample, deciding
@@ -187,21 +189,27 @@ observed match between a worker and a firm. This is a many-to-one matching
 problem because a firm can make offers to multiple workers, none, some, or all
 of which can be accepted by workers.
 
+In this model, firms and workers decide sequentially, with firms making offers
+first in order for workers to have opportunity sets to choose from. While firms
+and workers in real life certainly do not act in this sequential manner, the
+idea of the opportunity set is still applicable. Workers in the real labor
+market may not know their exact set of offers, but they can certainly guess
+which firms are within their reach based on their characteristics and on guesses
+about firms' preference.
+
 Our model only needs data on 1) the covariates of firms and workers, and 2) the
 job that workers accept. Such data is widely available in many social science
-surveys of the job market. Importantly, we do not need to observe the opportunity
-set. Therefore, our model obviates the need to follow the matching process and
-record who makes offer to whom, which is rarely possible for researchers.
+surveys of the job market. Importantly, we do not need to observe the
+opportunity set. Therefore, our model obviates the need to follow the matching
+process and record who makes offer to whom, which is rarely possible for
+researchers.
 
 If we assume that firms and workers are utility-maximizing agents, at the end of
 the matching process, no firm or worker would voluntarily change their final
 matches. As discussed in Section~\ref{sec:game_theory}, this property is called
 \textit{stability} in the game theoretic two-sided matching literature. We want
 our model to have this property because matching markets tend to produce stable
-matching. Indeed, \citet{Roth1992} show that for any given set of preferences, a
-stable match always exist. Furthermore, \citet{Roth2016} and \citet{Adachi2003}
-show that a decentralized market with agents making independent,
-utility-maximizing decisions can also reach a stable match by itself.
+matching.
 
 This stability property does not imply that the matches will never change.
 Indeed, if actors' preference shifts, their characteristics change, or new
@@ -215,11 +223,9 @@ to be meaningful.
 This section will proceed as follows. First, I discuss the utility model for how
 firms make offers to workers. Second, I discuss the utility model for how
 workers choose the best offer among those extended by firms. Third, I show how
-we can use a Bayesian MCMC
-approach to estimate the model. Fourth, I analyze US labor data and demonstrate how to
-interpret the model's result.
+we can use a Bayesian MCMC approach to estimate the model.
 
-\section{Modeling firms' decision making}
+\subsection{Modeling firms' decision making}
 \label{sec:model_firm_decision_making}
 
 A firm $j$'s decision on whether to hire worker $i$ rests on two utility
@@ -249,11 +255,11 @@ preference for these characteristics.
 
 This model makes two important assumptions about firms' hiring process. First,
 whether a firm decides to hire worker A depends on the characteristics of worker
-A alone, and it will continue to hire worker A even if worker B is no longer
-available. In other words, firms regard workers as substitutes rather than
-complements.\footnote{In the terminology of \citet{Roth1992}, firms are assumed
-  to have ``substitutable preference,'' or firms' preference is assumed to have
-  the property of substitutability. As discussed in
+A alone, i.e. it will continue to hire worker A regardless of whether another
+worker B is available. In other words, firms regard workers as substitutes
+rather than complements.\footnote{In the terminology of \citet{Roth1992}, firms
+  are assumed to have ``substitutable preference,'' or firms' preference is
+  assumed to have the property of substitutability. As discussed in
   Section~\ref{sec:game_theory}, this assumption is necessary to prove the
   existence of stable matching in the case of many-to-one matching.} This
 assumption is not universally true. A Hollywood producer may want to hire two
@@ -268,16 +274,15 @@ effect of diminishing marginal productivity of labor. This assumption is less
 restrictive than it may seem. Indeed, we can model the fact that the workers
 under consideration are less productive than the previous batch of workers by
 allowing firm $j$ to have a high baseline utility $b_j$. Therefore, we are not
-assuming that there is never any diminishing marginal
-productivity of labor, only that there is negligible diminishing effect between
-the first and the last of the workers under consideration. This assumption is a
-reasonable approximation if the firm's labor force is large compared to the
-number of workers being considered.\footnote{While not concerned with
-  diminishing marginal productivity, \citet{Roth1992} also assume that firms'
-  quota, i.e. the number of workers they can accept, is sufficiently large to
-  hire everyone in the set of workers under consideration. This assumption
-  simplifies the proof that a stable match always exists in the case of
-  many-to-one matching.}
+assuming that there is never any diminishing marginal productivity of labor,
+only that there is negligible diminishing effect between the first and the last
+of the workers under consideration. This assumption is a reasonable
+approximation if the firm's labor force is large compared to the number of
+workers being considered.\footnote{While not concerned with diminishing marginal
+  productivity, \citet{Roth1992} also assume that firms' quota, i.e. the number
+  of workers they can accept, is sufficiently large to hire everyone in the set
+  of workers under consideration. This assumption simplifies the proof that a
+  stable match always exists in the case of many-to-one matching.}
 
 In addition to the two above assumptions about the process of firm's decision
 making, we make three parametric assumptions that are standard in the discrete
@@ -301,20 +306,14 @@ an offer to worker $i$ as the familiar binomial logit form:
   Pr(o_{ij} = 0) &= 1 - Pr(o_{ij} = 1) = \frac{1}{1 + \exp({\bm{\beta}_j'X_i})}
 \end{align}
 
-The term $b_j$ is absorbed into $\bm{\beta}$ when we add an intercept term to
-the covariate matrix $X$.
+In Equation~\eqref{eq:prob_offer_ij}, the term $b_j$ is absorbed into
+$\bm{\beta}$ when we add an intercept term to the covariate matrix $X$.
 
 Once firms have made their offers, each worker $i$ will have a set of offers
 from which to pick her favorite. We call this set of offers the
 \textit{opportunity set} of worker $i$, denoted $O_i$. Since unemployment is
 always an available option, every opportunity set includes unemployment as an
-``offer.''\footnote{In our model setup, firms and workers decide sequentially,
-  with firms making offers first in order for workers to have opportunity sets
-  to choose from. While firms and workers in real life certainly do not act in
-  this sequential manner, the idea of the opportunity set is still applicable.
-  Workers in the real labor market may not know their exact set of offers, but
-  they can certainly guess which firms are within their reach based on their
-  characteristics and on guesses about firms' preference.}
+``offer.''
 
 The probability of worker $i$ obtaining the opportunity set $O_i$ is:
 
@@ -324,7 +323,7 @@ The probability of worker $i$ obtaining the opportunity set $O_i$ is:
                         \prod_{j \notin O_i} \frac{1}{1 + \exp(\bm{\beta_j}' X_i)} \label{eq:conditional_probability_of_offer}
 \end{align}
 
-\section{Modeling workers' decision making}
+\subsection{Modeling workers' decision making}
 
 Worker $i$'s utility for the accepting an offer from firm $j$ is:
 
@@ -343,7 +342,7 @@ matching process, resulting in the observed final match between a worker and her
 chosen firm in our data.
 
 We make two assumptions in modeling the worker's decision making. First, for
-simplicity, we assume that all workers share the same set of preferences--hence
+simplicity, we assume that all workers share the same set of preferences---hence
 $\alpha$ does not have a subscript $i$. The model can be extended so that there
 is heterogeneous preference among workers, either by estimating a separate model
 for each worker type (i.e. no pooling) or by building a hierarchical model for
@@ -368,27 +367,27 @@ models and is not unique to our setup.\footnote{The discrete choice literature
   the unobserved portion is strongly correlated.}
 
 Similar to our model of firm's utility, our model of worker's utility has three
-additional parametric assumptions that are standard in the literature. First, we
-assume that utility is linear. Second, the error term $v_{ij}$ are uncorrelated
-across $i$. Third, we model $v_{ij}$ having a Gumbel distribution so that the
-probability that worker $i$ will accept the offer of firm $j$ out of all the
-offers in its opportunity set $O_i$ takes the conditional logit form
-\citep{Cameron2005}:
+additional parametric assumptions that are standard in the discrete choice
+literature. First, we assume that utility is linear. Second, the error term
+$v_{ij}$ are uncorrelated across $i$. Third, we model $v_{ij}$ having a Gumbel
+distribution so that the probability that worker $i$ will accept the offer of
+firm $j$ out of all the offers in its opportunity set $O_i$ takes the
+conditional logit form \citep{Cameron2005}:
 
 \begin{align}
   p(A_i = a_i | O_i, \alpha_i) = \frac{\exp(\alpha'W_{a_i})}{\sum\limits_{j:j \in O_i} \exp(\alpha'W_j)} \label{eq:conditional_probability_of_accept}
 \end{align}
 
-where $a_i$ is the index of the firm that $i$ accepts to to work for.
+where $a_i$ is the index of the firm that $i$ accepts to to work for, and
 Unemployment is indexed as 0.
 
-\section{Model estimation}
+\subsection{Model estimation}
 
 Our goal is to estimate the preference of firms and workers, i.e. $\beta_j$ and
 $\alpha$. The key insight is that, conditional on the opportunity set being
 observed, the model of firms' and workers' decision making is a straightforward
-application of the binary logit and conditional logit model. Both models can be
-estimated with familiar tools like Maximum Likelihood Estimation (MLE).
+application of the binary logit and conditional logit models. Both models can be
+estimated with familiar tools such as Maximum Likelihood Estimation (MLE).
 
 However, in most social science research problems, the researcher only observes
 the final match $A$ and not the opportunity set $O$. For example, labor market
@@ -397,7 +396,7 @@ have received if she had applied), while data on her current job is widely
 available. Similarly in the marriage market or the FDI market, researchers often
 do not have the data on the offers being made, and only observe the final
 matching between men and women (i.e. who is married to whom) and between MNCs
-and countries (i.e. which factory is located where).
+and countries (i.e. which subsidiary is located where).
 
 \citet{Logan1998}'s solution to this problem is to use the
 Expectation-Maximization (EM) algorithm, an iterative method capable of finding
@@ -405,7 +404,7 @@ the maximum likelihood estimates when the model depends on unobserved latent
 variables (i.e. the unobserved opportunity set in this case)
 \citep{Dempster1977}. Our innovation is to estimate the model using a Bayesian
 MCMC approach, which offers several advantages. First, our MCMC approach
-produces the full posterior distribution, making inference easy. In contrast, EM
+produces the full posterior distribution, making inference and prediction easy. In contrast, EM
 only produces point estimates out of the box.\footnote{\citet{Jamshidian2000}
   propose a method for estimating the standard error of EM estimates. However,
   for hypothesis testing, we need further assumptions about the distribution of
@@ -422,9 +421,9 @@ put a hierarchical structure on firms' preference. This allows us to borrow
 information across firms, producing more precise estimates even when there is
 not a lot of data for a specific firm.
 
-The rest of this section describes how we conduct model estimation.
+The rest of this section describes the details of the MCMC approach.
 
-\subsection{Estimating the model using Metropolis-Hastings}
+\subsection{Estimating the model using MCMC}
 
 We are interested in the posterior distribution of workers' and firms'
 preference given the observed final match, i.e. $p(\alpha, \beta | A)$.
@@ -468,23 +467,19 @@ following steps:
 In our case, we will use symmetric proposal distributions, i.e.
 $p(\theta^*|\theta)$ = $p(\theta | \theta^*) \forall \theta, \theta^*$, so that
 the MH acceptance ratio simplifies to $MH_{\theta} =
-\frac{p(\theta^*)}{p(\theta)}$. In addition, because preference parameters tend
-to be correlated, we use an adaptive proposal distribution so that our MCMC
-samples have a faster convergence rate \citep{Haario1999,
-  Haario2001}.\footnote{Description of the Adaptive Metropolis procedure?}
+\frac{p(\theta^*)}{p(\theta)}$.
 
 Below we describe how to sample from the posterior of each parameter in the
 model using the Metropolis-Hastings (MH) algorithm. More detailed derivation of
-the Metropolis acceptance ratio is included in Appendix~\ref{chap:MH_ratio}. We
-ensure that our derivation and implementation of the acceptance ratio is correct
-using the unit-testing approach suggested by
-\citet{Grosse2014}.\footnote{Describe the unit-testing framework to ensure the
-  correctness of MCMC code?}
+the MH acceptance ratio is included in Appendix~\ref{chap:MH_ratio}. We ensure
+that our derivation and implementation of the acceptance ratio is correct using
+the unit-testing approach suggested by \citet{Grosse2014}.
 
-\subsection{Posterior of the opportunity set $p(O|A, \alpha, \beta)$}
+\textbf{Sampling from the posterior of the opportunity set $p(O|A, \alpha,
+  \beta)$}
 
 For each worker $i$, we propose a new value $O_i^*$ by flipping random cells in
-the current value $O_i$ from 0 to 1 and 1 to 0. Substantively, this is
+the current opportunity set $O_i$ from 0 to 1 and 1 to 0. Substantively, this is
 equivalent to perturbing the opportunity set by randomly making new offers or
 withdrawing existing offers. Note that this proposal distribution is indeed
 symmetric because proposing $O_i^*$ from $O_i$ and proposing $O_i$ from $O_i^*$
@@ -492,7 +487,7 @@ both involve flipping the same cells in the opportunity set. Hence,
 $p(O_i^*|O_i) = p(O_i|O_i^*) =$ the probability of selecting these particular
 cells out of the opportunity set.
 
-The Metropolis acceptance ratio for the proposed opportunity set $O_i^*$ is
+The MH acceptance ratio for the proposed opportunity set $O_i^*$ is
 
 \begin{align}
   MH_O &= \frac{p(O_i^* | A_i, \alpha, \bm{\beta})}{p(O_i | A_i, \alpha, \bm{\beta})} \\
@@ -513,39 +508,32 @@ reflected in the formula for $MH_O$ by the $\exp(\alpha'W_{j^*})$ term in the
 denominator.
 
 On the other hand, whether we should add the offer to the opportunity set also
-depends on firm $j$'s preference for worker $i$. If hiring worker $i$ brings firm
-$j$ net positive utility (i.e. $\bm{\beta}_{j^*}'X_i > 0$), we should add the
-offer. This is reflected in the formula for $MH_O$ by the multiplier
+depends on firm $j$'s preference for worker $i$. If hiring worker $i$ brings
+firm $j$ net positive utility (i.e. $\bm{\beta}_{j^*}'X_i > 0$), we should add
+the offer. This is reflected in the formula for $MH_O$ by the multiplier
 $\exp(\bm{\beta}_{j*}'X_i)$, which is larger than 1 when $\bm{\beta}_{j^*}'X_i >
 0$.
 
-\subsection{Posterior of firms' preference $p(\alpha|A, O, \beta)$}
+\textbf{Sampling from the posterior of workers' preference $p(\alpha|A, O,
+  \beta)$}
 
-At the beginning of the MCMC chain, we propose a new $\alpha^*$ using a Normal
-proposal distribution centered on the current value $\alpha$ with a hand-tuned
-diagonal covariance matrix. Later in the MCMC chain, the covariance matrix of
-the proposal distribution is adapted based on past samples to take into account
-the correlations across preference parameters \citep{Haario2001}.
-
-The Metropolis acceptance ratio for the proposed $\alpha^*$ is\footnote{We
-  log-transform the Metropolis acceptance ratio for better numerics.}
+We propose a new $\alpha^*$ using a Normal proposal distribution centered on the
+current value $\alpha$ with a hand-tuned diagonal covariance matrix. The MH
+acceptance ratio for the proposed $\alpha^*$ is:\footnote{We log-transform the
+  MH acceptance ratio for better numerics.}
 
 \begin{align}
   MH_\alpha &= \frac{\alpha^*|A, O, \beta)}{p(\alpha | A, O, \beta)} \\
   \log MH_\alpha &= \sum_i \Bigl[ (\alpha^* - \alpha)' W_{a_i} + \nonumber \\
-                 & \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) -
-                   \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \Bigr] + \nonumber\\
-                 & \log p(\alpha^*) - \log p(\alpha)
+            & \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) -
+              \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \Bigr] + \nonumber\\
+            & \log p(\alpha^*) - \log p(\alpha)
 \end{align}
 
-\subsection{Posterior of workers' preference $p(\beta|A, O, \alpha)$}
+\textbf{Sampling from the posterior of firms' preference $p(\beta|A, O, \alpha)$}
 
-We propose a new $\bm{\beta}^*$ using a Normal, adaptive proposal distribution
-similar to $\alpha$. Because $\bm{\beta}$ is high dimensional, with one set of
-$\beta$ for each employer, in each MCMC iteration we randomly choose and update
-only a part of $\bm{\beta}$.
-
-The Metropolis acceptance ratio for the proposed $\beta$ is
+We propose a new $\bm{\beta}^*$ using a Normal adaptive proposal distribution
+similar to $\alpha$. The MH acceptance ratio for the proposed $\beta$ is:
 
 \begin{align}
   MH_\beta &= \frac{p(\beta* | A, O, \alpha)}{p(\beta | A, O, \alpha)} \\
@@ -554,7 +542,7 @@ The Metropolis acceptance ratio for the proposed $\beta$ is
 \end{align}
 
 
-\subsection{Posterior of $\beta$'s hyperparameters $\mu_{\beta}, \tau_{\beta}$}
+\textbf{Sampling from the posterior of $\beta$'s hyperparameters $\mu_{\beta}, \tau_{\beta}$}
 
 As discussed above, the Bayesian approach to estimating our two-sided model
 allows us to put a hierarchical structure on the preference parameter. Here, we
@@ -564,7 +552,7 @@ and $\tau_{\beta}$ is the precision.
 
 When the prior $p(\beta)$ is also normal, we have a conjugate multivariate
 normal model, where $\mu_{\beta}$ and $\tau_{\beta}$ are the parameters while
-$\beta$ is considered the ``data''.
+$\beta$ is considered the ``data.''
 
 Since the model is conjugate, we can sample from the posterior of $\mu_{\beta}$
 and $\tau_{\beta}$ with Gibbs sampling. Their full conditional distribution of
@@ -586,10 +574,19 @@ The full conditional distribution of $\tau_{\beta}$ is:
   S^{-1} &= \left(S_0 + \sum (\beta - \mu_{\beta})(\beta - \mu_{\beta})^{\prime}\right)^{-1}
 \end{align}
 
-\section{Parameter interpretation}
+\section{Conclusion}
 
-The coefficients can be interpreted as the relative influence of a factor on the
-utility of the decision maker.
+This chapter has reviewed the game theoretic two-sided matching models,
+identifying key assumptions and properties that empirical model of two-sided
+matching market can take advantage of. A key property of matching market is that
+the final matching is likely to be \textit{stable}, with no agents being able to
+form a better match. Therefore, our two-sided logit model also aims to describe a
+process that would result in a stable matching.
+
+In addition to setting up the model, I have also discussed how to estimate it
+using the Metropolis-Hastings algorithm. In the next chapter, I show simulation
+results to demonstrate the correctness of my estimation and to explore other
+properties of the model.
 
 %%% Local Variables:
 %%% mode: latex

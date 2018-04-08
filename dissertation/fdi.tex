@@ -1,37 +1,49 @@
 \chapter{Two-sided matching model on Japanese FDI}
 \label{chap:FDI}
 
+In this chapter, I apply the two-sided matching model to analyze Japanese FDI in
+Asia. In doing so, I demonstrate how the two-sided matching model can address
+the three issues in the current FDI literature. First, I estimate
+countries' varying preference for FDI. Second, I show how countries value
+different things in a subsidiary. Third, I use firm-level operational data that
+maps closer to our theoretical concept of FDI than FDI flow statistics.
+
+Section~\ref{sec:Japan_FDI_in_Asia} motivates the study of Japanese FDI in Asia.
+Section~\ref{sec:Japan_sample} describes the dataset.
+Section~\ref{sec:Japan_variables} discusses the variables used in the model.
+Section~\ref{sec:Japan_result} shows the result.
+
+\section{The role of Japanese FDI in Asia}
+\label{sec:Japan_FDI_in_Asia}
+
 In the 1980s and 1990s, Japan FDI began to surge, becoming the second largest
-source of FDI flow behind only the United States. An important factor behind
-this development is the to float the hitherto undervalued yen. As the yen began
+source of FDI, trailing only the US. An important factor behind
+this development is the decision to float the hitherto undervalued yen. As the yen began
 to rise in the 1980s and peak in 1995 against the dollar,
-Japanese companies invested heavily abroad as they could now buy foreign assets
-for cheap \citet{Delios2001}.
+Japanese companies invested heavily abroad since they now could buy foreign assets
+for cheap \citep{Delios2001}.
 
 During this period, Japanese FDI also shifted its focus away from the US and
-Europe, making Asia its top destination. Some scholars
+Europe, making Asia its top destination. Scholars
 have argued that this wave of Japanese FDI was instrumental to Asia's
 economic growth by bringing not just capital but also technological know-how and
 the opportunity to become integrated in the global production network. In this
 so-called ``flying geese'' model of economic development, industrial development
 spread from Japan, the leading goose, to the rest of Asia, e.g. the Four Asian
-Tigers (Hong Kong, Singapore, South Korea, Taiwan), ASEAN, China, etc.
+Tigers (Hong Kong, Singapore, South Korea, Taiwan), ASEAN, and China, etc.
 \citep{Bernard1995, Kojima2000}.
 
-In this section, I apply the two-sided matching model to analyze the
-location pattern of manufacturing Japanese MNCs in Asia, estimating the MNCs'
-and countries' preference for each other.
-
 \section{Data and sample choice}
+\label{sec:Japan_sample}
 
 The dataset was compiled by Andrew Delios from the \textit{Kaigai Shinshutsu
-  Kigyou Souran} (Japanese Overseas Investments-by Country), 1986-1999 editions,
-a biennial publication that contains operational data on all foreign affiliates
-of Japanese firms.\footnote{I thank Professor Andrew Delios for generously
-  sharing the data.} Tokyo Keizai, Inc. collects this data via a survey of these
-affiliates, which is reputed to include all Japanese firms overseas
-\citep{Yamawaki1991}. Comparing the Japanese Overseas Investment data with other
-data sources on publicly listed firms, \citep{Delios2001} finds that the dataset
+  Kigyou Souran} (Japanese Overseas Investments---by Country), 1986-1999
+editions.\footnote{I thank Professor Andrew Delios for generously
+  sharing the data.} Japanese Overseas Investments is a biennial publication that contains operational data on all foreign affiliates
+of Japanese firms, collected by Tokyo Keizai, Inc. via a survey of these
+affiliates. The dataset is reputed to include all Japanese firms overseas
+\citep{Yamawaki1991}. Comparing the Japanese Overseas Investments data with other
+data sources on publicly listed firms, \citet{Delios2001} find that the dataset
 covers 98.5\% of public firms, which in turn control 99.5\% of the foreign
 subsidiaries. This high level of coverage ensures that our data captures the
 entire set of options available to countries and firms, obviating any worry
@@ -39,8 +51,8 @@ about whether the choice set in the data represents the choice set in
 reality.\footnote{The mismatch between the choice set in the sample and in the
   population is an unexplored theoretical aspect of two-sided matching models.
   Consider an example where we analyze a sample of 1000 men and women in the US
-  to estimate their mate preferences. How are our estimates affected by our
-  assumption that the potential choice set of each man includes all the women
+  to estimate their mate preferences. How are our estimates affected by the 
+  assumption that each man's potential choice set includes all the women
   (and vice versa)? Not only does an individual not have that many
   acquaintances, his social circle is also not a representative sample of the
   entire dataset \citep[568]{Logan2008}. Fortunately, this is not a problem for
@@ -52,47 +64,47 @@ reality.\footnote{The mismatch between the choice set in the sample and in the
 From this dataset, I make several choices restricting the sample to better fit
 with the assumption of the two-sided matching model.
 
-First, I limit the sample to manufacturing subsidiaries in Asia so that it is reasonable
+First, I limit the sample to manufacturing subsidiaries in Asia. This way, it is
+more reasonable
 for our model to assume
 that all subsidiaries have the same set of preference parameters. Indeed,
-\citep{Pak2005} finds that Japanese FDI in the West and in the East are
-fundamentally different---While subsidiaries in the West seek
-to augment their asset via R\&D and marketing, the subsidiaries in the East seek to exploit their
-asset by setting up local production with Japanese management. In addition, manufacturing FDI mainly
-consists of capital in the forms of property, plant, and equipment.
-Therefore, our data on the size of their capital maps more precisely to the
+\citet{Pak2005} find that Japanese FDI in the West and in the East are
+fundamentally different---while subsidiaries in the West seek
+to augment their asset via R\&D and marketing, subsidiaries in the East seek to exploit their
+asset by setting up local production with Japanese superior management. In addition, manufacturing FDI mainly
+consists of physical capital in the forms of property, plant, and equipment.
+Therefore, our data on the size of subsidiaries' capital maps more precisely to the
 concept of illiquid capital subjecting to the ``obsolescing bargain'' in
 Political Science theories.
 
-Second, I limit the sample to subsidiaries that are founded in the year 1996. The
-reason to limit the sample to subsidiaries founded in a particular year instead
-of including subsidiaries that have already invested is because the MNCs'
-utility function in our model does not capture the fixed cost of relocating.
+Second, I limit the sample to subsidiaries that are founded in the year 1996. Because the MNCs'
+utility function in our model does not capture the fixed cost of relocating, it
+would be incorrect to include both subsidiaries that have already invested and
+those that are considering, then assume that they have the same set of preference.
 Indeed, as a linear combination of only country covariates, the utility function
 does not take into account the fact that, if the moving cost is too high, a
 subsidiary may not relocate to a new country even if the new country is
-available and is a better option. Therefore, the utility function in our model
-is not appropriate for subsidiaries that have already invested.\footnote{Past
+available and is a better option.\footnote{Past
 applications of the two-sided matching model ignore this point and do not limit
-their sample to only agents that are participating in the matching market around
+their sample to only agents that participate in the matching market around
 the same time \citep{Logan1996, Logan2008}. However, given that a defining
 characteristic of FDI is its relative immobility compared to other form of
-global capital, the model's assumption of zero switching cost would be too
-unreasonable if we do not limit our sample.}
+global capital, if we do not limit our sample, the model's assumption of zero switching cost would be too
+unreasonable.}
 
 While the decision to limit the sample to subsidiaries founded in a particular
 year is theoretically motivated, the decision to choose the particular year of
 1996 is simply to get the largest sample size. There may be concerns about 1996
-being unique as a boom time leading up to the 1997 Asian Financial Crisis.
+being unique as the peak of an economic bubble, leading up to the 1997 Asian Financial Crisis.
 However, our sample only includes manufacturing FDI, which, unlike equity
 investors and land developers, were largely unaffected by the financial crisis.
-In addition, FDI trend remains stable before and after the crisis in terms of
+In addition, FDI trend remained stable before and after the crisis in terms of
 inflow, exit rate, and profitability \citep{Delios2001, UNCTAD1998}. In
-hindsight, this is not surprising as FDI firms focus on countries' fundamentals
-and were thus unaffected by the fluctuations in the financial markets
+hindsight, this is not surprising as FDI firms tend to focus on countries' fundamentals
+and are thus unaffected by the fluctuations in the financial markets
 \citep{Ahlquist2006}.
 
-The final sample includes 269 Japanese manufacturing subsidiaries in 1996, spreading
+In sum, the final sample includes 269 Japanese manufacturing subsidiaries in 1996, spreading
 across 9 Asian economies. China is the top destination, attracting 136 or 51\%
 of Japanese subsidiaries (Table \ref{tab:japan96_num_obs}).
 
@@ -105,6 +117,7 @@ of Japanese subsidiaries (Table \ref{tab:japan96_num_obs}).
 \end{table}
 
 \section{Variables}
+\label{sec:Japan_variables}
 
 For subsidiaries' characteristics that countries consider, I include:
 
@@ -113,13 +126,17 @@ For subsidiaries' characteristics that countries consider, I include:
   that it brings capital to the country, improving labor productivity. MNCs'
   capital is especially important for developing countries, which often cannot
   muster much domestic capital from their poor population and underdeveloped
-  financial market.
+  financial market. Therefore, we may expect countries to prefer MNCs with a lot
+  of capital.
 
 \item Labor size (number of employees): Similarly, a reputed benefit of FDI is
   that it creates jobs, generating not just economic growth but also increasing
-  the government's popularity among the populace.
+  the government's popularity among the populace. Therefore, we may expect
+  countries to prefer MNCs with a large labor demand.
 
-\item R\&D intensity (amount spent in R\&D as a percentage of revenue): To
+\item R\&D intensity (amount spent in R\&D as a percentage of revenue): The
+  potential for technological spillover between MNCs' subsidiaries and local
+  firms has been touted as a key to upgrading the host economy's productivity. To
   measure a subsidiary's technological capability, I use the R\&D intensity of
   the parent firm, calculated as the amount spent on R\&D as a percentage of
   revenue. Using the parent firm's R\&D intensity is a reasonable proxy because
@@ -135,8 +152,8 @@ For subsidiaries' characteristics that countries consider, I include:
   as two mutually reinforcing forces \citep{Liu2002}. The subsidiary of an
   export-focused parent firm may help local suppliers become integrated into
   the global production network, improving the quality of their goods to match
-  global standards and eventually being able to export themselves. Therefore, it
-  would be interesting to test if countries actively look for investment from
+  global standards and eventually being able to export themselves. Therefore, we
+  may expect countries to actively look for investment from
   Japanese firms with an export focus.
 \end{itemize}
 
@@ -147,7 +164,7 @@ variables from the Penn World Table:
 \item Market size (log GDP, constant 2005 USD): MNCs are expected to prefer countries with a large market
   size, which present MNCs with many potential customers and suppliers. In
   addition, market size is a key variable in the gravity
-  model, a standard model for analyzing FDI flows \citet{Bergstrand2007}.
+  model, a standard model for analyzing FDI flows \citep{Bergstrand2007}.
 
 \item Level of development (log GDP per capita, constant 2005 USD): As a measure
   of country income, development should attract more MNCs as MNCs prefer
@@ -159,8 +176,9 @@ variables from the Penn World Table:
 
 \item Human capital (Penn World Table index): As one primary factor of
   production, labor matters greatly to firms' productivity and profit. To
-  measure labor quality, the human capital index developed for the Penn World
-  Table, which includes not only years of education but also labor productivity
+  measure labor quality, I use the human capital index developed for the Penn World
+  Table, which incorporates not just years of education but also the
+  productivity level of labor
   \citep{Feenstra2015}. Because the human capital index does not have a
   substantively interpretable unit, I standardize the variable so that it has a
   standard deviation of 1.
@@ -169,48 +187,51 @@ variables from the Penn World Table:
 In sum, the model for the utility functions are:
 
 \begin{itemize}
-\item MNC $i$ utility for country $j$: $U_i(j) = \bm{\alpha}' W_j $, where $W_j$ includes log GDP, log GDP per capita, and human capital index.
-\item Country $j$ utility for MNC $i$: $V_j(i) = \beta_{0j} + \bm{\beta_j}'
+\item MNC $i$'s utility for country $j$: $U_i(j) = \bm{\alpha}' W_j $, where $W_j$ includes log GDP, log GDP per capita, and human capital index.
+\item Country $j$'s utility for MNC $i$: $V_j(i) = \beta_{0j} + \bm{\beta_j}'
   X_i$, where $X_i$ includes log number of employees, log capital size, R\&D intensity, and
 export intensity. 
 \end{itemize}
 
 \section{Result}
-\label{sec:result}
+\label{sec:Japan_result}
 
-The results below are produced by an MCMC chain with $4e6$ iterations with a
+The results below are produced by an MCMC chain with $4e6$ iterations and a
 thinning interval of 10, resulting in $4e5$ saved iterations. The starting
 values for all preference parameters are set at 0. I put a diffuse prior on
 $\alpha$, specifically a Normal distribution with mean 0 and variance 100.
 
-As discussed in Section~\ref{sec:reservation_choice}, since our sample does not include MNCs that choose the reservation choice, i.e. staying home instead of
+As discussed in Section~\ref{sec:reservation_choice}, since our sample does not
+include MNCs that choose the reservation choice, i.e. staying home instead of
 investing abroad, the estimate for the $\beta$ intercept will be too high. To
 combat this problem, I use an informative prior so that $\beta_{0j}$
 approximately follows a Normal distribution with mean -1 and variance
 10.\footnote{Specifically, the prior for $\beta_{0j}$'s mean is Normal with mean
-  -1 and variance 1. The prior for $\beta_{0j}$'s variance is
-  Inverse-Wishart with $\nu = 7$ and $S^{-1} = 10$ so that the variance is
-  loosely centered around 10.}
+  -1 and variance 1. The prior for $\beta_{0j}$'s variance is Inverse-Wishart
+  with $\nu = 7$ and $S^{-1} = 10$ so that the variance is loosely centered
+  around 10.}
 
 Figure~\ref{fig:japan96_alpha} shows the posterior distribution and the 95\%
 credible interval for MNCs' preference parameters. We can interpret the
 parameters as the relative weight MNCs attach to countries' characteristics when
 they decide where to invest. For example, the posterior mean for log GDP and for
-log GDP per capita is 0.72 and 0.66---this means that to MNCs, a 1\% increase
-in GDP is equivalent to 0.72 / 0.66 = 1.09\% increase in log GDP per capita.
+log GDP per capita is 0.72 and 0.66---this means that to MNCs, a 1\% increase in
+GDP is equivalent to 0.72 / 0.66 = 1.09\% increase in log GDP per capita.
 
 The coefficients for log GDP and log GDP per capita are both positive and
 significant, suggesting that Japanese MNCs are looking for large markets with a
 lot of disposable income. On the other hand, the coefficient for human capital
 is negative, corroborating earlier findings in the literature that Japanese MNCs
 in Asia do not aim to be innovative and thus have no need for strong human
-capital. On the contrary, since the human capital index includes not only years of
-education but also labor productivity, a high human capital index may signify
-high labor cost, explaining why Japanese manufacturing MNEs weigh it negatively. 
+capital. On the contrary, since the human capital index includes not only years
+of education but also labor productivity, a high human capital index may signify
+high labor cost, explaining why Japanese manufacturing MNEs weigh it negatively.
 
 \begin{figure}[tbp] \centering
   \includegraphics[width=0.75\textwidth,keepaspectratio]{japan96_alpha}
-  \caption[MNCs' preference for countries' characteristics.]{MNCs' preference for countries' characteristics. The density plot and the shaded region show the posterior distribution and the 95\% credible interval.}
+  \caption[MNCs' preference for countries' characteristics.]{MNCs' preference
+    for countries' characteristics. The density plot and the shaded region show
+    the posterior distribution and the 95\% credible interval.}
   \label{fig:japan96_alpha}
 \end{figure}
 
@@ -218,43 +239,43 @@ In addition to interpreting the coefficients as weights in the MNCs' utility
 function, we can also simulate and visualize their impact on MNCs' location
 choice. For example, we may ask if country A's GDP increases by 20\%, what will
 be the new share of MNCs that invest in country A? Like in the one-sided
-conditional logit model, the share of MNCs investing in a country depends not
+conditional logit model, the share of MNCs investing in country A depends not
 only on country A's characteristics but also on others'. In addition, in this
 two-sided model, the share of MNCs investing in a country also depends on the
 preference of countries. For example, even if country A becomes highly
 desirable, we may not see much change in the share of MNCs located there if
-country A's preference is also highly demanding. The interaction can be much
-more complicated. For example, consider a scenario in which country A and
-country B have similar preferences and compete for the same set of MNCs---even
-if country A becomes more desirable than the rest of the countries, as long as
-country A is less attractive than country B, the share of MNCs investing in
-country A will still remain unchanged.
+country A's preference is also highly demanding. The interaction between share
+of MNCs and countries' preferences can be much more complicated. Consider a
+scenario in which country A and country B have similar preferences and compete
+for the same set of MNCs. Even if country A becomes more desirable than the rest
+of the countries, as long as country A is less attractive than country B, the
+share of MNCs investing in country A will still remain unchanged.
 
-Fortunately, we can easily simulate these effects in the Bayesian framework. To
-see how the share of MNCs investing in Thailand changes along with hypothetical
-values of Thailand's GDP, we can take the following steps:
+Fortunately, we can easily simulate these effects in the Bayesian framework. For
+example, to see how the share of MNCs investing in Thailand changes along with
+hypothetical values of Thailand's GDP, we take the following steps:
 
 \begin{enumerate}
-  \item Construct a scenario in which Thailand has a new GDP, while all other
-    characteristics remain for Thailand and other countries
-  \item Make one draw for each parameter in the model from its posterior
-    distribution
-  \item Simulate the matching process in which countries first make offers to
-    MNCs, and MNCs then choose the best option
-  \item Record the share of MNCs investing in Thailand after the matching process
-  \item Repeat step (2)-(4) to get a distribution for the share of MNCs in
-    Thailand\footnote{Essentially we are constructing the posterior predictive
-      distribution for the share of MNCs in Thailand, integrating out the
-      preference parameters via simulation.}
+\item Construct a scenario in which Thailand has a new GDP, while all other
+  characteristics remain for Thailand and other countries
+\item Make one draw for each parameter in the model from its posterior
+  distribution
+\item Simulate the matching process in which countries first make offers to
+  MNCs, and MNCs then choose the best option
+\item Record the share of MNCs investing in Thailand after the matching process
+\item Repeat step (2)-(4) to get a distribution for the share of MNCs in
+  Thailand\footnote{Essentially we are constructing the posterior predictive
+    distribution for the share of MNCs in Thailand, integrating out the
+    preference parameters via simulation.}
 \end{enumerate}
 
 Following this process, I calculate the share of Japanese MNCs in Thailand at
 different hypothetical values of Thailand's GDP.
 Figure~\ref{fig:japan96_effect_GDP_on_share_of_MNCs} shows that as Thailand's
 GDP increases from 50\% to 150\% of its true value, the share of MNCs in
-Thailand increases from 8\% to 15\%. In addition, the share of MNCs
-investing in Indonesia and Malaysia, two competitors of Thailand in ASEAN,
-declines slightly as Thailand becomes more attractive. 
+Thailand increases from 8\% to 15\%. In addition, the share of MNCs investing in
+Indonesia and Malaysia, two competitors of Thailand in ASEAN, declines slightly
+as Thailand becomes more attractive.
 
 \begin{figure}[tbp]
   \centering
@@ -279,21 +300,21 @@ to our small sample size.\footnote{I present the results for Taiwan and
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/japan96_beta_Taiwan_Indonesia}
-  \caption[Preference of Taiwan and Indonesia.]{Preference of Taiwan and Indonesia for MNCs' characteristics.}
+  \caption[Preference of Taiwan and Indonesia.]{Preference of Taiwan and
+    Indonesia for MNCs' characteristics.}
   \label{fig:japan96_beta_Taiwan_Indonesia}
 \end{figure}
 
-While the relative size of preference parameters within a country is
-meaningful, we cannot readily compare preference parameters across countries.
-This is because coefficients in the logit model is normalized so
-that the variance of the unobserved factors in the utility function becomes
-1---therefore, the relative size of coefficients across two countries may be
-affected by the relative variance of the unobserved factors in the utility
-functions of those two countries \citep[chap. 2]{Train2009}. Since there is no
-guarantee that the unobserved factors will be the same or have the same variance
-across countries, we cannot say that, for example, Taiwan values export
-intensity more than Vietnam because Taiwan's coefficient for export intensity is
-larger.
+While the relative size of preference parameters within a country is meaningful,
+we cannot readily compare preference parameters across countries. This is
+because coefficients in the logit model is normalized so that the variance of
+the unobserved factors in the utility function becomes 1. Therefore, the
+relative size of coefficients across two countries may be affected by the
+relative variance of the unobserved factors in the utility functions of those
+two countries \citep[chap. 2]{Train2009}. Since there is no guarantee that the
+unobserved factors will be the same or have the same variance across countries,
+we cannot say that, for example, Taiwan values export intensity more than
+Vietnam because Taiwan's coefficient for export intensity is larger.
 
 We can, however, look at the sign of the estimates to see whether countries
 evaluate an MNC's trait positively or negatively.
@@ -309,33 +330,34 @@ these economies as being export-driven.
 
 \begin{figure}[tbp] \centering
   \includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_ltemp_luscptl}
-  \caption[Countries' preference for subsidiaries' size.]{Countries' preference for subsidiaries' size, measured by their labor
-    force (left) and capital (right). The density plot and the shaded region
-    show the posterior distribution and the 95\% credible interval.}
+  \caption[Countries' preference for subsidiaries' size.]{Countries' preference
+    for subsidiaries' size, measured by their labor force (left) and capital
+    (right). The density plot and the shaded region show the posterior
+    distribution and the 95\% credible interval.}
   \label{fig:japan96_beta_ltemp_luscptl}
 \end{figure}
 
 \begin{figure}[tbp] \centering
   \includegraphics[width=\textwidth,keepaspectratio]{japan96_beta_intrd_intexp}
-  \caption[Countries' preference for firms' intangible assets.]{Countries' preference for firms' intangible assets, i.e R\&D
-    intensity (left) and export intensity (right). The density plot and the
-    shaded region show the posterior distribution and the 95\% credible
-    interval.}
+  \caption[Countries' preference for firms' intangible assets.]{Countries'
+    preference for firms' intangible assets, i.e R\&D intensity (left) and
+    export intensity (right). The density plot and the shaded region show the
+    posterior distribution and the 95\% credible interval.}
   \label{fig:japan96_beta_intrd_intexp}
 \end{figure}
 
-In addition, we can simulate and visualize the impact of countries'
-preference on MNCs' location choice. Using the steps described above to simulate
-the posterior predictive distribution,
+In addition, we can simulate and visualize the impact of countries' preference
+on MNCs' location choice. Using the steps described above to simulate the
+posterior predictive distribution,
 Figure~\ref{fig:japan96_sim_china_more_demanding} shows how the distribution of
 Japanese MNCs across Asian countries will change if China becomes more stringent
 in its evaluation of MNCs. As China becomes as picky as South Korea (i.e.
-China's intercept is decreased to match South Korea's), the share of MNCs
-located in China decreases from 47\% to 20\%, a decrease of 27 percentage
+China's intercept is decreased to match South Korea's on average), the share of MNCs
+located in China decreases from 47\% to 20\%, a change of 27 percentage
 points. Of these 27 percentage points, 20 go to Indonesia and Thailand, the two
-biggest beneficiaries of China's becoming more demanding. On the other hand, the
+biggest beneficiaries of China's reduced appetite for FDI. On the other hand, the
 share of MNCs in Singapore, South Korea, and Taiwan remains virtually unchanged,
-suggesting that China is not competing for the same MNCs as these countries do.
+suggesting that China is not competing for the same MNCs as these countries.
 
 \begin{figure}[!ht]
   \centering
@@ -343,7 +365,8 @@ suggesting that China is not competing for the same MNCs as these countries do.
   \caption[Effect of China's demand for MNCs on MNCs' location across
   Asia.]{Effect of China's demand for MNCs on MNCs' location across Asia. If
     China becomes as picky as South Korea, its share of MNCs will decrease from
-    47\% to 20\%. The majority of these MNCs will relocate to Indonesia and Thailand.}
+    47\% to 20\%. The majority of these MNCs will relocate to Indonesia and
+    Thailand.}
   \label{fig:japan96_sim_china_more_demanding}
 \end{figure}
 
@@ -354,10 +377,10 @@ To check that our model fits well to the data, we can conduct posterior
 predictive checks, generating simulated matchings and comparing them with observed
 matching.
 
-Since the location of MNCs is something we model directly, we should at least
+Since the location of MNCs is something we model directly, we at least
 expect our model to have a good fit with the observed location.
 Figure~\ref{fig:japan96_prob_being_chosen_by_MNC_two_sided} shows that our model
-performs well in this regards as the predicted share of MNCs across countries
+performs well in this regard---the predicted share of MNCs across countries
 match the observed share exactly in most cases and well within the 95\% credible
 interval for all cases. 
 
@@ -371,13 +394,13 @@ bar show the posterior mean and the 95\% credible interval.}
 
 In addition, by conducting the posterior predictive checks for aspects of the
 data that we do not model directly, we gain a deeper understanding into what
-part of reality our model does not capture. Given that we may be interested in
+part of reality our model does not capture. Since we may be interested in
 not only the share of MNCs across countries, but also which types of firms are
 located in which countries, I conduct the posterior predictive checks for MNCs'
-characteristics. Figure~\ref{fig:japan96_sim_mean_ltemp} and
-Figure~\ref{fig:japan96_sim_var_ltemp} shows that our model captures the mean
+characteristics across countries. Figure~\ref{fig:japan96_sim_mean_ltemp} and
+Figure~\ref{fig:japan96_sim_var_ltemp} show that our model captures the mean
 and the variance of of MNCs' size across countries relatively well, with the
-observed mean of log Employee lying within the 95\% interval for all cases.
+observed mean and variance of log Employee lying within the 95\% interval for all cases.
 Admittedly the 95\% interval is really wide for many countries, reflecting the
 lack of precision in the estimates for countries' preference, likely due to the
 small sample size.
