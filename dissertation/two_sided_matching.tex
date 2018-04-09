@@ -1,35 +1,30 @@
 \chapter{Two-sided matching model}
 \label{chap:model}
 
-Much of our social, economic, and political life is governed by two-sided
-matching markets. In these matching markets, actors from two disjoint sets
-evaluate the characteristics of someone on the other side and voluntarily form a
-match if both deem each other satisfactory.\footnote{Throughout the
-  dissertation, I use ``two-sided matching market'' and ``matching market''
-  interchangeably. On the other hand, note that a two-sided market is not
-  necessarily a matching market \citep{Rysman2009}.} Marriage is a prominent
-example of such matching process. Others include the matching between firms and
-workers, federal judges and law clerks, the \textit{formateur} of a coalition
-government and other minority parties, or countries and multinational
-corporations (MNCs) that are looking for a location to invest.
-
-Two-sided matching market is substantively consequential because it often
-involves scarce, indivisible goods, such as life commitment to a marital partner
-or political allegiance in a coalition government. It is also intellectually
-interesting because the market outcome depends on the actions of both sides,
-demanding a different analytical approach from what's used for one-sided
-markets.
+As discussed in Chapter~\ref{chap:introduction}, our goal is to develop a
+two-sided matching model for the FDI market. To do so, I draw insights from
+studies of matching markets in other domains. Marriage is a prominent example of
+such a market---others include the matching between firms and workers, federal
+judges and law clerks, the \textit{formateur} of a coalition government and
+other minority parties, or countries and multinational corporations (MNCs) that
+are looking for a location to invest. In all of these matching markets, actors
+from two disjoint sets evaluate the characteristics of the other side and
+voluntarily form a match only if both deem each other
+satisfactory.\footnote{Throughout the dissertation, I use ``two-sided matching
+  market'' and ``matching market'' interchangeably. On the other hand, note that
+  a two-sided market is not necessarily a matching market \citep{Rysman2009}.}
 
 This chapter will proceed as follows. First, I discuss the game theory
 literature of two-sided matching models, where much of the terminology and
 insight originate. I will highlight key results that are relevant to our goal of
 estimating actors' preference in matching markets. Second, I describe the
-two-sided logit model, first developed by \citet{Logan1996} to study the labor market, and how I use a Bayesian MCMC approach to estimate it.
+two-sided logit model, first developed by \citet{Logan1996} to study the labor
+market, and how I use a Bayesian MCMC approach to estimate it.
 
 \section{Game theory models of matching markets}
 \label{sec:game_theory}
 
-\citet{Gale1962} was the first to study the matching market, using marriage as
+\citet{Gale1962} are the first to study the matching market, using marriage as
 an example. In this market, there are two finite and disjoint sets of actors:
 men and women. Each man has preferences over the women, and vice versa. Each
 man's preference can be represented as an ordered list, ranking each woman based
@@ -94,19 +89,20 @@ mates, will converge towards a stable matching if the search cost is
 negligible.\footnote{In this model, searching has a time cost. Thus, negligible
   search cost is modeled as agents having a time discount close to 1.} These
 results further suggest that the matching we observe in decentralized markets is
-likely stable and that our empirical model ought to describe a
-process that produces a stable matching.
+likely stable and that our empirical model ought to describe a process that
+produces a stable matching.
 
 The third key result is that all conclusions regarding the one-to-one matching
 market (e.g. marriage) generalize to the many-to-one matching market (e.g. labor
-market, FDI market) with some additional assumptions
-\citep{Roth1992}. One important assumption is that firms treat workers as
-substitutes, not complements. In other words, firms never regret hiring a worker
-even if another worker is no longer available. Therefore, when we conduct
-empirical analysis of many-to-one markets, we should focus on markets where
-agents have such ``substitutable preference.'' Otherwise, a stable matching is
-not guaranteed, agents' utility functions are interdependent, and it becomes
-unclear what kind of matching process our empirical model should approximate.
+market). However, there is an additional assumption: firms treat workers as
+substitutes, not complements \citep{Roth1992}. In other words, firms never
+regret hiring a worker even if another worker is no longer available. Therefore,
+when we conduct empirical analysis of many-to-one markets, we should focus on
+markets where agents have such ``substitutable preference.'' (For the FDI
+market, this means that a country's offer to an MNC is not conditional on its
+offer to another.) Otherwise, a stable matching is not guaranteed, and it
+becomes unclear what kind of matching process our empirical model should
+approximate.
 
 \section{Empirical models of matching markets}
 
@@ -137,9 +133,9 @@ preference.
 In addition to academic research in two-sided markets, companies have also
 developed a commercial interest in studying them as the Internet witnesses a
 proliferation of two-sided matching markets, e.g. online marketplaces (AirBnB),
-dating sites (eHarmony), or job board (e.g. Elance). To help their users
-discover a match quicker, these sites often build a recommender system that
-suggests potential matches.\footnote{To clarify, the term ``recommender system''
+dating sites (eHarmony), or job board (Elance). To help their users discover a
+match quicker, these sites often build a recommender system that suggests
+potential matches.\footnote{To clarify, the term ``recommender system''
   typically refers to systems that recommend items to users based on the reviews
   of users like them. That is not what we are discussing here. Instead, we focus
   on matching markets where the recommender system recommends users to one
@@ -165,11 +161,13 @@ preference for athleticism or dog ownership over other traits.
 While the LDA model works well for the online dating market, it is not
 applicable to most social science problems for two reasons. First, this model
 requires data of users reaching out to multiple partners rather than just the
-final match. Second, the LDA model only uncovers users' latent types and then
-requires the analyst to interpret what these latent types mean. In contrast,
-social scientists likely want to estimate the preference of specific, known
-types (e.g. how different regime types may prefer different characteristics of
-an MNC).
+final match. Second, the LDA model only clusters users' into latent types
+without describing what these types may mean, leaving it up to the analyst to
+attach substantive labels to these types. In contrast, social scientists likely
+want to estimate the preference of pre-defined types such as men vs women or
+young vs old. Therefore, while the LDA model is suitable for exploratory and
+predictive purposes, it does not have the interpretability that social
+scientists desire.
 
 \section{Two-sided logit model}
 
@@ -404,22 +402,22 @@ the maximum likelihood estimates when the model depends on unobserved latent
 variables (i.e. the unobserved opportunity set in this case)
 \citep{Dempster1977}. Our innovation is to estimate the model using a Bayesian
 MCMC approach, which offers several advantages. First, our MCMC approach
-produces the full posterior distribution, making inference and prediction easy. In contrast, EM
-only produces point estimates out of the box.\footnote{\citet{Jamshidian2000}
-  propose a method for estimating the standard error of EM estimates. However,
-  for hypothesis testing, we need further assumptions about the distribution of
-  the EM estimates.} Second, our MCMC approach can be faster than EM when the
-latent variable, i.e. the opportunity set, is high dimensional
-\citep{Ryden2008}.\footnote{Indeed, our opportunity set $O$ is a $(I \times J)$
-  matrix of 0s and 1s, where $I$ is the number of workers and $J$ is the number
-  of firms. Thus, there are $2^{IJ}$ potential values for the opportunity set,
-  which quickly becomes untenable even for a small number of $I$ and $J$. The
-  high dimension of $O$ forces \citet{Logan1998} to reduce the data dimension by
-  aggregating 17 employers in the data into 5 employer types, e.g. professional
-  or blue collar jobs.} Third, within the Bayesian framework, we can naturally
-put a hierarchical structure on firms' preference. This allows us to borrow
-information across firms, producing more precise estimates even when there is
-not a lot of data for a specific firm.
+produces the full posterior distribution, making inference and prediction easy.
+In contrast, EM only produces point estimates out of the
+box.\footnote{\citet{Jamshidian2000} propose a method for estimating the
+  standard error of EM estimates. However, for hypothesis testing, we need
+  further assumptions about the distribution of the EM estimates.} Second, our
+MCMC approach can be faster than EM when the latent variable, i.e. the
+opportunity set, is high dimensional \citep{Ryden2008}.\footnote{Indeed, our
+  opportunity set $O$ is a $(I \times J)$ matrix of 0s and 1s, where $I$ is the
+  number of workers and $J$ is the number of firms. Thus, there are $2^{IJ}$
+  potential values for the opportunity set, which quickly becomes untenable even
+  for a small number of $I$ and $J$. The high dimension of $O$ forces
+  \citet{Logan1998} to reduce the data dimension by aggregating 17 employers in
+  the data into 5 employer types, e.g. professional or blue collar jobs.} Third,
+within the Bayesian framework, we can naturally put a hierarchical structure on
+firms' preference. This allows us to borrow information across firms, producing
+more precise estimates even when there is not a lot of data for a specific firm.
 
 The rest of this section describes the details of the MCMC approach.
 
@@ -428,8 +426,8 @@ The rest of this section describes the details of the MCMC approach.
 We are interested in the posterior distribution of workers' and firms'
 preference given the observed final match, i.e. $p(\alpha, \beta | A)$.
 Unconditioned on the opportunity set, this posterior is difficult to derive or
-sample from. Therefore, we instead sample from the augmented posterior
-$p(\alpha, \beta, O | A)$, whose density is much simpler to derive.\footnote{See
+sample from. Therefore, we sample from the augmented posterior $p(\alpha, \beta,
+O | A)$, whose density is much simpler to derive.\footnote{See
   \citet{Tanner1987} for a discussion of such data augmentation techniques.}
 Specifically,
 
@@ -530,7 +528,8 @@ acceptance ratio for the proposed $\alpha^*$ is:\footnote{We log-transform the
             & \log p(\alpha^*) - \log p(\alpha)
 \end{align}
 
-\textbf{Sampling from the posterior of firms' preference $p(\beta|A, O, \alpha)$}
+\textbf{Sampling from the posterior of firms' preference $p(\beta|A, O,
+  \alpha)$}
 
 We propose a new $\bm{\beta}^*$ using a Normal adaptive proposal distribution
 similar to $\alpha$. The MH acceptance ratio for the proposed $\beta$ is:
@@ -538,11 +537,12 @@ similar to $\alpha$. The MH acceptance ratio for the proposed $\beta$ is:
 \begin{align}
   MH_\beta &= \frac{p(\beta* | A, O, \alpha)}{p(\beta | A, O, \alpha)} \\
   \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \left(\beta_j^{*\prime}X_i - \beta_j^{\prime}X_i \right) + \sum_{j} \left( \log(1 + {\exp({\beta_j^{\prime}X_i})) - \log(1 +  \exp(\beta_j^{*\prime}X_i})) \right) \right] \nonumber \\
-                & + \log p(\bm{\beta}^*) - \log p(\bm{\beta})
+           & + \log p(\bm{\beta}^*) - \log p(\bm{\beta})
 \end{align}
 
 
-\textbf{Sampling from the posterior of $\beta$'s hyperparameters $\mu_{\beta}, \tau_{\beta}$}
+\textbf{Sampling from the posterior of $\beta$'s hyperparameters $\mu_{\beta},
+  \tau_{\beta}$}
 
 As discussed above, the Bayesian approach to estimating our two-sided model
 allows us to put a hierarchical structure on the preference parameter. Here, we
@@ -580,13 +580,21 @@ This chapter has reviewed the game theoretic two-sided matching models,
 identifying key assumptions and properties that empirical model of two-sided
 matching market can take advantage of. A key property of matching market is that
 the final matching is likely to be \textit{stable}, with no agents being able to
-form a better match. Therefore, our two-sided logit model also aims to describe a
-process that would result in a stable matching.
+form a better match. Therefore, our two-sided logit model also aims to describe
+a process that would result in a stable matching.
 
 In addition to setting up the model, I have also discussed how to estimate it
-using the Metropolis-Hastings algorithm. In the next chapter, I show simulation
-results to demonstrate the correctness of my estimation and to explore other
-properties of the model.
+using Bayesian MCMC, specifically the Metropolis-Hastings algorithm. This
+approach provides us with several advantages over the current approach of EM
+estimation. First, once we have the posterior distribution of preference
+parameters, inference and prediction are very flexible and straightforward.
+Second, the MCMC approach can be more computationally tractable in high
+dimensions. Finally, we can use a hierarchical modeling approach to partially
+pool information and better estimate firms' preference even if some firms have a
+small sample size.
+
+In the next chapter, I show simulation results to demonstrate the correctness of
+my estimation and to explore other properties of the model.
 
 %%% Local Variables:
 %%% mode: latex

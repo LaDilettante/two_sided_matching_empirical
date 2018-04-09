@@ -43,17 +43,18 @@ years ($\pm$ 3.1) of education. 11\% of workers in our sample are non-white.
 On the other side of the matching market are five firms, representing five job
 categories: professional, managerial, sales-clerical-services, manufacturing
 blue collar, and other blue collar. Table~\ref{tab:labor_occ5_summary_employer}
-shows their characteristics. \textit{Prestige} is the Hodge-Seigel-Rossi score,
-used in the GSS to measure the prestige of a job \citep{Hodge1964, NORC2014}.
-\textit{Autonomy} is calculated as the odds of having a supervisor, multiplied
-by -1 so that a higher score is associated with a higher level of
-autonomy.\footnote{In other words, $\text{autonomy} = -\frac{P(\text{having a
-      supervisor})}{P(\text{not having a supervisor})}$} The prestige and the
-autonomy scores of a firm in our dataset are the average scores reported by
-workers who currently work in that job categories. Unemployment by itself does
-not have a score. Following \citet{Logan1996}'s study on the labor market, I set
-unemployment's prestige score to 50\% of the prestige of the last job held and
-its autonomy score as the average autonomy scores of all workers.
+shows their characteristics and the sub-categories from which they are
+aggregated. \textit{Prestige} is the Hodge-Seigel-Rossi score, used in the GSS
+to measure the prestige of a job \citep{Hodge1964, NORC2014}. \textit{Autonomy}
+is calculated as the odds of having a supervisor, multiplied by -1 so that a
+higher score is associated with a higher level of autonomy.\footnote{In other
+  words, $\text{autonomy} = -\frac{P(\text{having a supervisor})}{P(\text{not
+      having a supervisor})}$} The prestige and the autonomy scores of a firm in
+our dataset are the average scores reported by workers who currently work in
+that job categories. Unemployment by itself does not have a score. Following
+\citet{Logan1996}'s study on the labor market, I set unemployment's prestige
+score to 50\% of the prestige of the last job held and its autonomy score as the
+average autonomy scores of all workers.
 
 \begin{table}[tbp]
   \centering
@@ -346,8 +347,8 @@ which insufficiently takes into account this correlation, causing poor mixing. A
 potential solution to this problem is to make a correlated proposal for $\beta$
 and for the opportunity set: if we propose a new $\beta$ that puts a high
 emphasis on workers' education, then we should also perturb the opportunity set
-to make more offers to highly-educated worker. While conceptually simple, this
-approach is not straightforward to implement, and is left for future
+to make more offers to highly-educated worker. While the concept is simple, this
+approach is not straightforward to engineer, and is left for future
 research.\footnote{Alternatively, we may reparameterize the model entirely and
   eliminate the opportunity set, whose binary nature makes it impossible to use
   more modern MCMC approaches such as Hamiltonian Monte Carlo. A potential
