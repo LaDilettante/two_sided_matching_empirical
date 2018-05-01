@@ -1,4 +1,4 @@
-\chapter{Simulation results}
+\chapter{Properties of the two-sided logit model}
 \label{chap:simulation}
 
 In this chapter, I simulate the matching process of a labor market, using real
@@ -18,6 +18,11 @@ Indeed, while labor market data often include unemployment as the reservation
 choice, FDI data does not include firms who consider investing abroad but end up
 staying home. Simulation results show that some of our estimates will be biased,
 and I discuss potential remedies.
+
+Finally, I apply the two-sided matching model to US labor data of male workers,
+1982-1990, estimating both workers' and firms' preference for each other. The
+estimates are substantively plausible, thus increasing the confidence in my
+estimation procedure.
 
 \section{Labor market data}
 
@@ -198,9 +203,8 @@ common distribution. By doing so, I ``partially pool'' the sample across firms,
 pulling the estimate for firms with small sample sizes towards the common mean,
 and thus producing estimates that have more predictive power \citep{Gelman2006}.
 For a similar reason, the MCMC chain of the preference parameter for
-\textit{non-white} has a particularly poor mixing, likely because
-\textit{non-white} is a binary variable, having less variation and thus
-information that our model can use.
+\textit{non-white} has a particularly poor mixing, likely because our sample has
+very few \textit{non-white} workers and thus information that our model can use.
 
 \begin{figure}[tbp]
   \centering
@@ -462,40 +466,49 @@ highly desirable countries are the most reliable, and others' less so.
   \label{fig:sim_labor_nojobs_nounemp_offer_rate}
 \end{figure}
 
-\section{US labor market}
+\section{Analysis of US labor market data}
 \label{sec:labor}
 
-In this section I apply the two-sided logit model on the US labor market data, where the two sided logit model is originally developed for.
+In this section I apply the two-sided logit model on the US labor data of males
+workers, 1982-1990, and compare my result with \citet{Logan1996}'s findings.
 
-Services, professional, and managerial firms want highly educated workers. Blue
-collar and MFG actually have a negative preference for highly educated workers,
-perhaps because they consider these workers a flight risk, or a poor culture
-fit.
+Figure~\ref{fig:labor_occ5_alpha} shows workers' preference for two job
+characteristics, prestige and autonomy. While worker's preference for prestige
+is positive and statistically significant, the attitude towards autonomy seems
+more mixed. The posterior means for the coefficients of prestige and autonomy
+are 0.08 ($\pm$ 0.007) and -0.02 ($\pm$ 0.12), which are largely in line with
+\citet{Logan1996}'s estimates.
 
-We cannot compare the size of the estiamtes across firms, but we can compare
-within firms. Interestingly, managerial firms seem to care more about age than
-education, while professional firm care more about education than age.
-
-In addition to interpretation at the utility space, we can also make prediction
-in the normal space that is more interesting for policy formation. We can do the
-log-odd interpretation, however better yet we draw Figure 4.2
-show the probability of being hired for a typical worker. To produce this plot,
-we simulate the firms' preference just like a logit model.
-
-\begin{figure}[!ht]
+\begin{figure}[tbp]
   \centering
   \includegraphics[width=0.75\textwidth,keepaspectratio]{../figure/labor_occ5_alpha}
-  \caption[Workers' preference in the US labor market.]{Preference of workers for firms' characteristics. The density plot and the
+  \caption[Workers' preference in the US labor market.]{Workers' preference for firms' characteristics. The density plot and the
     shaded region show the posterior distribution and the 95\% credible interval
     after burn-in. While prestige is highly valued by workers, autonomy seems to
     be less importance.}
   \label{fig:labor_occ5_alpha}
 \end{figure}
 
-\begin{figure}[!ht]
+Figure~\ref{fig:labor_occ5_beta_educ_age} shows firms' preference for workers'
+education and age. The result is substantively plausible. The coefficient for
+education is positive and statistically significant for services, professional,
+and managerial firms, indicating that they want highly educated workers. On the
+other hand, other blue collar and manufacturing blue collar firms have a
+negative preference for educated workers, perhaps because they consider these
+workers a poor fit that leaves when a new opportunity arises.
+
+The relative weight of education and age in firms' utility functions is also
+revealing. While both managerial and professional firms care about education,
+managerial firms seem to care relatively more about a worker's age, likely as a
+proxy for his experience. Indeed, managerial firm's coefficients for education
+and age are 0.36 and 0.1, meaning that managerial firm values one year of
+education as much as 3.6 years of age. In contrast, professional firm values one
+year of education as much as 26.5 years of age.
+
+\begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/labor_occ5_beta_educ_age}
-  \caption[Firms' preference in the US labor market]{Preference of firms for workers' education and
+  \caption[Firms' preference in the US labor market]{Firms' preference for workers' education and
     age. Professional and managerial firms have a strong and positive preference
   for highly educated workers. While most firms do not highly value older workers,
   managerial firm stands out in their preference for age (likely as a
@@ -503,7 +516,22 @@ we simulate the firms' preference just like a logit model.
   \label{fig:labor_occ5_beta_educ_age}
 \end{figure}
 
-\begin{figure}[!ht]
+In addition to interpreting the effect of workers' characteristics on firms'
+utility, we can also calculate their substantive effect in terms of the
+probability of getting hired. Such interpretation would be more relevant to a
+worker deciding whether to get more education or not.
+Figure~\ref{fig:labor_occ5_educ_effect_on_hiring} shows the probability of being
+hired for a typical worker (i.e. one whose age is set at the median and race is
+set at the mode). For a worker seeking a service job, an extra year of education
+seems to have a positive and relatively linear effect on the probability of
+getting hired. In contrast, to get hired by a professional firm, an extra year
+does not have much of an effect until a worker crosses the tipping point of
+having 12 years of education. This result suggests that professional firm values
+college education much more than high-school education.\footnote{The diagnostics
+  plots, included in Appendix~\ref{chap:diagnostics_plots}, also show quick
+  convergence for the MCMC of this analysis.}
+
+\begin{figure}[tbp]
   \centering \includegraphics[width=\textwidth,keepaspectratio]{../figure/labor_occ5_educ_effect_on_hiring}
   \caption[The effect of education on the probability of a worker being hired in
   the US labor market.]{The
@@ -512,13 +540,6 @@ we simulate the firms' preference just like a logit model.
   \label{fig:labor_occ5_educ_effect_on_hiring}
 \end{figure}
 
-\begin{figure}[!ht]
-  \centering
-  \includegraphics[width=\textwidth,keepaspectratio]{../figure/labor_occ5_misc_traceplots}
-  \caption[Traceplots showing quick convergence for model of the US labor market.]{Trace plots of the posterior density and
-    parameter samples, showing quick convergence.}
-  \label{fig:labor_occ5_misc_traceplots}
-\end{figure}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "AnhLe_dissertation.tex"
