@@ -157,7 +157,7 @@ convergence within a reasonable time frame.
 \begin{figure}[!ht]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_alpha}
-  \caption[Simulation, estimate for workers' preference]{Two-sided logit
+  \caption[Estimates for workers' preference]{Two-sided logit
     estimates for workers' preference. The black line plots are the trace plots
     of the MCMC samplers, and the red line indicates the true parameter values.
     The trace plots show that the MCMC chain is able to converge to the true
@@ -180,7 +180,7 @@ for this poorer mixing.
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_beta_emp2}
-  \caption[Simulation, estimates for professional firm's preference.]{Two-sided
+  \caption[Estimates for professional firm's preference.]{Two-sided
     logit estimates for professional firm's preference. The MCMC chain is able
     to converge to the true parameter value, indicated by the red line, albeit
     with more autocorrelation than the MCMC chain for worker's preference in
@@ -205,7 +205,7 @@ information that our model can use.
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_beta_emp3}
-  \caption[Simulation, poor mixing due to small sample size.]{Two-sided logit
+  \caption[Poor mixing due to small sample size.]{Two-sided logit
     estimates for managerial firm's preference. Because the managerial firm only
     has a small sample size of 40 workers, or 1.9\% of the total sample, its
     preference is estimated more poorly than other's.}
@@ -263,8 +263,8 @@ confident in the wrong result.\footnote{This conditional logit model is
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_alpha_tsl_vs_cl}
-  \caption[Simulation, comparing the two-sided logit's and the one-sided
-  conditional logit's estimate.]{Estimates of workers' preference, produced by
+  \caption[Comparing two-sided logit's and one-sided
+  conditional logit's estimates.]{Estimates of workers' preference, produced by
     two-sided logit and conditional logit. The density plots show that the
     two-sided logit's 95\% credible interval includes the true value, indicated
     by the black line, while the conditional logit's 95\% confidence interval is
@@ -458,10 +458,67 @@ highly desirable countries are the most reliable, and others' less so.
 \begin{figure}[tbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{../figure/sim_labor_nojobs_nounemp_offer_rate}
-  \caption{The estimate for the best firm is still accurate}
+  \caption[Estimates for the preference of a desirable and an undesirable firm.]{The estimates }
   \label{fig:sim_labor_nojobs_nounemp_offer_rate}
 \end{figure}
 
+\section{US labor market}
+\label{sec:labor}
+
+In this section I apply the two-sided logit model on the US labor market data, where the two sided logit model is originally developed for.
+
+Services, professional, and managerial firms want highly educated workers. Blue
+collar and MFG actually have a negative preference for highly educated workers,
+perhaps because they consider these workers a flight risk, or a poor culture
+fit.
+
+We cannot compare the size of the estiamtes across firms, but we can compare
+within firms. Interestingly, managerial firms seem to care more about age than
+education, while professional firm care more about education than age.
+
+In addition to interpretation at the utility space, we can also make prediction
+in the normal space that is more interesting for policy formation. We can do the
+log-odd interpretation, however better yet we draw Figure 4.2
+show the probability of being hired for a typical worker. To produce this plot,
+we simulate the firms' preference just like a logit model.
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=0.75\textwidth,keepaspectratio]{../figure/labor_occ5_alpha}
+  \caption[Workers' preference in the US labor market.]{Preference of workers for firms' characteristics. The density plot and the
+    shaded region show the posterior distribution and the 95\% credible interval
+    after burn-in. While prestige is highly valued by workers, autonomy seems to
+    be less importance.}
+  \label{fig:labor_occ5_alpha}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/labor_occ5_beta_educ_age}
+  \caption[Firms' preference in the US labor market]{Preference of firms for workers' education and
+    age. Professional and managerial firms have a strong and positive preference
+  for highly educated workers. While most firms do not highly value older workers,
+  managerial firm stands out in their preference for age (likely as a
+  proxy for experience).}
+  \label{fig:labor_occ5_beta_educ_age}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering \includegraphics[width=\textwidth,keepaspectratio]{../figure/labor_occ5_educ_effect_on_hiring}
+  \caption[The effect of education on the probability of a worker being hired in
+  the US labor market.]{The
+    effect of education on the probability of a worker being hired into a professional
+    and a services job.}
+  \label{fig:labor_occ5_educ_effect_on_hiring}
+\end{figure}
+
+\begin{figure}[!ht]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{../figure/labor_occ5_misc_traceplots}
+  \caption[Traceplots showing quick convergence for model of the US labor market.]{Trace plots of the posterior density and
+    parameter samples, showing quick convergence.}
+  \label{fig:labor_occ5_misc_traceplots}
+\end{figure}
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "AnhLe_dissertation.tex"
