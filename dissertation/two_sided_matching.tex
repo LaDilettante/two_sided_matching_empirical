@@ -400,14 +400,14 @@ Expectation-Maximization (EM) algorithm, an iterative method capable of finding
 the maximum likelihood estimates when the model depends on unobserved latent
 variables (i.e. the unobserved opportunity set in this case)
 \citep{Dempster1977}. My innovation is to estimate the model using a Bayesian
-MCMC approach, which offers several advantages. First, our MCMC approach
+MCMC approach, which offers several advantages. First, my MCMC approach
 produces the full posterior distribution, making inference and prediction easy.
 In contrast, EM only produces point estimates out of the
 box.\footnote{\citet{Jamshidian2000} propose a method for estimating the
   standard error of EM estimates. However, for hypothesis testing, we need
-  further assumptions about the distribution of the EM estimates.} Second, our
+  further assumptions about the distribution of the EM estimates.} Second, my
 MCMC approach can be faster than EM when the latent variable, i.e. the
-opportunity set, is high dimensional \citep{Ryden2008}.\footnote{Indeed, our
+opportunity set, is high dimensional \citep{Ryden2008}.\footnote{Indeed, the
   opportunity set $O$ is a $(I \times J)$ matrix of 0s and 1s, where $I$ is the
   number of workers and $J$ is the number of firms. Thus, there are $2^{IJ}$
   potential values for the opportunity set, which quickly becomes untenable even
