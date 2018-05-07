@@ -1,16 +1,64 @@
 \chapter{Properties of the two-sided logit model}
 \label{chap:simulation}
 
-In this chapter, I simulate the matching process of a labor market, using real
-data on workers' and firms' characteristics and assigned model parameters. I
-then apply the two-sided logit model to show that the model is able to recover
-the underlying parameters and to diagnose the properties of the MCMC sampling. I
-compare the results of the two-sided logit model with the one-sided conditional
-logit model, showing that the one-sided approach produces biased estimates of
-workers' and firms' preference. This result demonstrates how the one-sided
-approach, despite being the default method for analyzing two-sided markets, can
-be misleading and unable to disentangle the effect of one side's preference from
-the other's.
+In this chapter I use simulation to examine the properties of the two-sided
+logit model. In a basic simulation study, the analyst assigns values to the
+parameters underlying the data generating process (DGP), generates a simulated
+dataset, applies the proposed statistical model, and studies the resulting
+estimate in relation to the known parameter values. In doing so, the analyst can
+empirically compare different models. For example, in
+Chapter~\ref{chap:literature_issues}, I discuss conceptually why the current
+one-sided approach in the FDI literature produces biased estimates of MNCs'
+preference. While such an argument is plausible, I cannot definitively
+ascertain its claim via an analysis of real data because MNCs' preference is not
+known in the real world. In contrast, in a simulation study, where I choose the
+parameter values ourselves, I can compare the one-sided and the two-sided
+models in terms of how their estimates deviate from the known true values.
+
+In addition, as a simple agent-based model, my simulation of the matching market
+can flexibly incorporate modification in the actors' characteristics,
+preference, information, behavioral rule, and many other aspects.\footnote{For a
+  review of agent-based model in Political Science, see \citet{DeMarchi2014}.}
+The simulated DGPs can achieve considerable degree of realism with these
+modifications. For example, in Chapter~\ref{chap:model}, the agents in the labor
+matching market are firms and workers who form matches based on one another's
+characteristics to maximize their utilities. In the current model, there are
+heterogeneous firm types, each having a different utility function with its own
+weights for workers' characteristics. I can extend the model by adding
+heterogeneous worker types. More ambitiously, I can modify the model so that
+agents do not have global information, making matching decision based on the
+locally observable options instead. Or I can assign each agent a location from
+which they cannot move too far, thus limiting them to locally available options.
+I can model agents as having finite computational power, unable to make
+utility-maximizing choice, and consequently relying on heuristic rules. For
+example, workers may choose a firm based on their similarity with the people
+working there. After making these modifications, I can check if our statistical
+model still perform reasonably well even though the modified DGPs deviate from
+its assumption. While these modifications are not implemented in this chapter,
+it is important to note that the simulation approach allows substantial
+flexibility in this regards.
+
+Finally, and very practically, a simulation study help ascertain that the
+software implementation of the Bayesian MCMC is correct. In theory, once I have
+described the sampling procedure as in Chapter~\ref{chap:model}, implementing
+the model is the simple matter of translating the algorithm into code. In
+practice, doing so is not trivial. Detecting software bugs from MCMC result is
+hard because a poor result can come from many different problems, including
+inaccurate prior values, posterior distributions that are difficult to sample
+from, or modeling assumptions that simply do not fit the data. By contrast,
+because I control the DGP in a simulation, I can eliminate these alternative
+causes of poor results and thus better identify implementation bugs.
+
+This chapter proceeds as follows. First, I simulate the matching process of a
+labor market, using real data on workers' and firms' characteristics and
+assigned model parameters. I then apply the two-sided logit model to show that
+the model is able to recover the underlying parameters and to diagnose the
+properties of the MCMC sampling. I compare the results of the two-sided logit
+model with the one-sided conditional logit model, showing that the one-sided
+approach produces biased estimates of workers' and firms' preference. This
+result demonstrates how the one-sided approach, despite being the default method
+for analyzing two-sided markets, can be misleading and unable to disentangle the
+effect of one side's preference from the other's.
 
 In addition, I explore the implications of the fact that, our FDI data does not
 include the ``reservation choice,'' i.e. the choice that is always available.
@@ -19,10 +67,10 @@ choice, FDI data does not include firms who consider investing abroad but end up
 staying home. Simulation results show that some of our estimates will be biased,
 and I discuss potential remedies.
 
-Finally, I apply the two-sided matching model to US labor data of male workers,
-1982-1990, estimating both workers' and firms' preference for each other. The
-estimates are substantively plausible, thus increasing the confidence in my
-estimation procedure.
+Finally, I apply the two-sided matching model to real US labor data of male
+workers, 1982-1990, estimating both workers' and firms' preference for each
+other. The estimates are substantively plausible, thus increasing the confidence
+in my estimation procedure.
 
 \section{Labor market data}
 
@@ -539,6 +587,44 @@ college education much more than high-school education.\footnote{The diagnostics
     and a services job.}
   \label{fig:labor_occ5_educ_effect_on_hiring}
 \end{figure}
+
+\section{Conclusion}
+
+In this chapter, I explore the properties of the two-sided matching model via
+simulation and an analysis of US labor data. The key finding is that the
+two-sided logit model is superior to the one-sided approach in studying matching
+market. Despite its wide use, the one-sided approach produces misleading result
+that confounds the preference of one side with the other's. For example, I
+simulate a scenario in which professional and managerial firms, both highly
+desirable, compete for the same small pool of skilled workers. Because
+professional firm is slightly more prestigious, the majority of this worker pool
+flocks to the professional firm over the managerial firm. In this example, the
+fact that the managerial firm is able to attract only a few workers is caused by
+both managerial firm's selectiveness and its slight inferiority in comparison
+with professional firm. However, the one-sided approach is unable to make this
+distinction and mistakenly considers the managerial firm to be highly
+undesirable by workers. This finding confirms my argument in
+Chapter~\ref{chap:literature_issues}. Because the FDI literature has not taken
+into account countries' preference in a two-sided approach, its estimate of
+MNCs' preference is suspect.
+
+In addition, I examine how the two-sided logit model performs when the
+``reservation choice'' is not observed. This issue is important to the study of
+FDI matching market because we typically do not observe those MNCs that make the
+``reservation choice,'' i.e. to stay at home instead of investing overseas. I
+find that this data limitation does not affect the estimate of MNCs' preference.
+However, it does bias the estimate of countries' preference. Intuitively,
+without observing firms that are unable to invest overseas, our sample only
+includes highly desirable MNCs that are invited by at least one country.
+Therefore, it appears as if countries hardly reject any MNC, causing countries'
+demand for FDI to be estimated as more permissive than it really is. There are
+two potential remedies to this problem. First, the estimate for the most
+desirable countries is least affected. Second, I can use an informative prior
+that constrains the demand intercept in countries' utility functions to a small
+value, counteracting the effect of the unobserved reservation choice.
+
+In the next chapter, I take into account these considerations in applying the
+two-sided logit model to the Japanese FDI data.
 
 %%% Local Variables:
 %%% mode: latex
