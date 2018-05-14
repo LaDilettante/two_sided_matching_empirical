@@ -58,7 +58,8 @@ MH_\alpha &= \prod_i \left[ \frac{\exp(\alpha^{*\prime} W_{a_i})}{\exp(\alpha' W
 Finally, we log transform the MH acceptance ratio for numerical stability.
 
 \begin{align}
-\log MH_\alpha &= \sum_i \left[ \epsilon_\alpha' W_{a_i} + \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) - \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \right] + \log p(\alpha^*) - \log p(\alpha)
+  \log MH_\alpha &= \sum_i \left[ \epsilon_\alpha' W_{a_i} + \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha' W_j)\right) - \log\left(\sum\limits_{j:j \in O_i} \exp(\alpha^{*\prime} W_j)\right) \right] \\
+  &+ \log p(\alpha^*) - \log p(\alpha)
 \end{align}
 
 \subsection{Firms' parameters, \texorpdfstring{$\boldmath\beta$}{beta}}
@@ -85,3 +86,8 @@ MH_\beta &= \prod_i \left[ \prod\limits_{j \in O_i}\frac{ \exp(\beta_j^{*\prime}
   \log MH_\beta &= \sum_i \left[ \sum_{j \in O_i} \beta_j^{*\prime}X_i - \beta_j^{\prime}X_i + \sum_{j} \log(1 + {\exp({\beta_j^{*\prime}X_i})) - \log(1 +  \exp(\beta_j^{\prime}X_i})) \right] \\
  & + \log MVN(\bm{\beta}^*|\mu_{\beta}, \tau_{\beta}) - \log MVN(\bm{\beta}|\mu_{\beta}, \tau_{\beta}) \nonumber
 \end{align}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "AnhLe_dissertation.tex"
+%%% End:
