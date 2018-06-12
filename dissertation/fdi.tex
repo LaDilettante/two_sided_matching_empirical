@@ -501,7 +501,17 @@ expect our model to have a good fit with the observed location.
 Figure~\ref{fig:japan96_prob_being_chosen_by_MNC_two_sided} shows that our model
 performs well in this regard---the predicted share of MNCs across countries
 match the observed share exactly in most cases and well within the 95\% credible
-interval for all cases. 
+interval for all cases.\footnote{On the other hand, the model performs less well in
+predicting the location of any particular firm. Averaging across firms, my model
+correctly predicts a firm's location only 30.4\% of the times. This result is
+expected given the difficulty of granular prediction at firm level.
+} In comparison, one-sided logit models predict less well.
+Figure~\ref{fig:japan96_onesided_model} shows the results of
+one-sided logit models predicting whether a firm is located in China or not
+(left) and in Indonesia or not (right).\footnote{I choose China and Indonesia
+  because these are two countries with the most data points. This way, I'm
+  giving one-sided models the best chance to predict well.} The AUC for these
+models is around 0.6, a decent albeit not remarkable performance.
 
 \begin{figure}[!ht] \centering
 \includegraphics[width=\textwidth,keepaspectratio]{japan96_prob_being_chosen_by_MNC_two_sided}
@@ -509,6 +519,14 @@ interval for all cases.
     observed share of MNCs across countries. The point and the error
 bar show the posterior mean and the 95\% credible interval.}
   \label{fig:japan96_prob_being_chosen_by_MNC_two_sided}
+\end{figure}
+
+\begin{figure}[!ht] \centering
+\includegraphics[width=\textwidth,keepaspectratio]{japan96_onesided_model}
+  \caption[ROC curve for one-sided logit models.]{ROC curve of one-sided logit
+    models, predicting whether a firm is located in China or not (left) and
+    Indonesia or not (right).}
+  \label{fig:japan96_onesided_model}
 \end{figure}
 
 In addition, by conducting the posterior predictive checks for aspects of the

@@ -112,15 +112,15 @@ existence of a stable matching. In contrast, empirical models of matching
 markets take the observed matching as given and attempt to estimate agents'
 preference.
 
-Unfortunately, most extant empirical models fail to adequately account for the
-structure of a two-sided matching market. Often, researchers simply analyze the
-market from one side, e.g. estimating a firm's preference by looking at the type
-of workers it hires. This approach does not take into account the fact that a
-match depends not only on an agent's preference but also his opportunity. For
-example, a farm may want to hire highly-educated workers but cannot do so
-because highly-educated workers do not want to work on farms. Modeling this
-interaction between preference and opportunity is a key contribution of my
-research.
+Unfortunately, most extant empirical models in political science fail to
+adequately account for the structure of a two-sided matching market. Often,
+researchers simply analyze the market from one side, e.g. estimating a firm's
+preference by looking at the type of workers it hires. This approach does not
+take into account the fact that a match depends not only on an agent's
+preference but also his opportunity. For example, a farm may want to hire
+highly-educated workers but cannot do so because highly-educated workers do not
+want to work on farms. Modeling this interaction between preference and
+opportunity is a key contribution of my research.
 
 Alternatively, some researchers measure agents' preferences by surveying them
 directly \citep{Posner2001, Sprecher1994}. While this approach circumvents the
@@ -129,6 +129,65 @@ need to disentangle preference and opportunity, surveys can only measure agents'
 collection effort while data on final matching (e.g. married couples, workers'
 current job, country location of MNCs) are widely available. My research aims to
 make use of such matching data to estimate agents' \textit{revealed} preference.
+
+Since the dynamics of two-sided matching is prevalent in the labor market, labor
+economists have been at the forefront of developing empirical models for
+matching markets. For example, \citet{Boyd2013} study the public school teacher
+labor market, with teachers on one side and public schools on the other. In this
+market, wage is sticky due to collective bargaining and public decision making,
+causing the market not to equilibrate, leaving some jobs plainly better than
+others. Teachers will sort into these ``good'' jobs conditional on how highly
+schools rank them as candidates. This sorting phenomenon distinguishes the
+public school teacher market from conventional labor market, suggesting that a
+matching model would be more appropriate.
+
+Therefore, \citet{Boyd2013} apply the insights from the game theoretical
+two-sided matching literature to build a structural model for the teacher labor
+market. In this model, teachers and schools have utility functions that take
+into account the characteristics of the other side. For example, a teacher may rank
+a school based on its location, students, and budget. Following the game theory
+literature, the authors then assume that the decentralized job matching mechanism
+leads to a stable matching of teachers to schools, implying that there is no
+school and teacher that would prefer each other than their current match. This
+assumption imposes a structure on the model, relating actors' preferences and
+characteristics with the observed match.
+
+However, it is difficult to estimate this model because its likelihood is not
+analytically available. To write down the likelihood of any matching,
+we need to enumerate all possible rankings of schools and teachers that will
+lead to that particular matching. While it is straightforward to derive a stable
+matching outcome from given values of characteristics and preference (e.g.
+following the deferred acceptance algorithm), the inverse problem does not have
+a known solution.
+
+This difficulty motivates \citet{Boyd2013} to estimate the model using method of
+simulated moments (MSM), an extension of the method of moments (MOM) estimation
+strategy. As in the typical MOM approach, the authors match population moments
+with their sample analogs. For example, a moment used by the authors is the
+expected difference between the attributes of the school where an individual
+work and the expected mean attributes given their qualifications. However,
+unlike the typical MOM approach, the moment in this case is not analytically
+available. Indeed, the mean attributes of an individual's jobs given their
+qualifications is a complicated term integrating over other candidates and
+schools in the markets. Because this term does not have a closed form, the
+authors simulate it by running the matching process multiple times, writing down
+the attributes of the individual' jobs, and averaging them across simulations.
+This approach is thus called method of \textit{simulated} moments.
+
+Following \citet{Boyd2013}, \citet{Agarwal2015} also uses MSM to analyze the
+matching market of medical residency in the US. \citet{Agarwal2015} notices that
+the variation of resident observable characteristics within a program 
+provides additional information about the program's preference. Indeed, in a stable match,
+residents within the same program must be of the same caliber. Otherwise, the
+program could replace lower quality residents with better ones, or
+higher quality residents could leave for a better program. Therefore, if we see
+that residents in a program are highly correlated on some characteristics, then
+those characteristics must be an important part of the program's utility
+function. This insight allows \citet{Agarwal2015} to identify more moments to be
+used in estimation, namely the within-program variance of resident
+observables.\footnote{While the MSM approach is the most developed, there are
+  other attempts to empirically model matching markets. See \citet{Fox2009} for
+  a review.}
 
 In addition to academic research, companies have also developed a commercial
 interest in studying two-sided matching markets, e.g. online marketplaces

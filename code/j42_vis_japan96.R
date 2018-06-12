@@ -220,3 +220,9 @@ f_sim_firm_location <- function() {
 }
 
 sim_res <- t(replicate(1000, f_sim_firm_location()))
+pd_firm_loc <- tibble(pct_correct = colMeans(sim_res), 
+                      nation = df_mnc$nation)
+ggplot(pd_firm_loc) +
+  geom_boxplot(aes(x = nation, y = pct_correct)) +
+  labs(x = "Country", y = "True positive rate" )
+ggsave("../figure/japan96_predicted_firm_location.pdf", w = 5.5, h = 3)

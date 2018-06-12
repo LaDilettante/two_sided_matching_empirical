@@ -59,6 +59,28 @@ ww <- df_country %>%
   as.matrix()
 rownames(ww) <- df_country$nation
 
+# ---- One-sided model ----
+
+df_onesided <- inner_join(df_mnc, df_country, by = "nation") %>%
+  mutate(china_or_not = nation == "China",
+         indonesia_or_not = nation == "Indonesia")
+
+m_onesided_china <- glm(china_or_not ~ ltemp + luscptl + int_r_d + int_exp,
+  family = binomial(link = "logit"), data = df_onesided)
+m_onesided_indonesia <- glm(indonesia_or_not ~ ltemp + luscptl + int_r_d + int_exp,
+  family = binomial(link = "logit"), data = df_onesided)
+
+pdf("../figure/japan96_onesided_model.pdf", w = 7, h = 3)
+par(mfrow = c(1, 2))
+pROC::roc(df_onesided$china_or_not, 
+          predict(m_onesided_china, type = "response"),
+          plot = TRUE, print.auc = TRUE)
+pROC::roc(df_onesided$indonesia_or_not, 
+          predict(m_onesided_indonesia, type = "response"),
+          plot = TRUE, print.auc = TRUE)
+par(mfrow = c(1, 1))
+dev.off()
+
 # ---- Prepare obs_opp ----
 
 n_i <- nrow(xx) ; p_i <- ncol(xx)

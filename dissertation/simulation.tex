@@ -6,48 +6,47 @@ logit model. In a basic simulation study, the analyst assigns values to the
 parameters underlying the data generating process (DGP), generates a simulated
 dataset, applies the proposed statistical model, and studies the resulting
 estimate in relation to the known parameter values. In doing so, the analyst can
-empirically compare different models. For example, in
-Chapter~\ref{chap:literature_issues}, I discuss conceptually why the current
-one-sided approach in the FDI literature produces biased estimates of MNCs'
-preference. While such an argument is plausible, I cannot definitively
-ascertain its claim via an analysis of real data because MNCs' preference is not
-known in the real world. In contrast, in a simulation study, where I choose the
-parameter values ourselves, I can compare the one-sided and the two-sided
-models in terms of how their estimates deviate from the known true values.
+empirically compare different models. For example, in this chapter, I compare
+the one-sided and the two-sided models, showing that the one-sided model
+produces biased estimates of MNCs' preference while the two-sided model does
+not. It would have been impossible to make this comparison via an analysis of
+real FDI data because MNCs' preference is not known in the real world. This
+finding corroborates my argument in Chapter~\ref{chap:literature_issues} that
+the one-sided approach currently used by the FDI literature is inappropriate.
 
-In addition, as a simple agent-based model, my simulation of the matching market
-can flexibly incorporate modification in the actors' characteristics,
-preference, information, behavioral rule, and many other aspects.\footnote{For a
-  review of agent-based model in Political Science, see \citet{DeMarchi2014}.}
-The simulated DGPs can achieve considerable degree of realism with these
-modifications. For example, in Chapter~\ref{chap:model}, the agents in the labor
-matching market are firms and workers who form matches based on one another's
-characteristics to maximize their utilities. In the current model, there are
-heterogeneous firm types, each having a different utility function with its own
-weights for workers' characteristics. I can extend the model by adding
-heterogeneous worker types. More ambitiously, I can modify the model so that
-agents do not have global information, making matching decision based on the
-locally observable options instead. Or I can assign each agent a location from
-which they cannot move too far, thus limiting them to locally available options.
-I can model agents as having finite computational power, unable to make
-utility-maximizing choice, and consequently relying on heuristic rules. For
-example, workers may choose a firm based on their similarity with the people
-working there. After making these modifications, I can check if our statistical
-model still perform reasonably well even though the modified DGPs deviate from
-its assumption. While these modifications are not implemented in this chapter,
-it is important to note that the simulation approach allows substantial
-flexibility in this regards.
+In addition, as a agent-based model, my simulation of the matching market can
+flexibly incorporate modification in actors' characteristics, preference,
+information, behavioral rule, and many other aspects.\footnote{See
+  \citet{DeMarchi2014} for a review of agent-based model in Political Science
+  and how flexible it can be.} The simulated DGPs can achieve considerable
+degree of realism with these modifications. For example, in
+Chapter~\ref{chap:model}, the agents in the labor matching market are firms and
+workers who form matches based on one another's characteristics to maximize
+their utilities. In this model, there are heterogeneous firm types, each having
+a different utility function with its own weights for workers' characteristics.
+I can extend the model by adding heterogeneous worker types. More ambitiously, I
+can modify the model so that agents do not have global information, making
+matching decision based on the locally observable options. Or I can assign each
+agent a location from which they cannot move too far, thus limiting them to
+locally available options. I can also model agents as having finite
+computational power, unable to make utility-maximizing choice, and consequently
+relying on heuristic rules such as choosing a firm based on their similarity
+with the people working there. After making these modifications, I can check if
+our statistical model still perform reasonably well even though the modified
+DGPs deviate from its assumption. While these modifications are not implemented
+in this chapter, it is important to note that the simulation approach allows
+substantial flexibility in this regards.
 
-Finally, and very practically, a simulation study help ascertain that the
+Finally, and very practically, a simulation study helps me ascertain that the
 software implementation of the Bayesian MCMC is correct. In theory, once I have
 described the sampling procedure as in Chapter~\ref{chap:model}, implementing
 the model is the simple matter of translating the algorithm into code. In
 practice, doing so is not trivial. Detecting software bugs from MCMC result is
 hard because a poor result can come from many different problems, including
-inaccurate prior values, posterior distributions that are difficult to sample
-from, or modeling assumptions that simply do not fit the data. By contrast,
-because I control the DGP in a simulation, I can eliminate these alternative
-causes of poor results and thus better identify implementation bugs.
+prior values that are inappropriate, posterior distributions that are difficult
+to sample from, or modeling assumptions that simply do not fit the data. By
+contrast, because I control the DGP in a simulation, I can eliminate these
+alternative causes of poor results and thus better identify implementation bugs.
 
 This chapter proceeds as follows. First, I simulate the matching process of a
 labor market, using real data on workers' and firms' characteristics and
